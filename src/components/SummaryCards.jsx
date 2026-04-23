@@ -55,10 +55,10 @@ const SummaryCards = ({ onNavigate }) => {
           </div>
           
           <div className="relative z-10 flex flex-col gap-4 w-full">
-             {/* Top: Flat Icon */}
-             <div className="mt-1">
-                <img src={myBalanceIcon} alt="Wallet" className="w-[30px] h-[30px] object-contain" />
-             </div>
+              {/* Top: Flat Icon */}
+              <div className="mt-1">
+                 <img src={myBalanceIcon} alt="Wallet" className="w-[44px] h-[44px] object-contain" />
+              </div>
              
              {/* Bottom: Text and 3D Badge */}
               <div className="flex items-end justify-between">
@@ -74,10 +74,10 @@ const SummaryCards = ({ onNavigate }) => {
 
         {/* Metric Cards - Slightly Taller */}
         {[
-          { label: 'Equity', value: '$ 0.00', icon: <img src={equityIcon} alt="Equity" className="w-[38px] h-[38px] object-contain" /> },
-          { label: 'Total Profit', value: '$ 0.00', icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[38px] h-[38px] object-contain" /> },
-          { label: 'Used Margin', value: '$ 0.00', icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[38px] h-[38px] object-contain" /> },
-          { label: 'Free Margin', value: '$ 0.00', icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[38px] h-[38px] object-contain" /> },
+          { label: 'Equity', value: '$ 0.00', icon: <img src={equityIcon} alt="Equity" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Total Profit', value: '$ 0.00', icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Used Margin', value: '$ 0.00', icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Free Margin', value: '$ 0.00', icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[54px] h-[54px] object-contain" /> },
         ].map((card, idx) => (
           <div 
             key={idx} 
