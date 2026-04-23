@@ -49,24 +49,26 @@ const SummaryCards = ({ onNavigate }) => {
                  backgroundSize: '24px 24px'
                }}></div>
 
-          {/* Group 14: Ultra-Soft Hourglass Lighting (Image 48) */}
-          <div className="absolute right-[15%] inset-y-0 w-[200px] pointer-events-none flex items-center justify-center">
-             {/* Intense Layered Green Bloom */}
-             <div className="absolute w-[180px] h-[180px] bg-[#76D041] blur-[40px] opacity-30 rounded-full"></div>
-             <div className="absolute w-[220px] h-[220px] bg-[#76D041] blur-[75px] opacity-50 rounded-full"></div>
-             <div className="absolute w-[260px] h-[260px] bg-[#76D041] blur-[100px] opacity-40 rounded-full"></div>
+          {/* Localized Lighting Container (Matching Image 52) */}
+          <div className="absolute right-[15%] inset-y-0 w-[180px] pointer-events-none flex items-center justify-center">
+             {/* Localized Green Bloom Layers */}
+             <div className="absolute w-[150px] h-[150px] bg-[#76D041] blur-[40px] opacity-40 rounded-full"></div>
+             <div className="absolute w-[190px] h-[190px] bg-[#76D041] blur-[65px] opacity-50 rounded-full"></div>
+             <div className="absolute w-[230px] h-[230px] bg-[#76D041] blur-[90px] opacity-35 rounded-full"></div>
              
-             {/* Ultra-Soft Hourglass Core - Ethereal Refraction */}
-             <div className="absolute w-[90px] h-[190px] bg-white blur-[85px] opacity-25"
-                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 65% 50%, 100% 100%, 0% 100%, 35% 50%)' }}></div>
+             {/* Top and Bottom Refraction Beams (Image 51/52 Style) */}
+             <div className="absolute top-0 w-[80px] h-[40%] bg-gradient-to-b from-white/25 via-white/5 to-transparent blur-[30px]"></div>
+             <div className="absolute bottom-0 w-[80px] h-[40%] bg-gradient-to-t from-white/25 via-white/5 to-transparent blur-[30px]"></div>
              
-             {/* Soft Top/Bottom White Halos */}
-             <div className="absolute top-[-50px] w-[220px] h-[80px] bg-white opacity-[0.12] blur-[60px] rounded-full"></div>
-             <div className="absolute bottom-[-50px] w-[220px] h-[80px] bg-white opacity-[0.12] blur-[60px] rounded-full"></div>
-             
-             {/* Central Shimmer Core */}
-             <div className="absolute inset-y-0 w-[1px] bg-white/30 blur-[2px]"></div>
-             <div className="absolute inset-y-8 w-[50px] bg-white/10 blur-[35px]"></div>
+             {/* Subtle Shimmer Core */}
+             <div className="absolute inset-y-0 w-[1px] bg-white/10 blur-[2px]"></div>
+
+             {/* Middle: Absolute Positioned Badge (Centered in Localized Light) */}
+             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-auto">
+                <div className="bg-gradient-to-b from-[#BAED4A] to-[#86BC25] px-6 py-2 rounded-full border-[1.31px] border-white/40 shadow-[0_15px_30px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.7)] flex items-center justify-center min-w-[115px]">
+                   <span className="text-[22px] font-black text-[#0B1C1E] tracking-tighter leading-none">$7348</span>
+                </div>
+             </div>
           </div>
           
           <div className="relative z-10 h-full flex flex-col justify-between">
@@ -75,12 +77,8 @@ const SummaryCards = ({ onNavigate }) => {
                 <img src={myBalanceIcon} alt="Wallet" className="w-[30px] h-[30px] object-contain opacity-90" />
              </div>
              
-             {/* Middle/Right: Absolute Positioned Badge (Figma Proportion) */}
-             <div className="absolute right-[12%] top-1/2 -translate-y-1/2 z-20">
-                <div className="bg-gradient-to-b from-[#BAED4A] to-[#86BC25] px-6 py-2 rounded-full border-[1.31px] border-white/40 shadow-[0_15px_30px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.7)] flex items-center justify-center min-w-[115px]">
-                   <span className="text-[22px] font-black text-[#0B1C1E] tracking-tighter leading-none">$7348</span>
-                </div>
-             </div>
+             {/* Flex Spacer to maintain layout */}
+             <div className="flex-1"></div>
 
              {/* Bottom Section: Small Text (Image 48 Match) */}
               <div className="flex items-end justify-start w-full">
