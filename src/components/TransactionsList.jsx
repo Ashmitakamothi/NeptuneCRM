@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const TransactionsList = () => {
+  const [transactionType, setTransactionType] = useState('Deposit');
+
   const transactions = [
     { from: 'Telcopay', to: 'Wallet', amount: '$ 100' },
     { from: 'Telcopay', to: 'Wallet', amount: '$ 100' },
@@ -12,10 +14,16 @@ const TransactionsList = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 pt-4 pb-3">
         <h2 className="text-[16px] font-extrabold text-[#122D32]">Recent Transactions</h2>
         <div className="bg-[#F4F5F7] p-1 rounded-full border border-[#E2E2E4] flex gap-1 items-center h-[32px] w-full sm:w-auto">
-          <button className="flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full bg-[#4C5E62] text-white font-semibold">
+          <button 
+            onClick={() => setTransactionType('Deposit')}
+            className={`flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full font-semibold transition-all ${transactionType === 'Deposit' ? 'bg-[#4C5E62] text-white shadow-sm' : 'text-[#122D32] opacity-80 hover:opacity-100'}`}
+          >
             Deposit
           </button>
-          <button className="flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full text-[#122D32] font-semibold opacity-80 hover:opacity-100 transition-opacity">
+          <button 
+            onClick={() => setTransactionType('Withdraw')}
+            className={`flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full font-semibold transition-all ${transactionType === 'Withdraw' ? 'bg-[#4C5E62] text-white shadow-sm' : 'text-[#122D32] opacity-80 hover:opacity-100'}`}
+          >
             Withdraw
           </button>
         </div>
