@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #06120f;
+  color: white;
+}
+
+@layer components {
+  .card {
+    @apply bg-brand-card rounded-2xl border border-white/5 overflow-hidden;
+  }
+  
+  .table-header {
+    @apply text-brand-text text-[10px] uppercase tracking-wider py-3 px-4 text-left font-medium;
+  }
+  
+  .table-cell {
+    @apply py-4 px-4 text-xs font-medium border-t border-white/5;
+  }
+
+  .glass-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-glow::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(199, 242, 132, 0.4) 0%, transparent 70%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Custom Scrollbar for Light Mode Sections (like White Cards) */
+.bg-white::-webkit-scrollbar-thumb,
+.bg-white ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.bg-white::-webkit-scrollbar-thumb:hover,
+.bg-white ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
