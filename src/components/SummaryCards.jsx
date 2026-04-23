@@ -38,36 +38,53 @@ const SummaryCards = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Cards Grid: Exact gap from Figma */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-[13.14px] mt-6 md:mt-8 items-center">
-        {/* Main Balance Card - Larger than others */}
-        <div className="bg-[#06120F] rounded-[15.76px] border-[1.31px] border-[#1F383D] p-5 flex flex-col justify-start h-[130px] relative overflow-hidden sm:col-span-2 xl:col-span-1">
-          {/* Perfect Soft Vertical Spotlight (Figma Style) */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* The Beam - Centered exactly behind the badge */}
-            <div className="absolute right-[10px] inset-y-0 w-[180px] flex items-center justify-center">
-               {/* Main soft wide glow */}
-               <div className="absolute w-[140px] h-full bg-[#A5D63F] blur-[55px] opacity-35"></div>
-               {/* Bright central vertical core - Whiter and more intense */}
-               <div className="absolute w-[45px] h-full bg-white blur-[20px] opacity-80"></div>
-               <div className="absolute w-[80px] h-full bg-[#d4ff94] blur-[30px] opacity-60"></div>
-            </div>
+      {/* Cards Grid: Adjusted to 6 columns for Figma parity */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-[13.14px] mt-6 md:mt-8 items-center">
+        {/* Main Balance Card - HIGH FIDELITY FIGMA BLOOM */}
+        <div className="bg-[#06120F] rounded-[21px] border-[1.31px] border-white/10 p-[26px] flex flex-col justify-between h-[145px] relative overflow-hidden sm:col-span-2 xl:col-span-2 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+          {/* Subtle Grid Pattern - Nearly Invisible */}
+          <div className="absolute inset-0 opacity-[0.005] pointer-events-none" 
+               style={{ 
+                 backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', 
+                 backgroundSize: '24px 24px'
+               }}></div>
+
+          {/* Group 14: Ultra-Soft Hourglass Lighting (Image 48) */}
+          <div className="absolute right-[15%] inset-y-0 w-[200px] pointer-events-none flex items-center justify-center">
+             {/* Intense Layered Green Bloom */}
+             <div className="absolute w-[180px] h-[180px] bg-[#76D041] blur-[40px] opacity-30 rounded-full"></div>
+             <div className="absolute w-[220px] h-[220px] bg-[#76D041] blur-[75px] opacity-50 rounded-full"></div>
+             <div className="absolute w-[260px] h-[260px] bg-[#76D041] blur-[100px] opacity-40 rounded-full"></div>
+             
+             {/* Ultra-Soft Hourglass Core - Ethereal Refraction */}
+             <div className="absolute w-[90px] h-[190px] bg-white blur-[85px] opacity-25"
+                  style={{ clipPath: 'polygon(0% 0%, 100% 0%, 65% 50%, 100% 100%, 0% 100%, 35% 50%)' }}></div>
+             
+             {/* Soft Top/Bottom White Halos */}
+             <div className="absolute top-[-50px] w-[220px] h-[80px] bg-white opacity-[0.12] blur-[60px] rounded-full"></div>
+             <div className="absolute bottom-[-50px] w-[220px] h-[80px] bg-white opacity-[0.12] blur-[60px] rounded-full"></div>
+             
+             {/* Central Shimmer Core */}
+             <div className="absolute inset-y-0 w-[1px] bg-white/30 blur-[2px]"></div>
+             <div className="absolute inset-y-8 w-[50px] bg-white/10 blur-[35px]"></div>
           </div>
           
-          <div className="relative z-10 flex flex-col gap-4 w-full">
-              {/* Top: Flat Icon */}
-              <div className="mt-1">
-                 <img src={myBalanceIcon} alt="Wallet" className="w-[44px] h-[44px] object-contain" />
-              </div>
+          <div className="relative z-10 h-full flex flex-col justify-between">
+             {/* Top Section: Wallet Icon (Image 48 Scale) */}
+             <div className="flex justify-start">
+                <img src={myBalanceIcon} alt="Wallet" className="w-[30px] h-[30px] object-contain opacity-90" />
+             </div>
              
-             {/* Bottom: Text and 3D Badge */}
-              <div className="flex items-end justify-between">
-                <h3 className="text-[17px] font-medium text-white mb-0.5 tracking-wide">My Balance:</h3>
-                
-                {/* Clean Solid Figma Badge */}
-                <div className="bg-[#A5D63F] px-5 py-1.5 rounded-full border border-[#0B1C1E]/45 shadow-[inset_0_-3px_0_rgba(0,0,0,0.22),0_10px_18px_rgba(0,0,0,0.26)] relative z-10">
-                   <span className="text-[16px] font-extrabold text-[#0B1C1E] tracking-tight">$7348</span>
+             {/* Middle/Right: Absolute Positioned Badge (Figma Proportion) */}
+             <div className="absolute right-[12%] top-1/2 -translate-y-1/2 z-20">
+                <div className="bg-gradient-to-b from-[#BAED4A] to-[#86BC25] px-6 py-2 rounded-full border-[1.31px] border-white/40 shadow-[0_15px_30px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.7)] flex items-center justify-center min-w-[115px]">
+                   <span className="text-[22px] font-black text-[#0B1C1E] tracking-tighter leading-none">$7348</span>
                 </div>
+             </div>
+
+             {/* Bottom Section: Small Text (Image 48 Match) */}
+              <div className="flex items-end justify-start w-full">
+                <h3 className="text-[15px] font-medium text-white/90 tracking-tight leading-none mb-1">My Balance:</h3>
              </div>
           </div>
         </div>
