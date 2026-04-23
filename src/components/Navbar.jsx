@@ -27,10 +27,8 @@ const Navbar = () => {
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
         {/* Left Section: Logo & Nav Links grouped together */}
         <div className="flex items-center gap-10">
-          {/* Logo Pill */}
-          <div className="bg-[#122D32] px-4 py-2 rounded-[8px] flex items-center border border-white/5">
-            <img src={logo} alt="Neptune Logo" className="h-[26px] w-auto object-contain" />
-          </div>
+          {/* Logo Pill (Removed redundant wrapper to fix double border) */}
+          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto object-contain" />
 
           {/* Navigation Links (Now closer to logo) */}
           <div className="hidden xl:flex items-center gap-0.5">
