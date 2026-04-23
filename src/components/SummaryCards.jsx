@@ -6,7 +6,7 @@ import totalProfitIcon from '../assets/totalprofit.png.png';
 import usedMarginIcon from '../assets/usedmargin.png.png';
 import freeMarginIcon from '../assets/freemargin.png.png';
 
-const SummaryCards = () => {
+const SummaryCards = ({ onNavigate }) => {
   const [dashboardType, setDashboardType] = useState('IB');
 
   return (
@@ -29,7 +29,10 @@ const SummaryCards = () => {
                 className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full text-[12px] sm:text-[13px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#4C5E62] text-white shadow-sm border border-[#5A6D71]' : 'font-medium text-[#8e9d9b] hover:text-white border border-transparent'}`}
               >IB Dashboard</button>
            </div>
-           <button className="flex justify-center items-center gap-2 bg-[#D1F7E9] hover:bg-[#c2ebd9] text-[#0A181B] px-6 py-2.5 rounded-full text-[14px] font-bold h-[46px] transition-all">
+           <button 
+             onClick={() => onNavigate('Add Product Batch')}
+             className="flex justify-center items-center gap-2 bg-[#D1F7E9] hover:bg-[#c2ebd9] text-[#0A181B] px-6 py-2.5 rounded-full text-[14px] font-bold h-[46px] transition-all"
+           >
              Add Product Batch <Plus size={18} strokeWidth={2.5} />
            </button>
         </div>
@@ -76,7 +79,11 @@ const SummaryCards = () => {
           { label: 'Used Margin', value: '$ 0.00', icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[38px] h-[38px] object-contain" /> },
           { label: 'Free Margin', value: '$ 0.00', icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[38px] h-[38px] object-contain" /> },
         ].map((card, idx) => (
-          <div key={idx} className="bg-[#25393B] rounded-[15.76px] border-[1.31px] border-[#314A4D] p-4 h-[115px] flex items-center gap-4 hover:bg-[#2d4447] transition-all cursor-pointer relative z-10">
+          <div 
+            key={idx} 
+            onClick={() => onNavigate(card.label)}
+            className="bg-[#25393B] rounded-[15.76px] border-[1.31px] border-[#314A4D] p-4 h-[115px] flex items-center gap-4 hover:bg-[#2d4447] transition-all cursor-pointer relative z-10"
+          >
             <div className="shrink-0">
                {card.icon}
             </div>

@@ -7,8 +7,8 @@ import reportsIcon from '../assets/reports.png.png';
 import leaderboardIcon from '../assets/leaderboard.png.png';
 import logo from '../assets/logo.png.png';
 
-const Navbar = () => {
-  const [activeMenu, setActiveMenu] = useState('Dashboard');
+const Navbar = ({ onNavigate, activeMenu }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const menuItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={14} /> },
@@ -20,7 +20,10 @@ const Navbar = () => {
     { name: 'More', icon: null, hasDropdown: true },
   ];
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const handleNavClick = (name) => {
+    onNavigate(name);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <nav className="bg-[#06120f] border-b border-white/5 h-[53px] sticky top-0 z-50">
@@ -28,24 +31,29 @@ const Navbar = () => {
         {/* Left Section: Logo & Nav Links grouped together */}
         <div className="flex items-center gap-10">
           {/* Logo Pill (Removed redundant wrapper to fix double border) */}
-          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto object-contain" />
+          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain" onClick={() => handleNavClick('Dashboard')} />
 
           {/* Navigation Links (Now closer to logo) */}
           <div className="hidden xl:flex items-center gap-0.5">
             {menuItems.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveMenu(item.name)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all duration-200 ${
-                  activeMenu === item.name
-                    ? 'bg-white text-[#06120f]' 
-                    : 'text-[#8e9d9b] hover:text-white'
-                }`}
-              >
-                {item.icon && <span>{item.icon}</span>}
-                <span>{item.name}</span>
-                {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
-              </button>
+              <React.Fragment key={index}>
+                <button
+                  onClick={() => handleNavClick(item.name)}
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all duration-200 ${
+                    activeMenu === item.name
+                      ? 'bg-white text-[#06120f]' 
+                      : 'text-[#8e9d9b] hover:text-white'
+                  }`}
+                >
+                  {item.icon && <span>{item.icon}</span>}
+                  <span>{item.name}</span>
+                  {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
+                </button>
+                {/* Vertical Divider (Vector from Figma) - Skip after Dashboard */}
+                {index < menuItems.length - 1 && item.name !== 'Dashboard' && (
+                  <div className="w-[1.31px] h-[24px] bg-white/10 mx-0.5"></div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
@@ -73,21 +81,16 @@ const Navbar = () => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="absolute top-[53px] left-0 w-full bg-[#0A181B] border-b border-white/5 py-4 px-6 flex flex-col gap-2 xl:hidden shadow-xl">
+        <div className="xl:hidden absolute top-full left-0 right-0 bg-[#06120f] border-b border-white/5 py-4 px-6 flex flex-col gap-4 shadow-2xl z-50">
           {menuItems.map((item, index) => (
             <button
               key={index}
-              onClick={() => {
-                setActiveMenu(item.name);
-                setIsMobileMenuOpen(false);
-              }}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-semibold transition-all duration-200 w-full ${
-                activeMenu === item.name
-                  ? 'bg-white/10 text-white' 
-                  : 'text-[#8e9d9b] hover:bg-white/5 hover:text-white'
+              onClick={() => handleNavClick(item.name)}
+              className={`flex items-center gap-3 py-2 text-sm font-semibold transition-colors ${
+                activeMenu === item.name ? 'text-white' : 'text-[#8e9d9b]'
               }`}
             >
-              {item.icon && <span>{item.icon}</span>}
+              {item.icon && <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>}
               <span>{item.name}</span>
             </button>
           ))}
