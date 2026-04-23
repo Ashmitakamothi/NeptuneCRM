@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X } from 'lucide-react';
+import homeSmileIcon from '../assets/home-smile.png';
 import internalTransferIcon from '../assets/internal-transfer.png.png';
 import accountsIcon from '../assets/account.png.png';
 import myTransactionIcon from '../assets/my-transaction.png.png';
@@ -11,7 +12,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const menuItems = [
-    { name: 'Dashboard', icon: <LayoutDashboard size={14} /> },
+    { name: 'Dashboard', icon: <img src={homeSmileIcon} alt="Dashboard" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'Accounts', icon: <img src={accountsIcon} alt="Accounts" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'Internal Transfer', icon: <img src={internalTransferIcon} alt="Internal Transfer" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'My Transaction', icon: <img src={myTransactionIcon} alt="My Transaction" className="w-[18px] h-[18px] object-contain" /> },
