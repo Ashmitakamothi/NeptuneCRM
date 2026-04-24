@@ -107,7 +107,13 @@ const SummaryCards = ({ onNavigate, data }) => {
         {/* Metric Cards - Slightly Taller */}
         {[
           { label: 'Equity', value: summaryData?.equity ?? summaryData?.Equity ?? 0, icon: <img src={equityIcon} alt="Equity" className="w-[54px] h-[54px] object-contain" /> },
-          { label: 'Total Profit', value: summaryData?.totalProfit ?? summaryData?.TotalProfit ?? 0, icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[54px] h-[54px] object-contain" /> },
+          { 
+            label: 'Total Profit', 
+            value: (summaryData?.openTrades && Array.isArray(summaryData.openTrades)) 
+                   ? summaryData.openTrades.reduce((sum, t) => sum + (Number(t.profit ?? t.Profit) || 0), 0)
+                   : (summaryData?.totalProfit ?? summaryData?.TotalProfit ?? 0), 
+            icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[54px] h-[54px] object-contain" /> 
+          },
           { label: 'Used Margin', value: summaryData?.usedMargin ?? summaryData?.UsedMargin ?? 0, icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[54px] h-[54px] object-contain" /> },
           { label: 'Free Margin', value: summaryData?.freeMargin ?? summaryData?.FreeMargin ?? 0, icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[54px] h-[54px] object-contain" /> },
         ].map((card, idx) => (
