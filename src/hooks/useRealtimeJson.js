@@ -47,14 +47,12 @@ export function useRealtimeJson(
     }
 
     runOnce();
-    const id = setInterval(runOnce, pollIntervalMs);
 
     return () => {
       alive = false;
       ac.abort();
-      clearInterval(id);
     };
-  }, [enabled, path, pollIntervalMs, baseUrl, token, key]);
+  }, [enabled, path, baseUrl, token, key]);
 
   return { data, error, loading };
 }
