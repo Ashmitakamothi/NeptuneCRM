@@ -37,8 +37,8 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/mt5-api/, ''),
         headers: {
-          'Cookie': 'token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDEwNzg1LCJleHAiOjE3NzcwMTc5ODUsImlhdCI6MTc3NzAxMDc4NSwiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.LxF95cUWzNEsE5TixRMFTsrE_gqW-iQdK0zDZS_vh56pm83d4bbJgqh-bNDPeCVoCbp74bEM9u_BC6pAC6CJxg',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDEwNzg1LCJleHAiOjE3NzcwMTc5ODUsImlhdCI6MTc3NzAxMDc4NSwiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.LxF95cUWzNEsE5TixRMFTsrE_gqW-iQdK0zDZS_vh56pm83d4bbJgqh-bNDPeCVoCbp74bEM9u_BC6pAC6CJxg',
+          'Cookie': 'token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDIwMjIzLCJleHAiOjE3NzcwMjc0MjMsImlhdCI6MTc3NzAyMDIyMywiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.MtuYPyjsURyMZQ4PpN0okFNnVXvJJaQlvEQKjRabjnvhkPKtwZxWECtW1gGxmEqbbdG5Pk7q3KKzoFYTkma4xA',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDIwMjIzLCJleHAiOjE3NzcwMjc0MjMsImlhdCI6MTc3NzAyMDIyMywiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.MtuYPyjsURyMZQ4PpN0okFNnVXvJJaQlvEQKjRabjnvhkPKtwZxWECtW1gGxmEqbbdG5Pk7q3KKzoFYTkma4xA',
           'Origin': 'https://cabinet.neptunefxcrm.com',
           'Referer': 'https://cabinet.neptunefxcrm.com/dashboard',
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',

@@ -6,7 +6,7 @@ export function useDashboardSocket() {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    const token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDEwNzg1LCJleHAiOjE3NzcwMTc5ODUsImlhdCI6MTc3NzAxMDc4NSwiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.LxF95cUWzNEsE5TixRMFTsrE_gqW-iQdK0zDZS_vh56pm83d4bbJgqh-bNDPeCVoCbp74bEM9u_BC6pAC6CJxg';
+    const token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDIwMjIzLCJleHAiOjE3NzcwMjc0MjMsImlhdCI6MTc3NzAyMDIyMywiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.MtuYPyjsURyMZQ4PpN0okFNnVXvJJaQlvEQKjRabjnvhkPKtwZxWECtW1gGxmEqbbdG5Pk7q3KKzoFYTkma4xA';
     const wsUrl = `wss://mt5.neptunefxcrm.com/api/MTFiveAccount/ws?authorization=Bearer%20${token}`;
 
     console.log('Connecting to WebSocket:', wsUrl);
