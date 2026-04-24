@@ -3,7 +3,7 @@ import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
 import withdrawIcon from '../assets/withdraw.png.png';
 import depositIcon from '../assets/deposite.png.png';
 
-const ActionCards = ({ onNavigate }) => {
+const ActionCards = ({ onNavigate, data }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-[10px] 2xl:gap-[21px] min-h-[130px]">
       {/* Withdraw Card */}
@@ -15,7 +15,9 @@ const ActionCards = ({ onNavigate }) => {
           <img src={withdrawIcon} alt="Withdraw" className="w-[34px] 2xl:w-[46px] h-[34px] 2xl:h-[46px] object-contain" />
         </div>
         <div className="flex flex-col min-w-0">
-          <div className="text-[17px] lg:text-[18px] 2xl:text-[24px] font-extrabold text-[#122D32] tracking-tight leading-none whitespace-nowrap">$1,882</div>
+          <div className="text-[17px] lg:text-[18px] 2xl:text-[24px] font-extrabold text-[#122D32] tracking-tight leading-none whitespace-nowrap">
+            ${data?.totalWithdrawal ?? data?.totalwithdrawal ?? data?.withdrawAmount ? Number(data?.totalWithdrawal ?? data?.totalwithdrawal ?? data?.withdrawAmount).toLocaleString() : '1,882'}
+          </div>
           <div className="text-[14px] 2xl:text-[18px] font-semibold text-[#B2BEBB] leading-none mt-1.5 2xl:mt-2 whitespace-nowrap">Withdraw</div>
         </div>
       </div>
@@ -29,7 +31,9 @@ const ActionCards = ({ onNavigate }) => {
           <img src={depositIcon} alt="Deposit" className="w-[34px] 2xl:w-[46px] h-[34px] 2xl:h-[46px] object-contain" />
         </div>
         <div className="flex flex-col min-w-0">
-          <div className="text-[17px] lg:text-[18px] 2xl:text-[24px] font-extrabold text-[#122D32] tracking-tight leading-none whitespace-nowrap">$ 83,205.45</div>
+          <div className="text-[17px] lg:text-[18px] 2xl:text-[24px] font-extrabold text-[#122D32] tracking-tight leading-none whitespace-nowrap">
+            ${data?.totalDeposit ?? data?.totaldeposit ?? data?.depositeAmount ? Number(data?.totalDeposit ?? data?.totaldeposit ?? data?.depositeAmount).toLocaleString() : '84,454.45'}
+          </div>
           <div className="text-[14px] 2xl:text-[18px] font-semibold text-[#B2BEBB] leading-none mt-1.5 2xl:mt-2 whitespace-nowrap">Deposit</div>
         </div>
       </div>

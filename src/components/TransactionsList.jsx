@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
+import { useRealtimeJson } from '../hooks/useRealtimeJson';
+import { endpoints } from '../api/endpoints';
 
-const TransactionsList = () => {
+const TransactionsList = ({ data: dataProp }) => {
   const [transactionType, setTransactionType] = useState('Deposit');
 
-  const transactions = [
-    { from: 'Telcopay', to: 'Wallet', amount: '$ 100' },
-    { from: 'Telcopay', to: 'Wallet', amount: '$ 100' },
-    { from: 'Campaign Reward: deposit test offer', to: 'Wallet', amount: '$ 100' },
+  const demoTransactions = [
+    { from: 'Telcopay', to: 'Wallet', amount: '$ 100', type: 'Deposit' },
+    { from: 'Telcopay', to: 'Wallet', amount: '$ 100', type: 'Deposit' },
+    { from: 'Campaign Reward: deposit test offer', to: 'Wallet', amount: '$ 100', type: 'Deposit' },
   ];
+
+  const { data: dataRemote } = useRealtimeJson(endpoints.recentTransactions, {
+    enabled: Boolean(!dataProp && endpoints.recentTransactions),
+  });
+  const data = dataProp ?? dataRemote;
+
+  const allTransactions = transactionType === 'Deposit' 
+    ? (data?.deposits || []) 
+    : (data?.withdrawals || []);
+
+  const filteredTransactions = allTransactions.length > 0 ? allTransactions : demoTransactions.filter(t => t.type === transactionType);
 
   return (
     <div className="bg-white rounded-[20px] border border-[#E2E2E4] shadow-[0_10px_25px_rgba(18,45,50,0.12)] flex flex-col overflow-hidden flex-1 min-h-0">
@@ -41,13 +54,25 @@ const TransactionsList = () => {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((t, i) => (
-                <tr key={i} className="border-b border-[#E2E2E4] last:border-0">
-                  <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-medium text-[#122D32]/80">{t.from}</td>
-                  <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-medium text-[#122D32]/80">{t.to}</td>
-                  <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-extrabold text-[#122D32] text-right">{t.amount}</td>
+              {filteredTransactions.length > 0 ? (
+                filteredTransactions.map((t, i) => (
+                  <tr key={i} className="border-b border-[#E2E2E4] last:border-0">
+                    <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-medium text-[#122D32]/80">
+                      {t.from ?? t.paymentFrom ?? t.PaymentFrom ?? '-'}
+                    </td>
+                    <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-medium text-[#122D32]/80">
+                      {t.to ?? t.paymentTo ?? t.PaymentTo ?? '-'}
+                    </td>
+                    <td className="py-3.5 px-2 md:px-4 text-[11px] md:text-[12px] font-extrabold text-[#122D32] text-right">
+                      {typeof t.amount === 'number' ? `$ ${t.amount.toLocaleString()}` : (t.amount ?? t.Amount ?? '-')}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" className="py-8 text-center text-[#B2BEBB] text-[12px]">No {transactionType} transactions found</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           </div>

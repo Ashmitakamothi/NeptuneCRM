@@ -5,9 +5,24 @@ import equityIcon from '../assets/equityicon.png.png';
 import totalProfitIcon from '../assets/totalprofit.png.png';
 import usedMarginIcon from '../assets/usedmargin.png.png';
 import freeMarginIcon from '../assets/freemargin.png.png';
+import { useRealtimeJson } from '../hooks/useRealtimeJson';
 
-const SummaryCards = ({ onNavigate }) => {
-  const [dashboardType, setDashboardType] = useState('IB');
+const SummaryCards = ({ onNavigate, data }) => {
+  const [dashboardType, setDashboardType] = useState('User');
+  const { data: summaryDataRemote } = useRealtimeJson(import.meta.env.VITE_ENDPOINT_SUMMARY, {
+    enabled: Boolean(!data && import.meta.env.VITE_ENDPOINT_SUMMARY),
+  });
+  const summaryData = data ?? summaryDataRemote;
+
+  const rawBalance =
+    summaryData?.walletAmount ??
+    summaryData?.walletBalance ??
+    summaryData?.balance ??
+    0;
+    
+  const balanceValue = typeof rawBalance === 'number' 
+    ? rawBalance.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+    : rawBalance || '0';
 
   return (
     <div className="bg-[#122D32] border-[1.31px] border-[#1F383D] rounded-[15.76px] p-5 md:p-[31.53px]">
@@ -66,7 +81,9 @@ const SummaryCards = ({ onNavigate }) => {
              {/* Middle: Absolute Positioned Badge (Centered in Localized Light) */}
              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-auto">
                 <div className="bg-gradient-to-b from-[#BAED4A] to-[#86BC25] px-6 py-2 rounded-full border-[1.31px] border-white/40 shadow-[0_15px_30px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.7)] flex items-center justify-center min-w-[115px]">
-                   <span className="text-[22px] font-black text-[#0B1C1E] tracking-tighter leading-none">$7348</span>
+                    <span className="text-[22px] font-black text-[#0B1C1E] tracking-tighter leading-none">
+                      ${balanceValue}
+                    </span>
                 </div>
              </div>
           </div>
@@ -89,10 +106,10 @@ const SummaryCards = ({ onNavigate }) => {
 
         {/* Metric Cards - Slightly Taller */}
         {[
-          { label: 'Equity', value: '$ 0.00', icon: <img src={equityIcon} alt="Equity" className="w-[54px] h-[54px] object-contain" /> },
-          { label: 'Total Profit', value: '$ 0.00', icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[54px] h-[54px] object-contain" /> },
-          { label: 'Used Margin', value: '$ 0.00', icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[54px] h-[54px] object-contain" /> },
-          { label: 'Free Margin', value: '$ 0.00', icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Equity', value: summaryData?.equity ?? summaryData?.Equity ?? 0, icon: <img src={equityIcon} alt="Equity" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Total Profit', value: summaryData?.totalProfit ?? summaryData?.TotalProfit ?? 0, icon: <img src={totalProfitIcon} alt="Total Profit" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Used Margin', value: summaryData?.usedMargin ?? summaryData?.UsedMargin ?? 0, icon: <img src={usedMarginIcon} alt="Used Margin" className="w-[54px] h-[54px] object-contain" /> },
+          { label: 'Free Margin', value: summaryData?.freeMargin ?? summaryData?.FreeMargin ?? 0, icon: <img src={freeMarginIcon} alt="Free Margin" className="w-[54px] h-[54px] object-contain" /> },
         ].map((card, idx) => (
           <div 
             key={idx} 
@@ -103,7 +120,9 @@ const SummaryCards = ({ onNavigate }) => {
                {card.icon}
             </div>
             <div className="flex flex-col justify-center">
-               <div className="text-[18px] lg:text-[20px] font-bold text-white tracking-tight leading-tight">{card.value}</div>
+               <div className="text-[18px] lg:text-[20px] font-bold text-white tracking-tight leading-tight">
+                 {typeof card.value === 'number' ? `$ ${card.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : card.value}
+               </div>
                <div className="text-[12px] lg:text-[13px] font-semibold text-[#5CBA47] leading-tight mt-1">{card.label}</div>
             </div>
           </div>

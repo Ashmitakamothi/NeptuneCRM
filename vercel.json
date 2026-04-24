@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/mt5-api/:path*",
+      "destination": "https://mt5.neptunefxcrm.com/:path*"
+    },
+    {
+      "source": "/live-api/:path*",
+      "destination": "https://cabinet.neptunefxcrm.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
