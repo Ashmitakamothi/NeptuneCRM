@@ -92,8 +92,8 @@ function App() {
   }, []);
 
   const renderContent = () => {
-    if (activePage.startsWith('Report_')) {
-      const type = activePage.replace('Report_', '');
+    if (activePage.startsWith('Reports_')) {
+      const type = activePage.replace('Reports_', '');
       if (type === 'Logs') {
         return <LogsPage onNavigate={setActivePage} />;
       }
