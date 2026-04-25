@@ -5,6 +5,9 @@ import AccountsPage from './components/AccountsPage';
 import InternalTransferPage from './components/InternalTransferPage';
 import MyTransactionsPage from './components/MyTransactionsPage';
 import PlaceholderPage from './components/PlaceholderPage';
+import ReportsPage from './components/ReportsPage';
+import LogsPage from './components/LogsPage';
+
 function App() {
   const [activePage, setActivePage] = useState(() => {
     return localStorage.getItem('activePage') || 'Dashboard';
@@ -13,7 +16,16 @@ function App() {
   React.useEffect(() => {
     localStorage.setItem('activePage', activePage);
   }, [activePage]);
+
   const renderContent = () => {
+    if (activePage.startsWith('Report_')) {
+      const type = activePage.replace('Report_', '');
+      if (type === 'Logs') {
+        return <LogsPage onNavigate={setActivePage} />;
+      }
+      return <ReportsPage type={type} onNavigate={setActivePage} />;
+    }
+
     switch (activePage) {
       case 'Dashboard':
         return <Dashboard onNavigate={setActivePage} />;

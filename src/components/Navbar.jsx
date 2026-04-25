@@ -16,13 +16,29 @@ const Navbar = ({ onNavigate, activeMenu }) => {
     { name: 'Accounts', icon: <img src={accountsIcon} alt="Accounts" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'Internal Transfer', icon: <img src={internalTransferIcon} alt="Internal Transfer" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'My Transaction', icon: <img src={myTransactionIcon} alt="My Transaction" className="w-[18px] h-[18px] object-contain" /> },
-    { name: 'Reports', icon: <img src={reportsIcon} alt="Reports" className="w-[18px] h-[18px] object-contain" /> },
+    { 
+      name: 'Reports', 
+      icon: <img src={reportsIcon} alt="Reports" className="w-[18px] h-[18px] object-contain" />, 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'Deposit', label: 'Deposit' },
+        { name: 'Withdraw', label: 'Withdraw' },
+        { name: 'Transfer', label: 'Transfer' },
+        { name: 'Logs', label: 'Logs' }
+      ]
+    },
     { name: 'Leaderboard', icon: <img src={leaderboardIcon} alt="Leaderboard" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'More', icon: null, hasDropdown: true },
   ];
 
-  const handleNavClick = (name) => {
-    onNavigate(name);
+  const handleNavClick = (name, dropdownItemName = null) => {
+    if (dropdownItemName) {
+      onNavigate(`Report_${dropdownItemName}`);
+    } else {
+      // Don't navigate to base Reports if they click it, wait for dropdown click.
+      if (name === 'Reports') return;
+      onNavigate(name);
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -31,30 +47,62 @@ const Navbar = ({ onNavigate, activeMenu }) => {
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
         {/* Left Section: Logo & Nav Links grouped together */}
         <div className="flex items-center gap-10">
-          {/* Logo Pill (Removed redundant wrapper to fix double border) */}
+          {/* Logo Pill */}
           <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain" onClick={() => handleNavClick('Dashboard')} />
 
-          {/* Navigation Links (Now closer to logo) */}
+          {/* Navigation Links */}
           <div className="hidden xl:flex items-center gap-0.5">
             {menuItems.map((item, index) => (
               <React.Fragment key={index}>
-                <button
-                  onClick={() => handleNavClick(item.name)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold transition-all duration-200 ${
-                    activeMenu === item.name
-                      ? 'bg-white text-[#06120f]' 
-                      : 'text-[#8e9d9b] hover:text-white'
-                  }`}
-                >
-                  {item.icon && (
-                    <span className={activeMenu === item.name ? 'brightness-0' : ''}>
-                      {item.icon}
-                    </span>
+                <div className="relative group flex items-center h-[53px]">
+                  <button
+                    onClick={() => handleNavClick(item.name)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold transition-all duration-200 ${
+                      activeMenu && activeMenu.startsWith('Report_') && item.name === 'Reports' ? 'bg-white text-[#06120f]' :
+                      activeMenu === item.name
+                        ? 'bg-white text-[#06120f]' 
+                        : 'text-[#8e9d9b] hover:text-white'
+                    }`}
+                  >
+                    {item.icon && (
+                      <span className={(activeMenu === item.name || (activeMenu && activeMenu.startsWith('Report_') && item.name === 'Reports')) ? 'brightness-0' : ''}>
+                        {item.icon}
+                      </span>
+                    )}
+                    <span>{item.name}</span>
+                    {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
+                  </button>
+                  
+                  {/* Dropdown Menu */}
+                  {item.dropdownItems && (
+                    <div className="absolute top-[53px] left-0 min-w-[160px] bg-[#1A1A1A] border border-white/10 rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0">
+                      <div className="py-2">
+                        {item.dropdownItems.map((dropItem, dropIndex) => {
+                          const isActive = activeMenu === `Report_${dropItem.name}`;
+                          return (
+                            <button
+                              key={dropIndex}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNavClick(item.name, dropItem.name);
+                              }}
+                              className={`w-full text-left px-4 py-2.5 text-[14px] flex items-center gap-3 transition-colors ${
+                                isActive ? 'text-[#00BFA5] bg-white/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                              }`}
+                            >
+                              {/* Radio button style icon (from screenshot) */}
+                              <div className="flex items-center justify-center w-4 h-4 rounded-full border border-current">
+                                {isActive && <div className="w-2 h-2 rounded-full bg-current"></div>}
+                              </div>
+                              <span className={isActive ? 'font-medium' : ''}>{dropItem.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
-                  <span>{item.name}</span>
-                  {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
-                </button>
-                {/* Vertical Divider (Vector from Figma) - Skip after Dashboard */}
+                </div>
+                {/* Vertical Divider */}
                 {index < menuItems.length - 1 && item.name !== 'Dashboard' && (
                   <div className="w-[1.31px] h-[24px] bg-white/10 mx-0.5"></div>
                 )}
