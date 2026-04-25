@@ -44,18 +44,9 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
     setCurrentPage(1);
   }, [operationFilter, dateRange]);
 
-  // Mock data matching the screenshot
+  // Mock data matching the screenshot (Commented out for API integration)
   const mockData = [
-    { id: 1, operation: 'IBWalletToWallet', paymentFrom: 'IB Wallet', paymentTo: '3936', amount: '$ 10', currency: 'USD', transactionDate: '22-04-2026 5:51 PM', status: 'PENDING' },
-    { id: 2, operation: 'IBWalletToWallet', paymentFrom: 'IB Wallet', paymentTo: 'Wallet', amount: '$ 10', currency: 'USD', transactionDate: '22-04-2026 5:51 PM', status: 'SUCCESS' },
-    { id: 3, operation: 'IBWalletToWallet', paymentFrom: 'IB Wallet', paymentTo: 'Wallet', amount: '$ 10', currency: 'USD', transactionDate: '22-04-2026 5:39 PM', status: 'SUCCESS' },
-    { id: 4, operation: 'Deposit', paymentFrom: 'BankTransfer', paymentTo: 'Wallet', amount: '$ 10.53', currency: 'USD', transactionDate: '16-04-2026 5:12 PM', status: 'PENDING' },
-    { id: 5, operation: 'WalletToAccount', paymentFrom: 'Wallet', paymentTo: '555006', amount: '$ 10', currency: 'USD', transactionDate: '16-04-2026 5:11 PM', status: 'SUCCESS' },
-    { id: 6, operation: 'Deposit', paymentFrom: '0', paymentTo: 'Wallet', amount: '$ 10', currency: 'USD', transactionDate: '16-04-2026 5:11 PM', status: 'SUCCESS' },
-    { id: 7, operation: 'Deposit', paymentFrom: 'USDT_BEP20', paymentTo: 'Wallet', amount: '$ 10', currency: 'USD', transactionDate: '16-04-2026 5:11 PM', status: 'SUCCESS' },
-    { id: 8, operation: 'Withdrawal', paymentFrom: 'Wallet', paymentTo: 'USDT_BEP20', amount: '$ 122', currency: 'USD', transactionDate: '15-04-2026 11:46 AM', status: 'PENDING' },
-    { id: 9, operation: 'Withdrawal', paymentFrom: 'Wallet', paymentTo: 'USDT_TRC20', amount: '$ 12', currency: 'USD', transactionDate: '15-04-2026 11:45 AM', status: 'PENDING' },
-    { id: 10, operation: 'Withdrawal', paymentFrom: 'Wallet', paymentTo: 'KessPay', amount: '$ 12', currency: 'USD', transactionDate: '11-04-2026 3:05 PM', status: 'PENDING' },
+
   ];
 
   const filteredData = mockData.filter(item => {
