@@ -11,6 +11,7 @@ import LeaderboardPage from './components/LeaderboardPage';
 import WalletDepositPage from './components/WalletDepositPage';
 import WalletWithdrawPage from './components/WalletWithdrawPage';
 import WebTraderPage from './components/WebTraderPage';
+import TradeAndWinPage from './components/TradeAndWinPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -24,7 +25,8 @@ function App() {
       'leaderboard': 'Leaderboard',
       'wallet/deposit': 'Wallet_Deposit',
       'wallet/withdraw': 'Wallet_Withdraw',
-      'webTrader': 'More_WebTrader'
+      'webTrader': 'More_WebTrader',
+      'trade_and_win': 'More_TradeAndWin'
     };
     
     if (urlMap[path]) return urlMap[path];
@@ -46,7 +48,8 @@ function App() {
       'Leaderboard': 'leaderboard',
       'Wallet_Deposit': 'wallet/deposit',
       'Wallet_Withdraw': 'wallet/withdraw',
-      'More_WebTrader': 'webTrader'
+      'More_WebTrader': 'webTrader',
+      'More_TradeAndWin': 'trade_and_win'
     };
 
     const path = pageToPath[activePage] || '';
@@ -73,7 +76,8 @@ function App() {
           'leaderboard': 'Leaderboard',
           'wallet/deposit': 'Wallet_Deposit',
           'wallet/withdraw': 'Wallet_Withdraw',
-          'webTrader': 'More_WebTrader'
+          'webTrader': 'More_WebTrader',
+          'trade_and_win': 'More_TradeAndWin'
         };
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -110,6 +114,8 @@ function App() {
         return <WalletWithdrawPage onNavigate={setActivePage} />;
       case 'More_WebTrader':
         return <WebTraderPage onNavigate={setActivePage} />;
+      case 'More_TradeAndWin':
+        return <TradeAndWinPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
