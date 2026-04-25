@@ -2,7 +2,38 @@ import React, { useMemo, useState } from 'react';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
 import { endpoints } from '../api/endpoints';
 
-const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType = null, statusFilter = 'All' }) => {
+const TRANSLATIONS = {
+  EN: {
+    login: "Login",
+    platform: "Platform",
+    acType: "A/C Type",
+    balance: "Balance",
+    leverage: "Leverage",
+    currency: "Currency",
+    createdAt: "Created At",
+    status: "Status",
+    actions: "Actions",
+    noRecord: "No Record Found",
+    liveAccount: "Live Account",
+    demoAccount: "Demo Account"
+  },
+  HI: {
+    login: "लॉगिन",
+    platform: "प्लेटफार्म",
+    acType: "ए/सी प्रकार",
+    balance: "बैलेंस",
+    leverage: "लेवरेज",
+    currency: "मुद्रा",
+    createdAt: "बनने की तिथि",
+    status: "स्थिति",
+    actions: "एक्शन",
+    noRecord: "कोई रिकॉर्ड नहीं मिला",
+    liveAccount: "लाइव अकाउंट",
+    demoAccount: "डेमो अकाउंट"
+  }
+};
+
+const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType = null, statusFilter = 'All', language = 'EN' }) => {
   const [internalAccountType, setInternalAccountType] = useState('Live');
   const accountType = externalAccountType || internalAccountType;
   const { data: dataRemote } = useRealtimeJson(endpoints.accounts, { enabled: Boolean(!dataProp && endpoints.accounts) });
@@ -32,6 +63,8 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
     });
   }, [accountsRaw, accountType, statusFilter]);
 
+  const t = (key) => TRANSLATIONS[language]?.[key] || key;
+
   return (
     <div className="rounded-[16px] border border-white/10 overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
       {!hideHeader && (
@@ -42,13 +75,13 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
               onClick={() => setInternalAccountType('Live')}
               className={`flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full font-semibold transition-all ${accountType === 'Live' ? 'bg-[#00BFA5] text-white shadow-sm' : 'text-[#8e9d9b] hover:text-white'}`}
             >
-              Live Account
+              {t('liveAccount')}
             </button>
             <button 
               onClick={() => setInternalAccountType('Demo')}
               className={`flex-1 sm:flex-none text-[11px] px-4 h-full rounded-full font-semibold transition-all ${accountType === 'Demo' ? 'bg-[#00BFA5] text-white shadow-sm' : 'text-[#8e9d9b] hover:text-white'}`}
             >
-              Demo Account
+              {t('demoAccount')}
             </button>
           </div>
         </div>
@@ -58,15 +91,15 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
         <table className="w-full whitespace-nowrap">
           <thead>
             <tr className="bg-[#1A1A1A] border-b border-white/10">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white">Login</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Platform</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">A/C Type</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Balance</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Leverage</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Currency</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Created At</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Status</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">Actions</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white">{t('login')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('platform')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('acType')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('balance')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('leverage')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('currency')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('createdAt')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('status')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -133,7 +166,7 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
                        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
                        <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
                      </svg>
-                     <span className="text-[14px] font-medium">No Record Found</span>
+                     <span className="text-[14px] font-medium">{t('noRecord')}</span>
                    </div>
                 </td>
               </tr>
