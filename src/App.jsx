@@ -10,15 +10,78 @@ import LogsPage from './components/LogsPage';
 import LeaderboardPage from './components/LeaderboardPage';
 import WalletDepositPage from './components/WalletDepositPage';
 import WalletWithdrawPage from './components/WalletWithdrawPage';
+import WebTraderPage from './components/WebTraderPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
+    // 1. Check URL path first
+    const path = window.location.pathname.replace(/^\//, '');
+    const urlMap = {
+      'dashboard': 'Dashboard',
+      'accounts': 'Accounts',
+      'internal-transfer': 'Internal Transfer',
+      'transactions': 'My Transaction',
+      'leaderboard': 'Leaderboard',
+      'wallet/deposit': 'Wallet_Deposit',
+      'wallet/withdraw': 'Wallet_Withdraw',
+      'webTrader': 'More_WebTrader'
+    };
+    
+    if (urlMap[path]) return urlMap[path];
+    
+    // 2. Fallback to localStorage
     return localStorage.getItem('activePage') || 'Dashboard';
   });
 
+  // Sync state to URL and localStorage
   React.useEffect(() => {
     localStorage.setItem('activePage', activePage);
+    
+    const pageToPath = {
+      'Dashboard': 'dashboard',
+      'Accounts': 'accounts',
+      'Internal Transfer': 'internal-transfer',
+      'My Transaction': 'transactions',
+      'My Transactions': 'transactions',
+      'Leaderboard': 'leaderboard',
+      'Wallet_Deposit': 'wallet/deposit',
+      'Wallet_Withdraw': 'wallet/withdraw',
+      'More_WebTrader': 'webTrader'
+    };
+
+    const path = pageToPath[activePage] || '';
+    const currentPath = window.location.pathname.replace(/^\//, '');
+    
+    if (path !== currentPath) {
+      window.history.pushState({ page: activePage }, '', `/${path}`);
+    }
   }, [activePage]);
+
+  // Handle browser Back/Forward buttons
+  React.useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.page) {
+        setActivePage(event.state.page);
+      } else {
+        // Fallback mapping based on current URL after pop
+        const path = window.location.pathname.replace(/^\//, '');
+        const urlMap = {
+          'dashboard': 'Dashboard',
+          'accounts': 'Accounts',
+          'internal-transfer': 'Internal Transfer',
+          'transactions': 'My Transaction',
+          'leaderboard': 'Leaderboard',
+          'wallet/deposit': 'Wallet_Deposit',
+          'wallet/withdraw': 'Wallet_Withdraw',
+          'webTrader': 'More_WebTrader'
+        };
+        if (urlMap[path]) setActivePage(urlMap[path]);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const renderContent = () => {
     if (activePage.startsWith('Report_')) {
@@ -45,6 +108,8 @@ function App() {
         return <WalletDepositPage onNavigate={setActivePage} />;
       case 'Wallet_Withdraw':
         return <WalletWithdrawPage onNavigate={setActivePage} />;
+      case 'More_WebTrader':
+        return <WebTraderPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
