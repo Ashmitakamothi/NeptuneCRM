@@ -12,6 +12,7 @@ import WalletDepositPage from './components/WalletDepositPage';
 import WalletWithdrawPage from './components/WalletWithdrawPage';
 import WebTraderPage from './components/WebTraderPage';
 import TradeAndWinPage from './components/TradeAndWinPage';
+import IBRequestPage from './components/IBRequestPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -26,7 +27,8 @@ function App() {
       'wallet/deposit': 'Wallet_Deposit',
       'wallet/withdraw': 'Wallet_Withdraw',
       'webTrader': 'More_WebTrader',
-      'trade_and_win': 'More_TradeAndWin'
+      'trade_and_win': 'More_TradeAndWin',
+      'ib_request': 'More_IBRequest'
     };
     
     if (urlMap[path]) return urlMap[path];
@@ -49,7 +51,8 @@ function App() {
       'Wallet_Deposit': 'wallet/deposit',
       'Wallet_Withdraw': 'wallet/withdraw',
       'More_WebTrader': 'webTrader',
-      'More_TradeAndWin': 'trade_and_win'
+      'More_TradeAndWin': 'trade_and_win',
+      'More_IBRequest': 'ib_request'
     };
 
     const path = pageToPath[activePage] || '';
@@ -77,7 +80,8 @@ function App() {
           'wallet/deposit': 'Wallet_Deposit',
           'wallet/withdraw': 'Wallet_Withdraw',
           'webTrader': 'More_WebTrader',
-          'trade_and_win': 'More_TradeAndWin'
+          'trade_and_win': 'More_TradeAndWin',
+          'ib_request': 'More_IBRequest'
         };
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -116,6 +120,8 @@ function App() {
         return <WebTraderPage onNavigate={setActivePage} />;
       case 'More_TradeAndWin':
         return <TradeAndWinPage onNavigate={setActivePage} />;
+      case 'More_IBRequest':
+        return <IBRequestPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
