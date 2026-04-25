@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
+import AccountsPage from './components/AccountsPage';
 import PlaceholderPage from './components/PlaceholderPage';
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
     switch (activePage) {
       case 'Dashboard':
         return <Dashboard onNavigate={setActivePage} />;
+      case 'Accounts':
+        return <AccountsPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }

@@ -40,13 +40,17 @@ const Navbar = ({ onNavigate, activeMenu }) => {
               <React.Fragment key={index}>
                 <button
                   onClick={() => handleNavClick(item.name)}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[12px] font-semibold transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold transition-all duration-200 ${
                     activeMenu === item.name
                       ? 'bg-white text-[#06120f]' 
                       : 'text-[#8e9d9b] hover:text-white'
                   }`}
                 >
-                  {item.icon && <span>{item.icon}</span>}
+                  {item.icon && (
+                    <span className={activeMenu === item.name ? 'brightness-0' : ''}>
+                      {item.icon}
+                    </span>
+                  )}
                   <span>{item.name}</span>
                   {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
                 </button>
