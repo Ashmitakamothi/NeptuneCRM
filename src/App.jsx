@@ -3,8 +3,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import AccountsPage from './components/AccountsPage';
 import InternalTransferPage from './components/InternalTransferPage';
+import MyTransactionsPage from './components/MyTransactionsPage';
 import PlaceholderPage from './components/PlaceholderPage';
-
 function App() {
   const [activePage, setActivePage] = useState(() => {
     return localStorage.getItem('activePage') || 'Dashboard';
@@ -21,6 +21,9 @@ function App() {
         return <AccountsPage onNavigate={setActivePage} />;
       case 'Internal Transfer':
         return <InternalTransferPage onNavigate={setActivePage} />;
+      case 'My Transactions':
+      case 'My Transaction': // Handle both singular and plural forms for safety
+        return <MyTransactionsPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
