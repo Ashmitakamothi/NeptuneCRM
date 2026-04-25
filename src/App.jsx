@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import AccountsPage from './components/AccountsPage';
+import InternalTransferPage from './components/InternalTransferPage';
 import PlaceholderPage from './components/PlaceholderPage';
 
 function App() {
-  const [activePage, setActivePage] = useState('Dashboard');
+  const [activePage, setActivePage] = useState(() => {
+    return localStorage.getItem('activePage') || 'Dashboard';
+  });
 
+  React.useEffect(() => {
+    localStorage.setItem('activePage', activePage);
+  }, [activePage]);
   const renderContent = () => {
     switch (activePage) {
       case 'Dashboard':
         return <Dashboard onNavigate={setActivePage} />;
       case 'Accounts':
         return <AccountsPage onNavigate={setActivePage} />;
+      case 'Internal Transfer':
+        return <InternalTransferPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
