@@ -8,6 +8,8 @@ import PlaceholderPage from './components/PlaceholderPage';
 import ReportsPage from './components/ReportsPage';
 import LogsPage from './components/LogsPage';
 import LeaderboardPage from './components/LeaderboardPage';
+import WalletDepositPage from './components/WalletDepositPage';
+import WalletWithdrawPage from './components/WalletWithdrawPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -39,6 +41,10 @@ function App() {
         return <MyTransactionsPage onNavigate={setActivePage} />;
       case 'Leaderboard':
         return <LeaderboardPage onNavigate={setActivePage} />;
+      case 'Wallet_Deposit':
+        return <WalletDepositPage onNavigate={setActivePage} />;
+      case 'Wallet_Withdraw':
+        return <WalletWithdrawPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
