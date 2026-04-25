@@ -14,6 +14,7 @@ import WebTraderPage from './components/WebTraderPage';
 import TradeAndWinPage from './components/TradeAndWinPage';
 import IBRequestPage from './components/IBRequestPage';
 import FAQsPage from './components/FAQsPage';
+import SupportPage from './components/SupportPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -30,7 +31,8 @@ function App() {
       'webTrader': 'More_WebTrader',
       'trade_and_win': 'More_TradeAndWin',
       'ib_request': 'More_IBRequest',
-      'faq': 'More_FAQs'
+      'faq': 'More_FAQs',
+      'support': 'More_Support'
     };
     
     if (urlMap[path]) return urlMap[path];
@@ -55,7 +57,8 @@ function App() {
       'More_WebTrader': 'webTrader',
       'More_TradeAndWin': 'trade_and_win',
       'More_IBRequest': 'ib_request',
-      'More_FAQs': 'faq'
+      'More_FAQs': 'faq',
+      'More_Support': 'support'
     };
 
     const path = pageToPath[activePage] || '';
@@ -85,7 +88,8 @@ function App() {
           'webTrader': 'More_WebTrader',
           'trade_and_win': 'More_TradeAndWin',
           'ib_request': 'More_IBRequest',
-          'faq': 'More_FAQs'
+          'faq': 'More_FAQs',
+          'support': 'More_Support'
         };
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -128,6 +132,8 @@ function App() {
         return <IBRequestPage onNavigate={setActivePage} />;
       case 'More_FAQs':
         return <FAQsPage onNavigate={setActivePage} />;
+      case 'More_Support':
+        return <SupportPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
