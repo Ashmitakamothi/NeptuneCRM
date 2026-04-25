@@ -7,6 +7,7 @@ import MyTransactionsPage from './components/MyTransactionsPage';
 import PlaceholderPage from './components/PlaceholderPage';
 import ReportsPage from './components/ReportsPage';
 import LogsPage from './components/LogsPage';
+import LeaderboardPage from './components/LeaderboardPage';
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -36,6 +37,8 @@ function App() {
       case 'My Transactions':
       case 'My Transaction': // Handle both singular and plural forms for safety
         return <MyTransactionsPage onNavigate={setActivePage} />;
+      case 'Leaderboard':
+        return <LeaderboardPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
     }
