@@ -13,7 +13,10 @@ const AccountsPage = ({ onNavigate }) => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
         <div className="flex items-center gap-3">
           <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none uppercase">ACCOUNTS</h1>
-          <span className="bg-[#158B86] text-white text-[10px] md:text-[12px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">News</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" style={{ animationDuration: '1s' }}></div>
+            <span className="bg-[#158B86] text-white text-sm sm:text-lg font-medium px-2 rounded-sm cursor-pointer">News</span>
+          </div>
         </div>
         
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
