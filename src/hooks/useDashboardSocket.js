@@ -1,15 +1,18 @@
 import { useEffect, useState, useRef } from 'react';
 
-export function useDashboardSocket() {
+export function useDashboardSocket(loginId) {
   const [data, setData] = useState(null);
   const [status, setStatus] = useState('connecting');
   const socketRef = useRef(null);
 
   useEffect(() => {
-    const token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3Mjc4MTY3LCJleHAiOjE3NzcyODUzNjcsImlhdCI6MTc3NzI3ODE2NywiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.ltSPaO9SS4yAjgbfqlhpyMnC2WYSJEv1KxUfhpPtNzqoc5GNs6NOe6YIqmIRzFXP29uOuPTdQoDnU7cP9PThEw';
+    if (!loginId) return;
+
+    const token = import.meta.env.VITE_API_TOKEN;
+    // Note: In production, you might need a separate proxy for WSS or use absolute URL if allowed
     const wsUrl = `wss://mt5.neptunefxcrm.com/api/MTFiveAccount/ws?authorization=Bearer%20${token}`;
 
-    console.log('Connecting to WebSocket:', wsUrl);
+    console.log('Connecting to WebSocket for account:', loginId);
     const ws = new WebSocket(wsUrl);
     socketRef.current = ws;
 
@@ -17,21 +20,20 @@ export function useDashboardSocket() {
       console.log('WebSocket Connected');
       setStatus('open');
       
-      // Send subscription messages
+      // Send subscription messages for the specific loginId
       const sub1 = JSON.stringify({
         action: "subscribe",
         eventType: "UserLiveDashboard",
-        loginId: 555166
+        loginId: parseInt(loginId)
       });
       const sub2 = JSON.stringify({
         action: "subscribe",
         eventType: "OpenPosition",
-        loginId: 555166
+        loginId: parseInt(loginId)
       });
       
       ws.send(sub1);
       ws.send(sub2);
-      console.log('Subscription messages sent');
     };
 
     ws.onmessage = (event) => {
@@ -54,12 +56,15 @@ export function useDashboardSocket() {
               ...innerData,
               balance: innerData.Balance,
               equity: innerData.Equity,
-              totalProfit: innerData.Pl ?? innerData.PlFloating ?? innerData.TotalProfit,
-              usedMargin: innerData.Margin ?? innerData.UsedMargin,
-              freeMargin: innerData.MarginFree ?? innerData.FreeMargin
+              floatingProfit: innerData.PlFloating || innerData.Pl || 0,
+              margin: innerData.Margin,
+              freeMargin: innerData.MarginFree
             }));
           } else if (message.eventType === 'OpenPosition') {
-            setData(prev => ({ ...prev, openTrades: innerData }));
+            setData(prev => ({ 
+              ...prev, 
+              openTrades: Array.isArray(innerData) ? innerData : [innerData] 
+            }));
           }
         }
       } catch (e) {
@@ -82,7 +87,7 @@ export function useDashboardSocket() {
         ws.close();
       }
     };
-  }, []);
+  }, [loginId]);
 
   return { data, status };
 }

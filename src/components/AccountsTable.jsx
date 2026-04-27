@@ -36,11 +36,31 @@ const TRANSLATIONS = {
   }
 };
 
-const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType = null, statusFilter = 'All', isDashboard = false }) => {
+const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType = null, statusFilter = 'All', isDashboard = false, onNavigate }) => {
   const [internalAccountType, setInternalAccountType] = useState('Live');
   const accountType = externalAccountType || internalAccountType;
   const { language } = useLanguage();
-  const { data: dataRemote } = useRealtimeJson(endpoints.accounts, { enabled: Boolean(!dataProp && endpoints.accounts) });
+
+  const dynamicAccountsEndpoint = useMemo(() => {
+    if (!endpoints.accounts) return null;
+    let url = endpoints.accounts;
+    
+    // Toggle between true/false for Live/Demo
+    if (accountType === 'Demo') {
+      url = url.replace('/true?', '/false?');
+    } else {
+      url = url.replace('/false?', '/true?');
+    }
+
+    if (statusFilter === 'Pending') {
+      return url.replace('FilterText=approved', 'FilterText=pending');
+    } else if (statusFilter === 'Declined') {
+      return url.replace('FilterText=approved', 'FilterText=rejected');
+    }
+    return url;
+  }, [accountType, statusFilter]);
+
+  const { data: dataRemote, loading } = useRealtimeJson(dynamicAccountsEndpoint, { enabled: Boolean(!dataProp && dynamicAccountsEndpoint) });
   const data = dataProp ?? dataRemote;
   const accountsRaw = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : null;
   const accounts = useMemo(() => {
@@ -49,19 +69,27 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
     
     return list.filter((a) => {
       // 1. Live/Demo Filter
-      let typeMatch = false;
-      if (typeof a.isLive === 'boolean' && typeof a.isDemo === 'boolean') {
-        typeMatch = t === 'live' ? a.isLive : a.isDemo;
+      let typeMatch = true;
+      if (typeof a.isLive === 'boolean') {
+        typeMatch = t === 'live' ? a.isLive : !a.isLive;
+      } else if (typeof a.isDemo === 'boolean') {
+        typeMatch = t === 'live' ? !a.isDemo : a.isDemo;
       } else {
         const typeStr = (a.type || a.accountType || a.acType || '').toString().toLowerCase();
-        typeMatch = !typeStr ? true : (t === 'live' ? typeStr.includes('live') : typeStr.includes('demo'));
+        if (typeStr) {
+          typeMatch = t === 'live' ? typeStr.includes('live') : typeStr.includes('demo');
+        }
       }
       if (!typeMatch) return false;
 
       // 2. Status Filter
       if (statusFilter && statusFilter !== 'All') {
-        const s = (a.status || 'APPROVED').toUpperCase();
-        if (s !== statusFilter.toUpperCase()) return false;
+        // If the API response doesn't have a status field, we assume it's valid
+        // because we called a status-specific endpoint (e.g., FilterText=approved)
+        if (a.status) {
+          const s = a.status.toUpperCase();
+          if (s !== statusFilter.toUpperCase()) return false;
+        }
       }
       return true;
     });
@@ -114,7 +142,18 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
           </thead>
 
           <tbody>
-            {accounts.length > 0 ? (
+            {loading ? (
+              // Skeleton Loader Rows
+              [...Array(5)].map((_, i) => (
+                <tr key={`skeleton-${i}`} className="border-b border-[var(--border-color)] animate-pulse">
+                  {[...Array(isDashboard ? 7 : 9)].map((_, j) => (
+                    <td key={`cell-${j}`} className="py-4 px-1 md:px-2">
+                      <div className="h-7 bg-[var(--border-color)] opacity-20 rounded-[8px] w-full"></div>
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : accounts.length > 0 ? (
               accounts.map((a, idx) => (
                 <tr key={a.id ?? idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
                   <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
@@ -151,18 +190,43 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
                         {(() => {
                           const status = (a.status || 'APPROVED').toUpperCase();
                           if (status === 'APPROVED') {
-                            return <span className="text-[#00BFA5]">APPROVED</span>;
+                            return <span className="px-3 py-1 rounded-full bg-[#D9F7E8] text-[#00B69B] text-[10px] font-bold tracking-wider">APPROVED</span>;
                           } else if (status === 'PENDING') {
-                            return <span className="text-[#F5A623]">PENDING</span>;
+                            return <span className="px-3 py-1 rounded-full bg-[#FFF4E5] text-[#FF9800] text-[10px] font-bold tracking-wider">PENDING</span>;
                           } else {
-                            return <span className="text-[#D0021B]">{status}</span>;
+                            return <span className="px-3 py-1 rounded-full bg-[#FEE2E2] text-[#EF4444] text-[10px] font-bold tracking-wider">{status}</span>;
                           }
                         })()}
                       </td>
                       <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                         <div className="flex items-center gap-3">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80 hover:opacity-100 cursor-pointer"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80 hover:opacity-100 cursor-pointer"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                          <div className="ant-dropdown-trigger cursor-pointer">
+                            <button className="bg-transparent border-none p-0 flex items-center justify-center">
+                              <div>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-80 hover:opacity-100 transition-opacity">
+                                  <circle cx="12" cy="12" r="3"></circle>
+                                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                                </svg>
+                              </div>
+                            </button>
+                          </div>
+                          <div className="ant-dropdown-trigger cursor-pointer" onClick={() => onNavigate && onNavigate('Account_Details', a)}>
+                            <button className="bg-transparent border-none p-0 flex items-center justify-center">
+                              <div>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="opacity-80 hover:opacity-100 transition-opacity">
+                                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                                  <line x1="17" y1="16" x2="23" y2="16"></line>
+                                </svg>
+                              </div>
+                            </button>
+                          </div>
                         </div>
                       </td>
                     </>

@@ -19,13 +19,13 @@ import TutorialsPage from './components/TutorialsPage';
 import MessengerPage from './components/MessengerPage';
 import DownloadPage from './components/DownloadPage';
 import ProfilePage from './components/ProfilePage';
+import AccountDetailsPage from './components/AccountDetailsPage';
 
-
-
-function App() {
-  const [activePage, setActivePage] = useState(() => {
+const App = () => {
+  const [activePage, setActivePageInternal] = useState(() => {
     // 1. Check URL path first
     const path = window.location.pathname.replace(/^\//, '');
+
     const urlMap = {
       'dashboard': 'Dashboard',
       'accounts': 'Accounts',
@@ -43,16 +43,22 @@ function App() {
       'tutorial': 'More_Tutorial',
       'download': 'More_Download',
       'mt5-download': 'More_MT5Download',
-      'profile': 'Profile'
+      'profile': 'Profile',
+      'accounts/details': 'Account_Details'
     };
 
-
-    
     if (urlMap[path]) return urlMap[path];
     
     // 2. Fallback to localStorage
     return localStorage.getItem('activePage') || 'Dashboard';
   });
+
+  const [pageData, setPageData] = useState(null);
+
+  const setActivePage = (page, data = null) => {
+    setActivePageInternal(page);
+    setPageData(data);
+  };
 
   // Sync state to URL and localStorage
   React.useEffect(() => {
@@ -76,16 +82,16 @@ function App() {
       'More_Tutorial': 'tutorial',
       'More_Download': 'download',
       'More_MT5Download': 'download',
-      'Profile': 'profile'
+      'Profile': 'profile',
+      'Account_Details': 'accounts/details'
     };
-
-
 
     const path = pageToPath[activePage] || '';
     const currentPath = window.location.pathname.replace(/^\//, '');
+    const currentSearch = window.location.search;
     
     if (path !== currentPath) {
-      window.history.pushState({ page: activePage }, '', `/${path}`);
+      window.history.pushState({ page: activePage }, '', `/${path}${activePage === 'Accounts' && !currentSearch ? '?filter=live' : currentSearch}`);
     }
   }, [activePage]);
 
@@ -95,7 +101,6 @@ function App() {
       if (event.state && event.state.page) {
         setActivePage(event.state.page);
       } else {
-        // Fallback mapping based on current URL after pop
         const path = window.location.pathname.replace(/^\//, '');
         const urlMap = {
           'dashboard': 'Dashboard',
@@ -114,9 +119,9 @@ function App() {
           'tutorial': 'More_Tutorial',
           'download': 'More_Download',
           'mt5-download': 'More_MT5Download',
-          'profile': 'Profile'
+          'profile': 'Profile',
+          'accounts/details': 'Account_Details'
         };
-
 
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -129,51 +134,31 @@ function App() {
   const renderContent = () => {
     if (activePage.startsWith('Reports_')) {
       const type = activePage.replace('Reports_', '');
-      if (type === 'Logs') {
-        return <LogsPage onNavigate={setActivePage} />;
-      }
+      if (type === 'Logs') return <LogsPage onNavigate={setActivePage} />;
       return <ReportsPage type={type} onNavigate={setActivePage} />;
     }
 
     switch (activePage) {
-      case 'Dashboard':
-        return <Dashboard onNavigate={setActivePage} />;
-      case 'Accounts':
-        return <AccountsPage onNavigate={setActivePage} />;
-      case 'Internal Transfer':
-        return <InternalTransferPage onNavigate={setActivePage} />;
+      case 'Dashboard': return <Dashboard onNavigate={setActivePage} />;
+      case 'Accounts': return <AccountsPage onNavigate={setActivePage} />;
+      case 'Account_Details': return <AccountDetailsPage onNavigate={setActivePage} pageData={pageData} />;
+      case 'Internal Transfer': return <InternalTransferPage onNavigate={setActivePage} />;
       case 'My Transactions':
-      case 'My Transaction': // Handle both singular and plural forms for safety
-        return <MyTransactionsPage onNavigate={setActivePage} />;
-      case 'More_Leaderboard':
-        return <LeaderboardPage onNavigate={setActivePage} />;
-      case 'Wallet_Deposit':
-        return <WalletDepositPage onNavigate={setActivePage} />;
-      case 'Wallet_Withdraw':
-        return <WalletWithdrawPage onNavigate={setActivePage} />;
-      case 'More_WebTrader':
-        return <WebTraderPage onNavigate={setActivePage} />;
-      case 'More_TradeAndWin':
-        return <TradeAndWinPage onNavigate={setActivePage} />;
-      case 'More_IBRequest':
-        return <IBRequestPage onNavigate={setActivePage} />;
-      case 'More_FAQs':
-        return <FAQsPage onNavigate={setActivePage} />;
-      case 'More_Support':
-        return <SupportPage onNavigate={setActivePage} />;
-      case 'More_Messenger':
-        return <MessengerPage onNavigate={setActivePage} />;
-      case 'More_Tutorial':
-        return <TutorialsPage onNavigate={setActivePage} />;
+      case 'My Transaction': return <MyTransactionsPage onNavigate={setActivePage} />;
+      case 'More_Leaderboard': return <LeaderboardPage onNavigate={setActivePage} />;
+      case 'Wallet_Deposit': return <WalletDepositPage onNavigate={setActivePage} />;
+      case 'Wallet_Withdraw': return <WalletWithdrawPage onNavigate={setActivePage} />;
+      case 'More_WebTrader': return <WebTraderPage onNavigate={setActivePage} />;
+      case 'More_TradeAndWin': return <TradeAndWinPage onNavigate={setActivePage} />;
+      case 'More_IBRequest': return <IBRequestPage onNavigate={setActivePage} />;
+      case 'More_FAQs': return <FAQsPage onNavigate={setActivePage} />;
+      case 'More_Support': return <SupportPage onNavigate={setActivePage} />;
+      case 'More_Messenger': return <MessengerPage onNavigate={setActivePage} />;
+      case 'More_Tutorial': return <TutorialsPage onNavigate={setActivePage} />;
       case 'More_Download':
-      case 'More_MT5Download':
-        return <DownloadPage onNavigate={setActivePage} />;
-      case 'Profile':
-        return <ProfilePage onNavigate={setActivePage} />;
-
-      default:
-        return <PlaceholderPage title={activePage} />;
-
+      case 'More_MT5Download': return <DownloadPage onNavigate={setActivePage} />;
+      case 'Profile': return <ProfilePage onNavigate={setActivePage} />;
+      default: return <PlaceholderPage title={activePage} />;
     }
   };
 
@@ -185,8 +170,7 @@ function App() {
         {renderContent()}
       </main>
     </div>
-
   );
-}
+};
 
 export default App;

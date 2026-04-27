@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import AccountsTable from './AccountsTable';
 import { Home, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useRealtimeJson } from '../hooks/useRealtimeJson';
+import { endpoints } from '../api/endpoints';
 
 const TRANSLATIONS = {
   EN: {
@@ -15,6 +17,7 @@ const TRANSLATIONS = {
     approved: "Approved",
     declined: "Declined",
     openLiveAccount: "Open Live Account",
+    openDemoAccount: "Open Demo Account",
     breadcrumb: "Accounts"
   },
   HI: {
@@ -28,15 +31,37 @@ const TRANSLATIONS = {
     approved: "स्वीकृत",
     declined: "अस्वीकृत",
     openLiveAccount: "लाइव अकाउंट खोलें",
+    openDemoAccount: "डेमो अकाउंट खोलें",
     breadcrumb: "अकाउंट्स"
   }
 };
 
 const AccountsPage = ({ onNavigate }) => {
   const [dashboardType, setDashboardType] = useState('User');
-  const [accountType, setAccountType] = useState('Live');
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [accountType, setAccountType] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter');
+    if (filter === 'demo') return 'Demo';
+    return 'Live';
+  });
+  const [statusFilter, setStatusFilter] = useState('Approved');
   const { language } = useLanguage();
+
+  // Reset status filter to Approved when switching between Live/Demo
+  React.useEffect(() => {
+    setStatusFilter('Approved');
+  }, [accountType]);
+
+  // Update URL search params when accountType changes
+  React.useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filter', accountType.toLowerCase());
+    window.history.replaceState({ page: 'Accounts' }, '', url.toString());
+  }, [accountType]);
+
+  // Call the live APIs as requested by user
+  useRealtimeJson(endpoints.accountTypes, { enabled: Boolean(endpoints.accountTypes) });
+  useRealtimeJson(endpoints.accountTutorials, { enabled: Boolean(endpoints.accountTutorials) });
 
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
@@ -130,28 +155,30 @@ const AccountsPage = ({ onNavigate }) => {
 
             {/* Right: Status Filters & Action Button */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
-               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto w-full sm:w-auto hide-scrollbar">
-                 {['Pending', 'Approved', 'Declined'].map((status) => {
-                    const statusKey = status.toLowerCase();
-                    return (
-                      <button
-                        key={status}
-                        onClick={() => setStatusFilter(statusFilter === status ? 'All' : status)}
-                        className={`whitespace-nowrap flex-shrink-0 px-5 py-2 rounded-[8px] text-[13px] font-bold transition-all ${
-                           statusFilter === status 
-                           ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' 
-                           : 'bg-transparent text-[var(--text-color)] hover:opacity-80'
-                        }`}
-                      >
-                        {t(statusKey)}
-                      </button>
-                    );
-                 })}
-               </div>
+               {accountType === 'Live' && (
+                 <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto w-full sm:w-auto hide-scrollbar">
+                   {['Pending', 'Approved', 'Declined'].map((status) => {
+                      const statusKey = status.toLowerCase();
+                      return (
+                        <button
+                          key={status}
+                          onClick={() => setStatusFilter(status)}
+                          className={`whitespace-nowrap flex-shrink-0 px-5 py-2 rounded-[8px] text-[13px] font-bold transition-all ${
+                             statusFilter === status 
+                             ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' 
+                             : 'bg-transparent text-[var(--text-color)] hover:opacity-80'
+                          }`}
+                        >
+                          {t(statusKey)}
+                        </button>
+                      );
+                   })}
+                 </div>
+               )}
 
                
                <button className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold shadow-[0_4px_10px_rgba(21,139,134,0.3)] transition-all whitespace-nowrap w-full sm:w-auto">
-                  {t('openLiveAccount')}
+                  {accountType === 'Live' ? t('openLiveAccount') : t('openDemoAccount')}
                </button>
             </div>
          </div>
@@ -163,6 +190,7 @@ const AccountsPage = ({ onNavigate }) => {
                hideHeader={true} 
                externalAccountType={accountType} 
                statusFilter={statusFilter}
+               onNavigate={onNavigate}
             />
          </div>
       </div>

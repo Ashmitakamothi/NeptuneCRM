@@ -4,6 +4,10 @@ export const endpoints = {
   openTrades: import.meta.env.VITE_ENDPOINT_OPEN_TRADES,
   recentTransactions: import.meta.env.VITE_ENDPOINT_RECENT_TRANSACTIONS,
   accounts: import.meta.env.VITE_ENDPOINT_ACCOUNTS,
+  accountTypes: import.meta.env.VITE_ENDPOINT_ACCOUNT_TYPES,
+  accountTutorials: import.meta.env.VITE_ENDPOINT_ACCOUNT_TUTORIALS,
+  accountProfit: import.meta.env.VITE_ENDPOINT_ACCOUNT_PROFIT,
+  accountTrades: import.meta.env.VITE_ENDPOINT_TRADES_BY_LOGIN,
   deposits: import.meta.env.VITE_ENDPOINT_DEPOSITES,
+  userLogin: '/mt5-api/api/Authentication/User-Login',
 };
-
