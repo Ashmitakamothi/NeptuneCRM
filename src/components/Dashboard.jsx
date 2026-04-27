@@ -58,7 +58,7 @@ const Dashboard = ({ onNavigate }) => {
       {/* Bottom Section: Accounts and Placeholder */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1051fr)_minmax(0,785fr)] gap-[13.14px]">
         <div className="min-w-0">
-          <AccountsTable data={slices.accounts} />
+          <AccountsTable data={slices.accounts} isDashboard={true} />
         </div>
         <div className="min-w-0 bg-[var(--card-bg)] rounded-[20px] border border-[var(--border-color)] shadow-[0_4px_6px_rgba(207,207,207,0.10)] h-[325px]" />
       </div>
