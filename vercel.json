@@ -7,6 +7,10 @@
     {
       "source": "/live-api/:path*",
       "destination": "https://cabinet.neptunefxcrm.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
