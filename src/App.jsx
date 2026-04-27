@@ -40,8 +40,10 @@ function App() {
       'support': 'More_Support',
       'messenger': 'More_Messenger',
       'tutorial': 'More_Tutorial',
-      'download': 'More_Download'
+      'download': 'More_Download',
+      'mt5-download': 'More_MT5Download'
     };
+
 
     
     if (urlMap[path]) return urlMap[path];
@@ -70,8 +72,10 @@ function App() {
       'More_Support': 'support',
       'More_Messenger': 'messenger',
       'More_Tutorial': 'tutorial',
-      'More_Download': 'download'
+      'More_Download': 'download',
+      'More_MT5Download': 'download'
     };
+
 
 
     const path = pageToPath[activePage] || '';
@@ -105,8 +109,10 @@ function App() {
           'support': 'More_Support',
           'messenger': 'More_Messenger',
           'tutorial': 'More_Tutorial',
-          'download': 'More_Download'
+          'download': 'More_Download',
+          'mt5-download': 'More_MT5Download'
         };
+
 
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -156,7 +162,9 @@ function App() {
       case 'More_Tutorial':
         return <TutorialsPage onNavigate={setActivePage} />;
       case 'More_Download':
+      case 'More_MT5Download':
         return <DownloadPage onNavigate={setActivePage} />;
+
       default:
         return <PlaceholderPage title={activePage} />;
 
