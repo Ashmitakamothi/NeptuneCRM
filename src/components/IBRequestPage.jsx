@@ -37,7 +37,7 @@ const IBRequestPage = ({ onNavigate }) => {
       {/* ── Top Header ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('ibRequest')}</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('ibRequest')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>

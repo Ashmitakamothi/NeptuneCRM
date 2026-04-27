@@ -12,6 +12,16 @@ import bankImg from '../assets/bank.png';
 
 const TRANSLATIONS = {
   EN: {
+    news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard',
+    withdraw: 'Withdraw', breadcrumb: 'Withdraw',
+    selectWithdrawMethod: 'Select Withdrawal Method', allWithdrawSecure: 'All withdrawals are processed securely',
+    processingTime: 'Processing Time:', fee: 'Fee:', minMax: 'Min / Max:',
+    withdrawVia: 'Withdraw Via', securityProtection: 'Security and Protection',
+    sslTitle: '256-bit SSL Encryption', sslDesc: 'Your data is protected by bank-level encryption',
+    secureTitle: 'Secure Transactions', secureDesc: 'All transactions are encrypted and protected from unauthorized access',
+    privacyTitle: 'Privacy Protected', privacyDesc: 'Your financial information is never stored on our servers',
+    walletBalance: 'Wallet Balance', transactionFees: 'Transaction Fees', processingTimeLabel: 'Processing Time:',
+    minWithdrawal: 'Minimum Withdrawal', maxWithdrawal: 'Maximum Withdrawal',
     approved: 'Approved', pending: 'Pending', rejected: 'Rejected',
     secureTRC: 'Secure USDT_TRC20 withdrawal', secureBank: 'Secure Bank Transfer withdrawal',
     secureBEP: 'Secure USDT_BEP20 withdrawal', secureCash: 'Secure Cash Withdrawal withdrawal',
@@ -129,7 +139,7 @@ const WalletWithdrawPage = ({ onNavigate }) => {
       {/* ── Top Header ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('withdraw')}</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('withdraw')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>

@@ -14,6 +14,16 @@ import upiImg from '../assets/upiLogo.png';
 
 const TRANSLATIONS = {
   EN: { 
+    news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard',
+    deposit: 'Deposit', breadcrumb: 'Deposit', selectPaymentMethod: 'Select Payment Method',
+    secureEncrypted: 'All transactions are encrypted and secure',
+    processingTime: 'Processing Time:', fee: 'Fee:', minMax: 'Min / Max:',
+    depositWith: 'Deposit With', securityProtection: 'Security and Protection',
+    sslTitle: '256-bit SSL Encryption', sslDesc: 'Your data is protected by bank-level encryption',
+    secureTitle: 'Secure Transactions', secureDesc: 'All transactions are encrypted and protected from unauthorized access',
+    privacyTitle: 'Privacy Protected', privacyDesc: 'Your financial information is never stored on our servers',
+    walletBalance: 'Wallet Balance', transactionFees: 'Transaction Fees', processingTimeLabel: 'Processing Time:',
+    minDeposit: 'Minimum Deposit', maxDeposit: 'Maximum Deposit',
     approved: 'Approved', pending: 'Pending', rejected: 'Rejected',
     securePayment: 'Secure Payment', secureTerio: 'Secure Teriopay payment',
     secureBank: 'Secure Bank Transfer payment', secureZaro: 'Secure ZaroPay_USDT payment',
@@ -142,7 +152,7 @@ const WalletDepositPage = ({ onNavigate }) => {
       {/* ── Top Header ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('deposit')}</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('deposit')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>

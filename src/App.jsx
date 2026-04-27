@@ -18,6 +18,7 @@ import SupportPage from './components/SupportPage';
 import TutorialsPage from './components/TutorialsPage';
 import MessengerPage from './components/MessengerPage';
 import DownloadPage from './components/DownloadPage';
+import ProfilePage from './components/ProfilePage';
 
 
 
@@ -41,7 +42,8 @@ function App() {
       'messenger': 'More_Messenger',
       'tutorial': 'More_Tutorial',
       'download': 'More_Download',
-      'mt5-download': 'More_MT5Download'
+      'mt5-download': 'More_MT5Download',
+      'profile': 'Profile'
     };
 
 
@@ -73,7 +75,8 @@ function App() {
       'More_Messenger': 'messenger',
       'More_Tutorial': 'tutorial',
       'More_Download': 'download',
-      'More_MT5Download': 'download'
+      'More_MT5Download': 'download',
+      'Profile': 'profile'
     };
 
 
@@ -110,7 +113,8 @@ function App() {
           'messenger': 'More_Messenger',
           'tutorial': 'More_Tutorial',
           'download': 'More_Download',
-          'mt5-download': 'More_MT5Download'
+          'mt5-download': 'More_MT5Download',
+          'profile': 'Profile'
         };
 
 
@@ -164,6 +168,8 @@ function App() {
       case 'More_Download':
       case 'More_MT5Download':
         return <DownloadPage onNavigate={setActivePage} />;
+      case 'Profile':
+        return <ProfilePage onNavigate={setActivePage} />;
 
       default:
         return <PlaceholderPage title={activePage} />;

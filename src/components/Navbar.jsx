@@ -261,7 +261,12 @@ const Navbar = ({ onNavigate, activeMenu }) => {
             <Settings size={20} strokeWidth={2} />
           </button>
           
-          <div className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1"></div>
+          <div 
+            onClick={() => handleNavClick('Profile')}
+            className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1 flex items-center justify-center overflow-hidden"
+          >
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel" alt="Profile" className="w-full h-full object-cover" />
+          </div>
           
           {/* Mobile Hamburger Menu */}
           <button 
