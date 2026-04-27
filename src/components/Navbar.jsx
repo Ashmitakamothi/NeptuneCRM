@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones } from 'lucide-react';
+import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import homeSmileIcon from '../assets/home-smile.png';
 import internalTransferIcon from '../assets/internal-transfer.png.png';
 import accountsIcon from '../assets/account.png.png';
@@ -10,6 +12,25 @@ import logo from '../assets/logo.png.png';
 
 const Navbar = ({ onNavigate, activeMenu }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, setLanguage } = useLanguage();
+
+  const t = (key) => {
+    const TRANSLATIONS = {
+      EN: {
+        Dashboard: 'Dashboard', Accounts: 'Accounts', Wallet: 'Wallet', Deposit: 'Deposit', Withdraw: 'Withdraw',
+        'Internal Transfer': 'Internal Transfer', 'My Transaction': 'My Transaction', Reports: 'Reports', Transfer: 'Transfer', Logs: 'Logs',
+        More: 'More', Leaderboard: 'Leaderboard', Tools: 'Tools', 'Web Trader': 'Web Trader', 'Trade & Win': 'Trade & Win',
+        'IB Request': 'IB Request', Messenger: 'Messenger', Tutorial: 'Tutorial', 'MT5 Download': 'MT5 Download', Support: 'Support', FAQs: 'FAQs'
+      },
+      HI: {
+        Dashboard: 'डैशबोर्ड', Accounts: 'अकाउंट्स', Wallet: 'वॉलेट', Deposit: 'जमा करें', Withdraw: 'निकासी',
+        'Internal Transfer': 'आंतरिक स्थानांतरण', 'My Transaction': 'मेरा लेनदेन', Reports: 'रिपोर्ट', Transfer: 'ट्रांसफर', Logs: 'लॉग्स',
+        More: 'अधिक', Leaderboard: 'लीडरबोर्ड', Tools: 'उपकरण', 'Web Trader': 'वेब ट्रेडर', 'Trade & Win': 'ट्रेड एंड विन',
+        'IB Request': 'IB अनुरोध', Messenger: 'मैसेंजर', Tutorial: 'ट्यूटोरियल', 'MT5 Download': 'MT5 डाउनलोड', Support: 'समर्थन', FAQs: 'अक्सर पूछे जाने वाले प्रश्न'
+      }
+    };
+    return TRANSLATIONS[language]?.[key] || key;
+  };
   
   const menuItems = [
     { name: 'Dashboard', icon: <img src={homeSmileIcon} alt="Dashboard" className="w-[18px] h-[18px] object-contain" /> },
@@ -36,12 +57,12 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         { name: 'Logs', label: 'Logs' }
       ]
     },
-    { name: 'Leaderboard', icon: <img src={leaderboardIcon} alt="Leaderboard" className="w-[18px] h-[18px] object-contain" /> },
     { 
       name: 'More', 
       icon: null, 
       hasDropdown: true,
       dropdownItems: [
+        { name: 'Leaderboard', label: 'Leaderboard', icon: <img src={leaderboardIcon} alt="Leaderboard" className="w-[18px] h-[18px] object-contain" /> },
         { 
           name: 'Tools', 
           label: 'Tools', 
@@ -74,9 +95,12 @@ const Navbar = ({ onNavigate, activeMenu }) => {
     setIsMobileMenuOpen(false);
   };
 
+  const { isDark, toggleTheme } = useTheme();
+
   return (
-    <nav className="bg-[#06120f] border-b border-white/5 h-[53px] sticky top-0 z-50">
+    <nav className="bg-[var(--nav-bg)] border-b border-[var(--border-color)] h-[53px] sticky top-0 z-50 transition-colors">
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
+
         {/* Left Section: Logo & Nav Links grouped together */}
         <div className="flex items-center gap-10">
           {/* Logo Pill */}
@@ -89,25 +113,29 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                 <div className="relative group flex items-center h-[53px]">
                   <button
                     onClick={() => handleNavClick(item.name)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold transition-all duration-200 ${
-                      activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown ? 'bg-white text-[#06120f]' :
-                      activeMenu === item.name
-                        ? 'bg-white text-[#06120f]' 
-                        : 'text-[#8e9d9b] hover:text-white'
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold whitespace-nowrap transition-all duration-200 ${
+                      (activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown) || activeMenu === item.name
+                        ? 'bg-[#158B86] text-white shadow-[0_2px_10px_rgba(21,139,134,0.3)]'
+                        : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
                     }`}
                   >
                     {item.icon && (
-                      <span className={(activeMenu === item.name || (activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown)) ? 'brightness-0' : ''}>
+                      <span className={`flex items-center justify-center ${
+                        (activeMenu === item.name || (activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown))
+                          ? ''
+                          : (!isDark ? '[&>img]:brightness-0 [&>img]:opacity-60' : '[&>img]:opacity-60')
+                      }`}>
                         {item.icon}
                       </span>
                     )}
-                    <span>{item.name}</span>
+                    <span>{t(item.name)}</span>
                     {item.hasDropdown && <ChevronDown size={14} className="ml-0.5 opacity-60" />}
                   </button>
                   
                   {/* Dropdown Menu */}
                   {item.dropdownItems && (
-                    <div className="absolute top-[53px] left-0 min-w-[180px] bg-[#1A1A1A] border border-white/10 rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0">
+                    <div className="absolute top-[53px] left-0 min-w-[180px] bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0">
+
                       <div className="py-2">
                         {item.dropdownItems.map((dropItem, dropIndex) => {
                           const isActive = activeMenu === `${item.name}_${dropItem.name}`;
@@ -120,25 +148,26 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                                   handleNavClick(item.name, dropItem.name);
                                 }}
                                 className={`w-full text-left py-2.5 text-[14px] flex items-center justify-between transition-colors ${
-                                  isActive ? 'text-[#00BFA5] bg-white/5' : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                  isActive ? 'text-[#00BFA5] bg-[var(--sub-bg)]' : 'text-[var(--text-color)] opacity-80 hover:text-[var(--text-color)] hover:bg-[var(--sub-bg)]'
                                 } px-4`}
+
                               >
                                 <div className="flex items-center gap-3">
                                   {dropItem.icon ? (
-                                    <span className="opacity-80 flex items-center justify-center w-[18px]">{dropItem.icon}</span>
+                                    <span className={`opacity-80 flex items-center justify-center w-[18px] ${!isDark ? '[&>img]:brightness-0' : ''}`}>{dropItem.icon}</span>
                                   ) : (
                                     <div className="flex items-center justify-center w-4 h-4 rounded-full border border-current">
                                       {isActive && <div className="w-2 h-2 rounded-full bg-current"></div>}
                                     </div>
                                   )}
-                                  <span className={isActive ? 'font-medium' : ''}>{dropItem.label}</span>
+                                  <span className={isActive ? 'font-medium' : ''}>{t(dropItem.label)}</span>
                                 </div>
                                 {dropItem.hasNestedDropdown && <ChevronDown size={14} className="opacity-60" />}
                               </button>
                               
                               {/* Nested Inline Menu */}
                               {dropItem.hasNestedDropdown && (
-                                <div className="hidden group-hover/nested:block bg-[#222222]">
+                                <div className="hidden group-hover/nested:block bg-[var(--sub-bg)]">
                                   {dropItem.nestedItems.map((nested, nIndex) => {
                                     const isNestedActive = activeMenu === `${item.name}_${nested.name}`;
                                     return (
@@ -149,13 +178,14 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                                           handleNavClick(item.name, nested.name);
                                         }}
                                         className={`w-full text-left py-2.5 pl-12 pr-4 text-[14px] flex items-center gap-3 transition-colors ${
-                                          isNestedActive ? 'text-[#00BFA5] bg-white/10' : 'text-gray-300 hover:text-white hover:bg-white/10'
+                                          isNestedActive ? 'text-[#00BFA5] bg-[var(--sub-bg)]' : 'text-[var(--text-color)] opacity-70 hover:text-[var(--text-color)] hover:bg-[var(--sub-bg)]'
                                         }`}
+
                                       >
                                         <div className="flex items-center justify-center w-[14px] h-[14px] rounded-full border border-current">
                                           {isNestedActive && <div className="w-1.5 h-1.5 rounded-full bg-current"></div>}
                                         </div>
-                                        <span className={isNestedActive ? 'font-medium' : ''}>{nested.label}</span>
+                                        <span className={isNestedActive ? 'font-medium' : ''}>{t(nested.label)}</span>
                                       </button>
                                     );
                                   })}
@@ -170,7 +200,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                 </div>
                 {/* Vertical Divider */}
                 {index < menuItems.length - 1 && item.name !== 'Dashboard' && (
-                  <div className="w-[1.31px] h-[24px] bg-white/10 mx-0.5"></div>
+                  <div className="w-[1.31px] h-[24px] bg-[var(--border-color)] mx-0.5"></div>
                 )}
               </React.Fragment>
             ))}
@@ -178,43 +208,91 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         </div>
 
         {/* Right Section: User Actions & Mobile Menu */}
-        <div className="flex items-center gap-3 md:gap-4">
-          <button className="relative p-1 text-[#8e9d9b] hover:text-white transition-colors">
-            <Bell size={18} strokeWidth={2} />
-            <span className="absolute top-0 right-0 w-2 h-2 bg-[#FF4D4F] rounded-full border-2 border-[#06120f]"></span>
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Theme Toggle */}
+          <button 
+            onClick={toggleTheme}
+            className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors"
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          >
+            {isDark ? <Moon size={20} strokeWidth={2} /> : <Sun size={20} strokeWidth={2} />}
           </button>
-          <button className="p-1 text-[#8e9d9b] hover:text-white transition-colors">
-            <Settings size={18} strokeWidth={2} />
+
+          {/* Language Selector */}
+          <div className="relative group/lang flex items-center h-[53px]">
+            <button className="flex items-center gap-1.5 p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors h-full">
+              <Globe size={18} strokeWidth={2} />
+              <span className="text-[14px] font-bold">{language === 'EN' ? 'US' : 'IN'}</span>
+            </button>
+            <div className="absolute top-[53px] right-0 w-32 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all duration-200 pointer-events-none group-hover/lang:pointer-events-auto transform translate-y-2 group-hover/lang:translate-y-0">
+              <div className="py-2">
+                <button 
+                  onClick={() => setLanguage('EN')} 
+                  className={`w-full text-left px-4 py-2 text-[14px] font-semibold transition-colors flex items-center justify-between ${language === 'EN' ? 'text-[var(--text-color)] bg-[var(--sub-bg)]' : 'text-[var(--text-color)] opacity-80 hover:bg-[var(--sub-bg)]'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-[12px] opacity-60 font-bold w-[20px]">US</span>
+                    <span>English</span>
+                  </span>
+                  {language === 'EN' && <Check size={14} strokeWidth={2.5} />}
+                </button>
+                <button 
+                  onClick={() => setLanguage('HI')} 
+                  className={`w-full text-left px-4 py-2 text-[14px] font-semibold transition-colors flex items-center justify-between ${language === 'HI' ? 'text-[var(--text-color)] bg-[var(--sub-bg)]' : 'text-[var(--text-color)] opacity-80 hover:bg-[var(--sub-bg)]'}`}
+                >
+                  <span className="flex items-center gap-3">
+                    <span className="text-[12px] opacity-60 font-bold w-[20px]">IN</span>
+                    <span className="text-[15px]">हिन्दी</span>
+                  </span>
+                  {language === 'HI' && <Check size={14} strokeWidth={2.5} />}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-[1px] h-5 bg-[var(--border-color)] mx-1 hidden sm:block"></div>
+
+          <button className="relative p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors">
+            <Bell size={20} strokeWidth={2} />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF4D4F] rounded-full border-2 border-[var(--nav-bg)]"></span>
           </button>
-          <div className="w-8 h-8 rounded-full bg-[#D1F7E9] cursor-pointer border border-white/10"></div>
+          
+          <button className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors hidden sm:block">
+            <Settings size={20} strokeWidth={2} />
+          </button>
+          
+          <div className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1"></div>
           
           {/* Mobile Hamburger Menu */}
           <button 
-            className="xl:hidden p-1 text-[#8e9d9b] hover:text-white transition-colors ml-1"
+            className="xl:hidden p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors ml-1"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X size={22} strokeWidth={2} /> : <Menu size={22} strokeWidth={2} />}
+            {isMobileMenuOpen ? <X size={24} strokeWidth={2} /> : <Menu size={24} strokeWidth={2} />}
           </button>
+
         </div>
+
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden absolute top-full left-0 right-0 bg-[#06120f] border-b border-white/5 py-4 px-6 flex flex-col gap-4 shadow-2xl z-50">
+        <div className="xl:hidden absolute top-full left-0 right-0 bg-[var(--nav-bg)] border-b border-[var(--border-color)] py-4 px-6 flex flex-col gap-4 shadow-2xl z-50">
           {menuItems.map((item, index) => (
             <button
               key={index}
               onClick={() => handleNavClick(item.name)}
-              className={`flex items-center gap-3 py-2 text-sm font-semibold transition-colors ${
-                activeMenu === item.name ? 'text-white' : 'text-[#8e9d9b]'
+              className={`flex items-center gap-3 py-2 px-3 rounded-md text-sm font-semibold transition-colors ${
+                activeMenu === item.name ? 'bg-[#158B86] text-white shadow-md' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
               }`}
             >
-              {item.icon && <span className="w-5 h-5 flex items-center justify-center">{item.icon}</span>}
-              <span>{item.name}</span>
+              {item.icon && <span className={`w-5 h-5 flex items-center justify-center ${activeMenu === item.name ? '' : (!isDark ? '[&>img]:brightness-0 [&>img]:opacity-60' : '[&>img]:opacity-60')}`}>{item.icon}</span>}
+              <span>{t(item.name)}</span>
             </button>
           ))}
         </div>
       )}
+
     </nav>
   );
 };

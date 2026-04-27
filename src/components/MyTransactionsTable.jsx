@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TRANSLATIONS = {
   EN: {
@@ -32,7 +33,8 @@ const TRANSLATIONS = {
   }
 };
 
-const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRange = null, exportTrigger = 0 }) => {
+const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, exportTrigger = 0 }) => {
+  const { language } = useLanguage();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,7 +123,7 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
             currentPage === i 
               ? 'bg-[#158B86] text-white' 
-              : 'text-white hover:bg-white/5'
+              : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)]'
           }`}
         >
           {i}
@@ -145,41 +147,42 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
   };
 
   return (
-    <div className="rounded-[16px] border border-white/10 overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
+    <div className="rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[#1A1A1A] border-b border-white/10">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white">{t('operation')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('paymentFrom')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('paymentTo')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('amount')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('currency')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('transactionDate')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('status')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('remark')}</th>
+            <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)]">{t('operation')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentFrom')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentTo')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('amount')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('transactionDate')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
             </tr>
           </thead>
+
           <tbody>
             {paginatedData.length > 0 ? (
               paginatedData.map((row) => (
-                <tr key={row.id} className="border-b border-white/5 last:border-0 hover:bg-[#1A1A1A] transition-colors">
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                <tr key={row.id} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.operation}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.paymentFrom}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.paymentTo}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.amount}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.currency}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.transactionDate}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px]">
@@ -212,10 +215,10 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
         </table>
       </div>
 
-      <div className="px-4 py-3 flex items-center justify-between border-t border-white/10 shrink-0 flex-wrap gap-4">
+      <div className="px-4 py-3 flex items-center justify-between border-t border-[var(--border-color)] shrink-0 flex-wrap gap-4">
         <div className="relative">
           <button 
-            className="flex items-center justify-between w-[120px] px-3 py-1.5 bg-[#1A1A1A] border border-white/10 rounded-[6px] text-white text-[13px] font-medium hover:border-white/30 transition-colors"
+            className="flex items-center justify-between w-[120px] px-3 py-1.5 bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[6px] text-[var(--text-color)] text-[13px] font-medium hover:opacity-80 transition-colors"
             onClick={() => setIsRowsDropdownOpen(!isRowsDropdownOpen)}
           >
             <span>{itemsPerPage} / Page</span>
@@ -223,14 +226,14 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
           </button>
           
           {isRowsDropdownOpen && (
-            <div className="absolute bottom-[calc(100%+4px)] left-0 w-full bg-[#1E1E1E] border border-white/10 rounded-[6px] overflow-hidden z-10 shadow-xl">
+            <div className="absolute bottom-[calc(100%+4px)] left-0 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[6px] overflow-hidden z-10 shadow-xl">
               {[5, 10, 20, 50].map((num) => (
                 <button
                   key={num}
                   className={`w-full px-3 py-2 text-left text-[13px] transition-colors ${
                     itemsPerPage === num 
                       ? 'bg-[#158B86] text-white' 
-                      : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                      : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)] opacity-80 hover:opacity-100'
                   }`}
                   onClick={() => {
                     setItemsPerPage(num);
@@ -249,8 +252,8 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
           <button 
             className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${
               currentPage === 1 
-                ? 'text-gray-500 cursor-not-allowed' 
-                : 'text-white hover:bg-white/5 cursor-pointer'
+                ? 'text-gray-500 cursor-not-allowed opacity-50' 
+                : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)] cursor-pointer'
             }`}
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
@@ -263,8 +266,8 @@ const MyTransactionsTable = ({ operationFilter = 'All', language = 'EN', dateRan
           <button 
             className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${
               currentPage === totalPages || totalPages === 0
-                ? 'text-gray-500 cursor-not-allowed' 
-                : 'text-white hover:bg-white/5 cursor-pointer'
+                ? 'text-gray-500 cursor-not-allowed opacity-50' 
+                : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)] cursor-pointer'
             }`}
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages || totalPages === 0}

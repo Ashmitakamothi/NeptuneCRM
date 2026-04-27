@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe, Monitor, Apple, Smartphone, Laptop, Download } from 'lucide-react';
+import { Home, ChevronRight, Monitor, Apple, Smartphone, Laptop, Download } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import downloadBg from '../assets/download-bg.jpg';
 import mt5Logo from '../assets/mt5.png';
 
@@ -18,19 +19,39 @@ const TRANSLATIONS = {
     riskText: 'All investments entail risks and may result in both profits and losses. In particular, trading leveraged derivative products such as Foreign Exchange (Forex) and Contracts for Difference (CFDs) carries a high level of risk to your capital. All these derivative products, many of which are leveraged, may not be appropriate for all investors.',
     riskText2: 'It is important that you understand that investments, your capital is at risk. Past performance is not a guide to future performance. You should carefully consider your investment objectives, trading knowledge and experience and affordability.',
     riskText3: 'MetaTrader is a trading name of MT5, authorised and regulated by the Financial Services Authority of Seychelles with License No. SD049.'
+  },
+  HI: {
+    news: 'समाचार',
+    userDashboard: 'उपयोगकर्ता डैशबोर्ड',
+    ibDashboard: 'IB डैशबोर्ड',
+    title: 'टर्मिनल डाउनलोड करें',
+    heroTitle: 'एमटी5 ट्रेडिंग ऐप',
+    heroSubtitle: 'ऐप स्टोर और गूगल प्ले स्टोर से एमटी5 ट्रेडिंग ऐप डाउनलोड करें',
+    downloadSection: 'डाउनलोड',
+    mt5Title: 'मेटाट्रेडर 5',
+    mt5Subtitle: 'पीसी, वेब ब्राउज़र, स्मार्टफोन और टैबलेट के लिए मेटाट्रेडर डाउनलोड करें',
+    riskTitle: 'जोखिम विवरण :',
+    riskText: 'सभी निवेशों में जोखिम शामिल होता है और इससे लाभ या हानि दोनों हो सकते हैं। विशेष रूप से, विदेशी मुद्रा (फॉरेक्स) और कॉन्ट्रैक्ट्स फॉर डिफरेंस (CFDs) जैसे लीवरेज्ड डेरिवेटिव उत्पादों का व्यापार आपकी पूंजी के लिए उच्च स्तर का जोखिम लेकर आता है। ऐसे सभी डेरिवेटिव उत्पाद, जिनमें से कई लीवरेज्ड होते हैं, सभी निवेशकों के लिए उपयुक्त नहीं हो सकते हैं। लीवरेज का प्रभाव यह होता है कि लाभ और हानि दोनों बढ़ जाते हैं।',
+    riskText2: 'यह महत्वपूर्ण है कि आप समझें कि निवेश में आपकी पूंजी जोखिम में होती है। पिछला प्रदर्शन भविष्य के प्रदर्शन का संकेत नहीं होता है। किसी भी वित्तीय उत्पाद में निवेश करने से पहले, आपको अपने निवेश उद्देश्यों, ट्रेडिंग ज्ञान, अनुभव और वहन क्षमता पर सावधानीपूर्वक विचार करना चाहिए।',
+    riskText3: 'मेटाट्रेडर, एमटी5 का एक ट्रेडिंग नाम है, जो सेशेल्स वित्तीय सेवा प्राधिकरण द्वारा लाइसेंस संख्या SD049 के अंतर्गत अधिकृत और विनियमित है।',
+    windows: 'विंडोज़',
+    macos: 'मैक ओएस',
+    ios: 'आईफ़ोन/आईपैड',
+    android: 'एंड्रॉइड/टैबलेट',
+    apk: 'एपीके'
   }
 };
 
 const DownloadPage = ({ onNavigate }) => {
+  const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
 
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   const downloadOptions = [
     { 
       id: 'windows', 
-      name: 'Windows', 
+      name: t('windows'), 
       url: 'https://download.mql5.com/cdn/web/metaquotes.ltd/mt5/mt5setup.exe?utm_source=www.metaquotes.net&utm_campaign=download',
       icon: (
         <svg viewBox="0 0 448 512" className="w-5 h-5 fill-current">
@@ -40,7 +61,7 @@ const DownloadPage = ({ onNavigate }) => {
     },
     { 
       id: 'macos', 
-      name: 'Mac OS', 
+      name: t('macos'), 
       url: 'https://download.mql5.com/cdn/web/metaquotes.ltd/mt5/mt5setup.exe?utm_source=www.metaquotes.net&utm_campaign=download',
       icon: (
         <svg viewBox="0 0 512 512" className="w-5 h-5 fill-current">
@@ -50,7 +71,7 @@ const DownloadPage = ({ onNavigate }) => {
     },
     { 
       id: 'ios', 
-      name: 'iPhone/iPad', 
+      name: t('ios'), 
       url: 'https://apps.apple.com/us/app/metatrader-5/id413251709?utm_campaign=install.metaquotes&utm_source=www.metaquotes.net',
       icon: (
         <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
@@ -60,7 +81,7 @@ const DownloadPage = ({ onNavigate }) => {
     },
     { 
       id: 'android', 
-      name: 'Android/Tablet', 
+      name: t('android'), 
       url: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5&hl=en&referrer=ref_id%3d5192043324314688962%26hl%3den%26utm_source%3dwww.metaquotes.net%26utm_campaign%3dinstall.metaquotes',
       icon: (
         <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
@@ -70,7 +91,7 @@ const DownloadPage = ({ onNavigate }) => {
     },
     { 
       id: 'apk', 
-      name: 'Apk', 
+      name: t('apk'), 
       url: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5&hl=en&referrer=ref_id%3d5192043324314688962%26hl%3den%26utm_source%3dwww.metaquotes.net%26utm_campaign%3dinstall.metaquotes',
       icon: (
         <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
@@ -86,9 +107,9 @@ const DownloadPage = ({ onNavigate }) => {
   return (
     <div className="flex flex-col w-full animate-fade-in pb-12">
       {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/20 mb-6 shrink-0">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-white tracking-tight uppercase">{t('title')}</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('title')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#158B86] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
@@ -96,22 +117,25 @@ const DownloadPage = ({ onNavigate }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[38px]">
-            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('userDashboard')}</button>
-            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('ibDashboard')}</button>
+          <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[38px]">
+            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
+            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
+          {/* 
           <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
           <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
             <Globe size={16} /> <span>US</span>
           </div>
+          */}
         </div>
+
       </div>
 
       {/* ── Breadcrumb ─────────────────────────────────────────── */}
       <div className="flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
-        <Home size={17} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white">Download Terminal</span>
+        <span className="text-[var(--text-color)]">Download Terminal</span>
       </div>
 
       {/* ── Hero Banner ────────────────────────────────────────── */}
@@ -131,7 +155,7 @@ const DownloadPage = ({ onNavigate }) => {
       <div className="max-w-4xl mx-auto w-full px-2">
         <h3 className="text-[#158B86] text-[20px] font-bold mb-3 tracking-wider">Download</h3>
 
-        <div className="bg-[#1A1A1A]/30 border border-white/5 rounded-[8px] p-4 backdrop-blur-md">
+        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] p-4 backdrop-blur-md">
           <div className="flex items-center gap-2 mb-2">
             <div className="bg-white p-0.5 rounded-[2px]">
               <img src={mt5Logo} alt="MT5" className="w-5 h-5 object-contain" />
@@ -150,10 +174,10 @@ const DownloadPage = ({ onNavigate }) => {
                 rel="noopener noreferrer"
                 className="flex flex-col items-center gap-1.5 group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#158B86]/10 border border-white/5 flex items-center justify-center text-[#158B86] group-hover:bg-[#158B86]/20 group-hover:border-[#158B86]/30 transition-all duration-300">
+                <div className="w-10 h-10 rounded-full bg-[#158B86]/10 border border-[var(--border-color)] flex items-center justify-center text-[#158B86] group-hover:bg-[#158B86]/20 group-hover:border-[#158B86]/30 transition-all duration-300">
                   {option.icon}
                 </div>
-                <span className="text-[#158B86] text-[11px] font-medium group-hover:text-white transition-colors">{option.name}</span>
+                <span className="text-[#158B86] text-[11px] font-medium group-hover:text-[var(--text-color)] transition-colors">{option.name}</span>
               </a>
             ))}
           </div>
@@ -162,11 +186,11 @@ const DownloadPage = ({ onNavigate }) => {
 
         {/* ── Risk Statement ────────────────────────────────────── */}
         <div className="mt-6 space-y-1.5">
-          <h5 className="text-white text-[12px] font-black tracking-wider uppercase">{t('riskTitle')}</h5>
+          <h5 className="text-[var(--text-color)] text-[12px] font-black tracking-wider uppercase">{t('riskTitle')}</h5>
           <div className="space-y-1">
-            <p className="text-white/80 text-[10px] leading-tight italic">{t('riskText')}</p>
-            <p className="text-white/80 text-[10px] leading-tight italic text-justify">{t('riskText2')}</p>
-            <p className="text-white/80 text-[10px] leading-tight italic">{t('riskText3')}</p>
+            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic">{t('riskText')}</p>
+            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic text-justify">{t('riskText2')}</p>
+            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic">{t('riskText3')}</p>
           </div>
         </div>
       </div>

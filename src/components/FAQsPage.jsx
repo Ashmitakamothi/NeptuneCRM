@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe, ChevronDown, Search, HelpCircle } from 'lucide-react';
+import { Home, ChevronRight, ChevronDown, Search, HelpCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TRANSLATIONS = {
-  EN: { news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard' },
-  HI: { news: 'समाचार', userDashboard: 'यूजर डैशबोर्ड', ibDashboard: 'आईबी डैशबोर्ड' },
+  EN: { news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard', faqs: 'FAQs' },
+  HI: { news: 'समाचार', userDashboard: 'यूजर डैशबोर्ड', ibDashboard: 'आईबी डैशबोर्ड', faqs: 'अक्सर पूछे जाने वाले प्रश्न' },
+};
+
+const CATEGORY_MAP = {
+  'Account': { EN: 'Account', HI: 'अकाउंट' },
+  'Deposit': { EN: 'Deposit', HI: 'जमा' },
+  'Client': { EN: 'Client', HI: 'क्लाइंट' },
+  'Meta Trader': { EN: 'Meta Trader', HI: 'मेटा ट्रेडर' },
+  'Withdrawal': { EN: 'Withdrawal', HI: 'निकासी' },
+  'Internal Transfer': { EN: 'Internal Transfer', HI: 'आंतरिक स्थानांतरण' },
+  'IB': { EN: 'IB', HI: 'IB' }
 };
 
 const CATEGORIES = [
@@ -24,8 +35,8 @@ const FAQ_DATA = {
 };
 
 const FAQsPage = ({ onNavigate }) => {
+  const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
   const [selectedCategory, setSelectedCategory] = useState('Account');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -37,46 +48,51 @@ const FAQsPage = ({ onNavigate }) => {
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
       {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-white tracking-tight uppercase">FAQ</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('faqs')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
           </div>
+
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[38px]">
-            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('userDashboard')}</button>
-            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('ibDashboard')}</button>
+          <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[38px]">
+            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
+            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
+          {/*
           <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
           <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
             <Globe size={16} /> <span>US</span>
           </div>
+          */}
         </div>
+
       </div>
 
       {/* ── Breadcrumb ─────────────────────────────────────────── */}
       <div className="flex items-center gap-2 text-[15px] mb-7 font-medium">
-        <Home size={17} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white">FAQ</span>
+        <span className="text-[var(--text-color)]">{t('faqs')}</span>
       </div>
+
 
       {/* ── Category Selector ───────────────────────────────────── */}
       <div className="relative mb-6 w-full max-w-[280px]">
         <button 
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-[#1A1A1A] border border-white/10 rounded-[8px] text-white text-[14px] hover:border-[#158B86]/40 transition-all shadow-lg"
+          className="w-full flex items-center justify-between px-4 py-3 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] text-[var(--text-color)] text-[14px] hover:border-[#158B86]/40 transition-all shadow-lg"
         >
-          <span className="opacity-80">{selectedCategory}</span>
+          <span className="opacity-80">{CATEGORY_MAP[selectedCategory]?.[language] || selectedCategory}</span>
           <ChevronDown size={16} className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {isDropdownOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-[#1A1A1A] border border-white/10 rounded-[8px] overflow-hidden z-50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] animate-slide-down">
+          <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden z-50 shadow-[0_10px_30px_rgba(0,0,0,0.5)] animate-slide-down">
             {CATEGORIES.map((cat) => (
               <button 
                 key={cat}
@@ -85,45 +101,48 @@ const FAQsPage = ({ onNavigate }) => {
                   setIsDropdownOpen(false);
                   setExpandedIndex(null);
                 }}
-                className={`w-full text-left px-4 py-3 text-[14px] transition-colors ${selectedCategory === cat ? 'bg-[#158B86] text-white' : 'text-[#8e9d9b] hover:bg-white/5 hover:text-white'}`}
+                className={`w-full text-left px-4 py-3 text-[14px] transition-colors ${selectedCategory === cat ? 'bg-[#158B86] text-white' : 'text-[#8e9d9b] hover:bg-white/5 hover:text-[var(--text-color)]'}`}
               >
-                {cat}
+                {CATEGORY_MAP[cat]?.[language] || cat}
               </button>
             ))}
+
           </div>
         )}
       </div>
 
       {/* ── FAQ Content Area ───────────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-h-[450px] border border-white/10 rounded-[12px] bg-[#1A1A1A]/30 backdrop-blur-sm p-8 relative overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-[450px] border border-[var(--border-color)] rounded-[12px] bg-[var(--card-bg)] backdrop-blur-sm p-8 relative overflow-hidden">
         {/* Category Header Inside */}
-        <h2 className="text-[18px] font-bold text-white mb-8">{selectedCategory} FAQs</h2>
+        <h2 className="text-[18px] font-bold text-[var(--text-color)] mb-8">{selectedCategory} FAQs</h2>
+
 
         {/* Subtle background pattern */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#158B86 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
         <div className="flex-1 flex flex-col gap-0 relative z-10">
           {currentFaqs.length > 0 ? (
-            <div className="bg-[#1A1A1A]/50 border border-white/5 rounded-[12px] overflow-hidden">
+            <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[12px] overflow-hidden">
               {currentFaqs.map((faq, index) => (
-                <div key={index} className="transition-all">
+                <div key={index} className="transition-all border-b border-[var(--border-color)] last:border-b-0">
                   <button 
                     onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
                     className="w-full flex items-center justify-between p-6 text-left group"
                   >
-                    <span className="text-[15px] font-medium text-white/90 group-hover:text-white transition-colors">
+                    <span className="text-[15px] font-medium text-[var(--text-color)] opacity-90 group-hover:opacity-100 transition-colors">
                       {faq.q}
                     </span>
-                    <div className="text-white/40 group-hover:text-[#158B86] transition-colors">
+                    <div className="text-[var(--text-color)] opacity-40 group-hover:text-[#158B86] transition-colors">
                       {expandedIndex === index ? <span className="text-[24px] leading-none">−</span> : <span className="text-[24px] leading-none">+</span>}
                     </div>
                   </button>
                   
                   {expandedIndex === index && (
-                    <div className="px-6 pb-6 text-[14px] text-[#8e9d9b] leading-relaxed animate-fade-in">
+                    <div className="px-6 pb-6 text-[14px] text-[var(--text-color)] opacity-80 leading-relaxed animate-fade-in">
                       {faq.a}
                     </div>
                   )}
+
                 </div>
               ))}
             </div>

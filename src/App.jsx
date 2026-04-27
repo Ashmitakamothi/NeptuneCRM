@@ -30,7 +30,7 @@ function App() {
       'accounts': 'Accounts',
       'internal-transfer': 'Internal Transfer',
       'transactions': 'My Transaction',
-      'leaderboard': 'Leaderboard',
+      'leaderboard': 'More_Leaderboard',
       'wallet/deposit': 'Wallet_Deposit',
       'wallet/withdraw': 'Wallet_Withdraw',
       'webTrader': 'More_WebTrader',
@@ -62,7 +62,7 @@ function App() {
       'Internal Transfer': 'internal-transfer',
       'My Transaction': 'transactions',
       'My Transactions': 'transactions',
-      'Leaderboard': 'leaderboard',
+      'More_Leaderboard': 'leaderboard',
       'Wallet_Deposit': 'wallet/deposit',
       'Wallet_Withdraw': 'wallet/withdraw',
       'More_WebTrader': 'webTrader',
@@ -99,7 +99,7 @@ function App() {
           'accounts': 'Accounts',
           'internal-transfer': 'Internal Transfer',
           'transactions': 'My Transaction',
-          'leaderboard': 'Leaderboard',
+          'leaderboard': 'More_Leaderboard',
           'wallet/deposit': 'Wallet_Deposit',
           'wallet/withdraw': 'Wallet_Withdraw',
           'webTrader': 'More_WebTrader',
@@ -141,7 +141,7 @@ function App() {
       case 'My Transactions':
       case 'My Transaction': // Handle both singular and plural forms for safety
         return <MyTransactionsPage onNavigate={setActivePage} />;
-      case 'Leaderboard':
+      case 'More_Leaderboard':
         return <LeaderboardPage onNavigate={setActivePage} />;
       case 'Wallet_Deposit':
         return <WalletDepositPage onNavigate={setActivePage} />;
@@ -172,13 +172,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-dark pb-12">
+    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12">
       <Navbar onNavigate={setActivePage} activeMenu={activePage} />
       
       <main className="max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8">
         {renderContent()}
       </main>
     </div>
+
   );
 }
 

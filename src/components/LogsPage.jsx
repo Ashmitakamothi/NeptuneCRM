@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe } from 'lucide-react';
+import { Home, ChevronRight } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 import LogsTable from './LogsTable';
 
 const TRANSLATIONS = {
@@ -7,45 +8,50 @@ const TRANSLATIONS = {
     news: "News",
     userDashboard: "User Dashboard",
     ibDashboard: "IB Dashboard",
+    logs: "LOGS",
+    logsBread: "Logs"
   },
   HI: {
     news: "समाचार",
     userDashboard: "यूजर डैशबोर्ड",
     ibDashboard: "आईबी डैशबोर्ड",
+    logs: "लॉग्स",
+    logsBread: "लॉग्स"
   }
 };
 
 const LogsPage = ({ onNavigate }) => {
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const { language } = useLanguage();
 
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   return (
     <div className="flex flex-col w-full h-full animate-fade-in pb-20">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none uppercase">LOGS</h1>
+          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none uppercase">{t('logs')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" style={{ animationDuration: '1s' }}></div>
             <span className="bg-[#158B86] text-white text-sm sm:text-lg font-medium px-2 rounded-sm cursor-pointer">{t('news')}</span>
           </div>
         </div>
+
         
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-           <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[40px]">
+           <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
               <button 
                 onClick={() => setDashboardType('User')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('userDashboard')}</button>
               <button 
                 onClick={() => setDashboardType('IB')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('ibDashboard')}</button>
            </div>
            
+           {/*
            <button className="text-[#8e9d9b] hover:text-white transition-colors">
               <Moon size={20} strokeWidth={2} />
            </button>
@@ -77,15 +83,18 @@ const LogsPage = ({ onNavigate }) => {
                </div>
              )}
            </div>
+           */}
         </div>
       </div>
 
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[15px] mb-6 font-medium">
-        <Home size={18} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <Home size={18} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white cursor-default tracking-wide">Logs</span>
+        <span className="text-[var(--text-color)] cursor-default tracking-wide">{t('logsBread')}</span>
       </div>
+
 
       {/* Table Section */}
       <LogsTable language={language} />

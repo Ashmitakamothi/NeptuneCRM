@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe, Wallet, CreditCard, BadgeDollarSign, Briefcase, Search, Calendar } from 'lucide-react';
-import { DatePicker, ConfigProvider, theme } from 'antd';
+import { Home, ChevronRight, Wallet, BadgeDollarSign, Briefcase, Search } from 'lucide-react';
+import { DatePicker, ConfigProvider, theme as antdTheme } from 'antd';
+import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import InternalTransferTable from './InternalTransferTable';
+
 import mt5Logo from '../assets/mt5.png';
 
 const { RangePicker } = DatePicker;
@@ -29,7 +32,10 @@ const TRANSLATIONS = {
     rejected: "Rejected",
     startDate: "Start date",
     endDate: "End date",
-    search: "Search"
+    search: "Search",
+    itemsPerPage: "/ Page",
+    walletSub: "Primary wallet account",
+    tradingSub: "Live trading account"
   },
   HI: {
     transfer: "ट्रांसफर",
@@ -53,7 +59,10 @@ const TRANSLATIONS = {
     rejected: "अस्वीकृत",
     startDate: "प्रारंभ तिथि",
     endDate: "अंतिम तिथि",
-    search: "खोजें"
+    search: "खोजें",
+    itemsPerPage: "/ पेज",
+    walletSub: "मुख्य वॉलेट अकाउंट",
+    tradingSub: "लाइव ट्रेडिंग अकाउंट"
   }
 };
 
@@ -69,7 +78,7 @@ const SelectableCard = ({ id, label, subtext, isSelected, onClick, imageSrc, cus
   <label 
     onClick={(e) => { e.preventDefault(); onClick(id); }}
     className={`flex items-center gap-1 border-2 rounded-lg p-3 m-0 transition-all cursor-pointer bg-transparent ${
-      isSelected ? 'border-[#00BFA5]' : 'border-white/10 hover:border-white/30'
+      isSelected ? 'border-[#00BFA5]' : 'border-[var(--border-color)] hover:border-[#00BFA5]/50'
     }`}
   >
     <div className={`w-4 h-4 rounded-full border-2 flex flex-shrink-0 items-center justify-center mr-1 ${isSelected ? 'border-[#00BFA5]' : 'border-[#8e9d9b]'}`}>
@@ -81,12 +90,12 @@ const SelectableCard = ({ id, label, subtext, isSelected, onClick, imageSrc, cus
       ) : customIcon ? (
         customIcon
       ) : (
-        <div className="w-6 h-6 bg-white/5 rounded-[4px] flex items-center justify-center">
+        <div className="w-6 h-6 bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[4px] flex items-center justify-center">
           {IconComponent && <IconComponent size={14} className="text-[#00BFA5]" />}
         </div>
       )}
       <div className="flex flex-col justify-center">
-        <span className="text-[14px] font-bold text-white leading-tight">{label}</span>
+        <span className="text-[14px] font-bold text-[var(--text-color)] leading-tight">{label}</span>
         {subtext && <span className="text-[12px] font-medium text-[#8e9d9b] leading-tight mt-0.5">{subtext}</span>}
       </div>
     </div>
@@ -94,9 +103,9 @@ const SelectableCard = ({ id, label, subtext, isSelected, onClick, imageSrc, cus
 );
 
 const InternalTransferPage = ({ onNavigate }) => {
+  const { isDark } = useTheme();
+  const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState('Approved');
   const [searchQuery, setSearchQuery] = useState('');
   const [dateRange, setDateRange] = useState(null);
@@ -107,32 +116,34 @@ const InternalTransferPage = ({ onNavigate }) => {
   const [amount, setAmount] = useState('');
   const [agreed, setAgreed] = useState(false);
 
-  const t = (key) => TRANSLATIONS[language][key] || key;
+  const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   return (
     <div className="animate-fade-in flex flex-col h-full">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)]">
         <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none uppercase">{t('transfer')}</h1>
+          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none uppercase">{t('transfer')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" style={{ animationDuration: '1s' }}></div>
             <span className="bg-[#158B86] text-white text-sm sm:text-lg font-medium px-2 rounded-sm cursor-pointer">{t('news')}</span>
           </div>
         </div>
+
         
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-           <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[40px]">
+           <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
               <button 
                 onClick={() => setDashboardType('User')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('userDashboard')}</button>
               <button 
                 onClick={() => setDashboardType('IB')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('ibDashboard')}</button>
            </div>
            
+          {/* 
            <button className="text-[#8e9d9b] hover:text-white transition-colors">
               <Moon size={20} strokeWidth={2} />
            </button>
@@ -164,27 +175,29 @@ const InternalTransferPage = ({ onNavigate }) => {
                </div>
              )}
            </div>
+           */}
         </div>
+
       </div>
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[14px] font-semibold mt-4 mb-6">
-         <Home size={16} className="text-[#158B86] cursor-pointer" onClick={() => onNavigate('Dashboard')} />
+         <Home size={16} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-opacity" onClick={() => onNavigate('Dashboard')} />
          <ChevronRight size={14} className="text-[#8e9d9b]" />
-         <span className="text-white">{t('breadcrumb')}</span>
+         <span className="text-[var(--text-color)]">{t('breadcrumb')}</span>
       </div>
 
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 gap-6">
          
          {/* Summary Cards Row */}
-         <div className="border border-white/10 rounded-[12px] p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-4 bg-transparent">
+         <div className="border border-[var(--border-color)] rounded-[12px] p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 md:gap-4 bg-[var(--card-bg)]">
             <div className="flex items-center gap-4 flex-1">
               <div className="w-12 h-12 rounded-[10px] bg-[#0A3D3B] flex items-center justify-center">
                 <Briefcase size={22} className="text-[#00BFA5]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="sm:text-xl text-md font-bold text-white leading-tight">0</span>
+                <span className="sm:text-xl text-md font-bold text-[var(--text-color)] leading-tight">0</span>
                 <span className="text-sm font-medium text-gray-500 capitalize leading-tight mt-1">{t('walletAccountNo')}</span>
               </div>
             </div>
@@ -194,7 +207,7 @@ const InternalTransferPage = ({ onNavigate }) => {
                 <Wallet size={22} className="text-[#E53E3E]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="sm:text-xl text-md font-bold text-white leading-tight">$ 0.00</span>
+                <span className="sm:text-xl text-md font-bold text-[var(--text-color)] leading-tight">$ 0.00</span>
                 <span className="text-sm font-medium text-gray-500 capitalize leading-tight mt-1">{t('walletBalance')}</span>
               </div>
             </div>
@@ -204,7 +217,7 @@ const InternalTransferPage = ({ onNavigate }) => {
                 <BadgeDollarSign size={22} className="text-[#DD6B20]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="sm:text-xl text-md font-bold text-white leading-tight">$ 0.00</span>
+                <span className="sm:text-xl text-md font-bold text-[var(--text-color)] leading-tight">$ 0.00</span>
                 <span className="text-sm font-medium text-gray-500 capitalize leading-tight mt-1">{t('minDeposit')}</span>
               </div>
             </div>
@@ -214,25 +227,25 @@ const InternalTransferPage = ({ onNavigate }) => {
                 <BadgeDollarSign size={22} className="text-[#38A169]" strokeWidth={1.5} />
               </div>
               <div className="flex flex-col">
-                <span className="sm:text-xl text-md font-bold text-white leading-tight">$ 0.00</span>
+                <span className="sm:text-xl text-md font-bold text-[var(--text-color)] leading-tight">$ 0.00</span>
                 <span className="text-sm font-medium text-gray-500 capitalize leading-tight mt-1">{t('maxDeposit')}</span>
               </div>
             </div>
          </div>
 
          {/* Transfer Form Container */}
-         <div className="bg-transparent border border-white/10 rounded-[12px] p-5">
+         <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-5">
            {/* Amount Input */}
            <div className="mb-5">
              <label className="block text-lg font-medium text-gray-500 mb-2">{t('amountInUsd')}</label>
              <div className="relative max-w-[280px]">
-               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white font-medium">$</span>
+               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-color)] font-medium">$</span>
                <input 
                  type="text" 
                  placeholder="0"
                  value={amount}
                  onChange={(e) => setAmount(e.target.value)}
-                 className="w-full bg-[#06120f] border border-white/10 rounded-[8px] py-2 pl-7 pr-3 text-white text-[14px] font-medium focus:outline-none focus:border-[#158B86] transition-colors"
+                 className="w-full bg-[var(--bg-color)] border border-[var(--border-color)] rounded-[8px] py-2 pl-7 pr-3 text-[var(--text-color)] text-[14px] font-medium focus:outline-none focus:border-[#158B86] transition-colors"
                />
              </div>
            </div>
@@ -246,15 +259,16 @@ const InternalTransferPage = ({ onNavigate }) => {
                <SelectableCard 
                  id="wallet" 
                  label={t('wallet')} 
-                 subtext="$ 0.00" 
+                 subtext={t('walletSub')}
                  isSelected={fromAccount === 'wallet'} 
                  onClick={setFromAccount} 
                  customIcon={<CustomWalletIcon />}
                />
                <SelectableCard 
-                 id="555006" 
-                 label="555006" 
-                 isSelected={fromAccount === '555006'} 
+                 id="trading" 
+                 label="Trading" 
+                 subtext={t('tradingSub')}
+                 isSelected={fromAccount === 'trading'} 
                  onClick={setFromAccount} 
                  imageSrc={mt5Logo}
                />
@@ -275,17 +289,18 @@ const InternalTransferPage = ({ onNavigate }) => {
              </label>
              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 max-w-4xl">
                <SelectableCard 
-                 id="wallet_to" 
+                 id="wallet" 
                  label={t('wallet')} 
-                 subtext="$ 0.00" 
-                 isSelected={toAccount === 'wallet_to'} 
+                 subtext={t('walletSub')}
+                 isSelected={toAccount === 'wallet'} 
                  onClick={setToAccount} 
                  customIcon={<CustomWalletIcon />}
                />
                <SelectableCard 
-                 id="555006_to" 
-                 label="555006" 
-                 isSelected={toAccount === '555006_to'} 
+                 id="trading" 
+                 label="Trading" 
+                 subtext={t('tradingSub')}
+                 isSelected={toAccount === 'trading'} 
                  onClick={setToAccount} 
                  imageSrc={mt5Logo}
                />
@@ -318,6 +333,7 @@ const InternalTransferPage = ({ onNavigate }) => {
                  {t('terms')}
                </a>
              </span>
+             <span>{t('itemsPerPage')} {t('itemsPerPage')}</span>
            </div>
 
            {/* Submit Button */}
@@ -329,7 +345,7 @@ const InternalTransferPage = ({ onNavigate }) => {
          {/* Table Filters Row */}
          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-2">
            {/* Left: Status Filters */}
-           <div className="bg-[#1A1A1A] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto w-full md:w-auto hide-scrollbar">
+           <div className="bg-[var(--sub-bg)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto w-full md:w-auto hide-scrollbar">
              {['Approved', 'Pending', 'Rejected'].map((status) => {
                 const statusKey = status.toLowerCase();
                 return (
@@ -339,7 +355,7 @@ const InternalTransferPage = ({ onNavigate }) => {
                     className={`whitespace-nowrap flex-shrink-0 px-5 py-2 rounded-[8px] text-[13px] font-bold transition-all ${
                        statusFilter === status 
                        ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' 
-                       : 'bg-transparent text-white hover:text-white/80'
+                       : 'bg-transparent text-[var(--text-color)] hover:opacity-80'
                     }`}
                   >
                     {t(statusKey)}
@@ -352,15 +368,15 @@ const InternalTransferPage = ({ onNavigate }) => {
            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
              <ConfigProvider
                theme={{
-                 algorithm: theme.darkAlgorithm,
+                 algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
                  token: {
                    colorPrimary: '#00BFA5',
-                   colorBgContainer: '#06120f',
-                   colorBgElevated: '#1A1A1A',
-                   colorBorder: 'rgba(255, 255, 255, 0.1)',
+                   colorBgContainer: isDark ? '#06120f' : '#ffffff',
+                   colorBgElevated: isDark ? '#1A1A1A' : '#ffffff',
+                   colorBorder: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                    borderRadius: 8,
-                   colorText: '#8e9d9b',
-                   colorTextPlaceholder: '#555',
+                   colorText: isDark ? '#8e9d9b' : '#333333',
+                   colorTextPlaceholder: isDark ? '#555' : '#aaa',
                  },
                }}
              >
@@ -370,17 +386,17 @@ const InternalTransferPage = ({ onNavigate }) => {
                  style={{ height: '36px', width: '260px' }}
                  format="DD-MM-YYYY"
                  placeholder={[t('startDate'), t('endDate')]}
-                 separator={<span className="text-[#8e9d9b]">→</span>}
+                 separator={<span className="text-[var(--text-color)] opacity-60">→</span>}
                />
              </ConfigProvider>
-             <div className="bg-[#06120f] border border-white/10 rounded-[8px] flex items-center px-3 py-2 w-full sm:w-[200px]">
-               <Search size={14} className="text-[#8e9d9b] opacity-60 mr-2" />
+             <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-[8px] flex items-center px-3 py-2 w-full sm:w-[200px]">
+               <Search size={14} className="text-[var(--text-color)] opacity-60 mr-2" />
                <input 
                  type="text" 
                  placeholder={t('search')} 
                  value={searchQuery}
                  onChange={(e) => setSearchQuery(e.target.value)}
-                 className="bg-transparent border-none outline-none text-[13px] text-white w-full placeholder-[#8e9d9b]"
+                 className="bg-transparent border-none outline-none text-[13px] text-[var(--text-color)] w-full placeholder-[var(--text-color)] placeholder-opacity-50"
                />
              </div>
            </div>
@@ -390,7 +406,6 @@ const InternalTransferPage = ({ onNavigate }) => {
          <div className="flex-1 min-h-0">
            <InternalTransferTable 
              statusFilter={statusFilter} 
-             language={language} 
              searchQuery={searchQuery}
              dateRange={dateRange}
            />

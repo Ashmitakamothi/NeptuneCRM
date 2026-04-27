@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Download, Moon, Globe } from 'lucide-react';
-import { DatePicker, ConfigProvider, theme } from 'antd';
+import { Home, ChevronRight, Download } from 'lucide-react';
+import { DatePicker, ConfigProvider, theme as antdTheme } from 'antd';
+import { useTheme } from '../contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import ReportsTable from './ReportsTable';
 
 const { RangePicker } = DatePicker;
@@ -13,6 +15,15 @@ const TRANSLATIONS = {
     export: "Export",
     startDate: "Start date",
     endDate: "End date",
+    exportCSV: "Export as CSV",
+    depositReport: "DEPOSIT REPORT",
+    withdrawReport: "WITHDRAW REPORT",
+    transferReport: "TRANSFER REPORT",
+    lossReport: "LOSS REPORT",
+    depositBread: "Deposit Report",
+    withdrawBread: "Withdraw Report",
+    transferBread: "Transfer Report",
+    lossBread: "Loss Report",
   },
   HI: {
     news: "समाचार",
@@ -21,13 +32,22 @@ const TRANSLATIONS = {
     export: "निर्यात",
     startDate: "प्रारंभ तिथि",
     endDate: "अंतिम तिथि",
+    exportCSV: "CSV के रूप में निर्यात करें",
+    depositReport: "जमा रिपोर्ट",
+    withdrawReport: "निकासी रिपोर्ट",
+    transferReport: "ट्रांसफर रिपोर्ट",
+    lossReport: "लॉस रिपोर्ट",
+    depositBread: "जमा रिपोर्ट",
+    withdrawBread: "निकासी रिपोर्ट",
+    transferBread: "ट्रांसफर रिपोर्ट",
+    lossBread: "लॉस रिपोर्ट",
   }
 };
 
 const ReportsPage = ({ type, onNavigate }) => {
+  const { isDark } = useTheme();
+  const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [dateRange, setDateRange] = useState(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [exportTrigger, setExportTrigger] = useState(0);
@@ -35,33 +55,46 @@ const ReportsPage = ({ type, onNavigate }) => {
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   // Format the title and breadcrumb based on type
-  const reportTitle = `${type} Report`.toUpperCase();
-  const breadcrumbText = `${type} Report`;
+  const getReportKeys = (type) => {
+    switch(type?.toLowerCase()) {
+      case 'deposit': return { title: 'depositReport', bread: 'depositBread' };
+      case 'withdraw': return { title: 'withdrawReport', bread: 'withdrawBread' };
+      case 'transfer': return { title: 'transferReport', bread: 'transferBread' };
+      case 'loss': return { title: 'lossReport', bread: 'lossBread' };
+      default: return { title: `${type} Report`.toUpperCase(), bread: `${type} Report` };
+    }
+  };
+
+  const keys = getReportKeys(type);
+  const reportTitle = TRANSLATIONS[language]?.[keys.title] || keys.title;
+  const breadcrumbText = TRANSLATIONS[language]?.[keys.bread] || keys.bread;
 
   return (
     <div className="flex flex-col w-full h-full animate-fade-in pb-20">
       {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none uppercase">{reportTitle}</h1>
+          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none uppercase">{reportTitle}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" style={{ animationDuration: '1s' }}></div>
             <span className="bg-[#158B86] text-white text-sm sm:text-lg font-medium px-2 rounded-sm cursor-pointer">{t('news')}</span>
           </div>
         </div>
+
         
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-           <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[40px]">
+           <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[40px]">
               <button 
                 onClick={() => setDashboardType('User')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('userDashboard')}</button>
               <button 
                 onClick={() => setDashboardType('IB')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-white'}`}
+                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
               >{t('ibDashboard')}</button>
            </div>
            
+           {/*
            <button className="text-[#8e9d9b] hover:text-white transition-colors">
               <Moon size={20} strokeWidth={2} />
            </button>
@@ -93,42 +126,44 @@ const ReportsPage = ({ type, onNavigate }) => {
                </div>
              )}
            </div>
+           */}
         </div>
       </div>
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[15px] mb-6 font-medium">
-        <Home size={18} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <Home size={18} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white cursor-default tracking-wide">{breadcrumbText}</span>
+        <span className="text-[var(--text-color)] cursor-default tracking-wide">{breadcrumbText}</span>
       </div>
+
 
       {/* Top Actions: Date Picker & Export Only */}
       <div className="flex justify-end w-full mb-6">
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
           <ConfigProvider
             theme={{
-              algorithm: theme.darkAlgorithm,
-              token: {
-                colorPrimary: '#158B86',
-                colorBgContainer: 'transparent',
-                colorBorder: 'rgba(255, 255, 255, 0.1)',
-                colorTextPlaceholder: 'rgba(255, 255, 255, 0.3)',
-                colorText: 'white',
-                borderRadius: 6,
-                controlHeight: 40,
-              },
-              components: {
-                DatePicker: {
-                  activeBorderColor: '#158B86',
-                  hoverBorderColor: 'rgba(255, 255, 255, 0.3)',
-                  activeBg: 'transparent',
-                }
-              }
-            }}
+               algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+               token: {
+                 colorPrimary: '#158B86',
+                 colorBgContainer: 'transparent',
+                 colorBorder: isDark ? 'rgba(142, 157, 155, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+                 colorTextPlaceholder: isDark ? 'rgba(142, 157, 155, 0.7)' : 'rgba(0, 0, 0, 0.3)',
+                 colorText: 'inherit',
+                 borderRadius: 6,
+                 controlHeight: 40,
+               },
+               components: {
+                 DatePicker: {
+                   activeBorderColor: '#158B86',
+                   hoverBorderColor: isDark ? 'rgba(142, 157, 155, 0.6)' : 'rgba(0, 0, 0, 0.3)',
+                   activeBg: 'transparent',
+                 }
+               }
+             }}
           >
             <RangePicker 
-              className="w-full sm:w-[280px] hover:border-white/30 transition-colors"
+              className="w-full sm:w-[280px] hover:border-[var(--border-color)] transition-colors text-[var(--text-color)]"
               placeholder={[t('startDate'), t('endDate')]}
               onChange={(dates) => setDateRange(dates)}
               style={{ backgroundColor: 'transparent' }}
@@ -145,27 +180,27 @@ const ReportsPage = ({ type, onNavigate }) => {
             </button>
             
             {isExportOpen && (
-              <div className="absolute top-[calc(100%+8px)] right-0 min-w-[140px] bg-[#1A1A1A] border border-white/10 rounded-[8px] overflow-hidden shadow-2xl py-2 z-50">
-                <div className="absolute -top-2 right-6 w-4 h-4 bg-[#1A1A1A] border-l border-t border-white/10 transform rotate-45"></div>
+              <div className="absolute top-[calc(100%+8px)] right-0 min-w-[140px] bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-2xl py-2 z-50">
+                <div className="absolute -top-2 right-6 w-4 h-4 bg-[var(--card-bg)] border-l border-t border-[var(--border-color)] transform rotate-45"></div>
                 <button
-                  className="relative z-10 w-full px-4 py-2 text-left text-[14px] text-white hover:bg-white/5 hover:text-[#00BFA5] transition-colors"
+                  className="relative z-10 w-full px-4 py-2 text-left text-[14px] text-[var(--text-color)] hover:bg-white/5 hover:text-[#00BFA5] transition-colors"
                   onClick={() => {
                     setIsExportOpen(false);
                     setExportTrigger(prev => prev + 1);
                   }}
                 >
-                  Export as CSV
+                  {t('exportCSV')}
                 </button>
               </div>
             )}
           </div>
+
         </div>
       </div>
 
       {/* Table Section */}
       <ReportsTable 
         type={type}
-        language={language}
         dateRange={dateRange}
         exportTrigger={exportTrigger}
       />

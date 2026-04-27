@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tooltip } from 'antd';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TRANSLATIONS = {
   EN: {
@@ -32,7 +33,8 @@ const TRANSLATIONS = {
   }
 };
 
-const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQuery = '', dateRange = null }) => {
+const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRange = null }) => {
+  const { language } = useLanguage();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
   const [currentPage, setCurrentPage] = useState(1);
@@ -152,7 +154,7 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
             currentPage === i 
               ? 'bg-[#158B86] text-white' 
-              : 'text-white hover:bg-white/5'
+              : 'text-[var(--text-color)] hover:bg-white/5'
           }`}
         >
           {i}
@@ -182,15 +184,16 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
   };
 
   return (
-    <div className="rounded-[16px] border border-white/10 overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
+    <div className="rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[#1A1A1A] border-b border-white/10">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white">{t('from')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('to')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('amount')}</th>
-              <th className="p-0 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10 cursor-pointer hover:bg-white/5 transition-colors" onClick={() => handleSort('requestDate')}>
+            <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)]">{t('from')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('to')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('amount')}</th>
+              <th className="p-0 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)] cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleSort('requestDate')}>
+
                 <Tooltip title={getSortTooltip('requestDate')} placement="top" color="#404040" overlayInnerStyle={{ borderRadius: '6px', padding: '4px 12px', fontSize: '13px' }} mouseEnterDelay={0.3}>
                   <div className="flex items-center justify-between w-full h-full py-3 px-2 md:px-4">
                     <span>{t('requestDate')}</span>
@@ -198,7 +201,7 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
                   </div>
                 </Tooltip>
               </th>
-              <th className="p-0 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10 cursor-pointer hover:bg-white/5 transition-colors" onClick={() => handleSort('actionDate')}>
+              <th className="p-0 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)] cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleSort('actionDate')}>
                 <Tooltip title={getSortTooltip('actionDate')} placement="top" color="#404040" overlayInnerStyle={{ borderRadius: '6px', padding: '4px 12px', fontSize: '13px' }} mouseEnterDelay={0.3}>
                   <div className="flex items-center justify-between w-full h-full py-3 px-2 md:px-4">
                     <span>{t('actionDate')}</span>
@@ -206,32 +209,34 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
                   </div>
                 </Tooltip>
               </th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('status')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-white border-l border-white/10">{t('remark')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
+              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
+
             </tr>
           </thead>
           <tbody>
             {paginatedData.length > 0 ? (
               paginatedData.map((row) => (
-                <tr key={row.id} className="border-b border-white/5 last:border-0 hover:bg-[#1A1A1A] transition-colors">
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                <tr key={row.id} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {language === 'HI' && row.from === 'Wallet' ? t('wallet') : row.from}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.to}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     $ {row.amount}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.requestDate}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-white">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
                     {row.actionDate}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px]">
-                    <span className="text-white opacity-80">{language === 'HI' ? t(row.status.toLowerCase()) : row.status}</span>
+                    <span className="text-[var(--text-color)] opacity-80">{language === 'HI' ? t(row.status.toLowerCase()) : row.status}</span>
                   </td>
+
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[#158B86]">
                     <svg width="22" height="22" viewBox="0 0 24 25" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-[#00BFA5] hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2 12.5s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
@@ -258,22 +263,22 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
       </div>
       
       {/* Pagination Bar */}
-      <div className="bg-[#1A1A1A] p-3 flex flex-col sm:flex-row items-center justify-between border-t border-white/10 gap-4 sm:gap-0">
+      <div className="bg-[var(--card-bg)] p-3 flex flex-col sm:flex-row items-center justify-between border-t border-[var(--border-color)] gap-4 sm:gap-0">
         <div className="relative">
           <div 
-            className="bg-[#06120f] border border-white/10 rounded-[6px] px-3 py-1.5 flex items-center justify-between min-w-[100px] cursor-pointer hover:border-white/20 transition-colors"
+            className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[6px] px-3 py-1.5 flex items-center justify-between min-w-[100px] cursor-pointer hover:opacity-80 transition-colors"
             onClick={() => setIsRowsDropdownOpen(!isRowsDropdownOpen)}
           >
-            <span className="text-white text-[13px] font-medium">{itemsPerPage} / Page</span>
+            <span className="text-[var(--text-color)] text-[13px] font-medium">{itemsPerPage} / Page</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-[#8e9d9b] transition-transform ${isRowsDropdownOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
           </div>
           
           {isRowsDropdownOpen && (
-            <div className="absolute bottom-full left-0 mb-1 w-full bg-[#06120f] border border-white/10 rounded-[6px] overflow-hidden z-10 shadow-xl">
+            <div className="absolute bottom-full left-0 mb-1 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[6px] overflow-hidden z-10 shadow-xl">
               {[5, 10, 20, 50].map((num) => (
                 <div 
                   key={num}
-                  className={`px-3 py-2 text-[13px] cursor-pointer hover:bg-white/5 transition-colors ${itemsPerPage === num ? 'text-[#158B86] font-medium' : 'text-white'}`}
+                  className={`px-3 py-2 text-[13px] cursor-pointer hover:bg-white/5 transition-colors ${itemsPerPage === num ? 'text-[#158B86] font-medium' : 'text-[var(--text-color)]'}`}
                   onClick={() => {
                     setItemsPerPage(num);
                     setCurrentPage(1);
@@ -291,7 +296,7 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
           <button 
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
-            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${currentPage === 1 ? 'text-white/30 cursor-not-allowed' : 'text-white hover:bg-white/5'}`}
+            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'text-[var(--text-color)] hover:bg-white/5'}`}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
@@ -301,12 +306,13 @@ const InternalTransferTable = ({ statusFilter = 'All', language = 'EN', searchQu
           <button 
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
             disabled={currentPage === totalPages}
-            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${currentPage === totalPages ? 'text-white/30 cursor-not-allowed' : 'text-white hover:bg-white/5'}`}
+            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'text-[var(--text-color)] hover:bg-white/5'}`}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
       </div>
+
     </div>
   );
 };

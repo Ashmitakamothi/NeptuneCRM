@@ -60,8 +60,9 @@ const Dashboard = ({ onNavigate }) => {
         <div className="min-w-0">
           <AccountsTable data={slices.accounts} />
         </div>
-        <div className="min-w-0 bg-white rounded-[20px] border border-[#E2E2E4] shadow-[0_4px_6px_rgba(207,207,207,0.10)] h-[325px]" />
+        <div className="min-w-0 bg-[var(--card-bg)] rounded-[20px] border border-[var(--border-color)] shadow-[0_4px_6px_rgba(207,207,207,0.10)] h-[325px]" />
       </div>
+
     </div>
   );
 };

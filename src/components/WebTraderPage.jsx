@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe, Link2, UserPlus, Lock, ShieldCheck, ChevronDown } from 'lucide-react';
+import { Home, ChevronRight, Link2, UserPlus, Lock, ShieldCheck, ChevronDown } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TRANSLATIONS = {
-  EN: { news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard' },
-  HI: { news: 'समाचार', userDashboard: 'यूजर डैशबोर्ड', ibDashboard: 'आईबी डैशबोर्ड' },
+  EN: { 
+    news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard',
+    webTrader: 'WEB TRADER', connect: 'Connect to account', demo: 'Open Demo account',
+    login: 'Login', password: 'Password', server: 'Server', platform: 'Platform',
+    savePassword: 'Save password in browser storage', connectBtn: 'Connect to account'
+  },
+  HI: { 
+    news: 'समाचार', userDashboard: 'उपयोगकर्ता डैशबोर्ड', ibDashboard: 'IB डैशबोर्ड',
+    webTrader: 'वेब ट्रेडर', connect: 'अकाउंट से कनेक्ट करें', demo: 'डेमो अकाउंट खोलें',
+    login: 'लॉगिन', password: 'पासवर्ड', server: 'सर्वर', platform: 'प्लेटफॉर्म',
+    savePassword: 'ब्राउज़र स्टोरेज में पासवर्ड सेव करें', connectBtn: 'अकाउंट से कनेक्ट करें'
+  },
 };
 
 const WebTraderPage = ({ onNavigate }) => {
+  const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [language, setLanguage] = useState('EN');
   const [activeTab, setActiveTab] = useState('connect');
   const [savePassword, setSavePassword] = useState(true);
 
@@ -17,33 +28,37 @@ const WebTraderPage = ({ onNavigate }) => {
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
       {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-white tracking-tight uppercase">WEB TRADER</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight uppercase">{t('webTrader')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
           </div>
+
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[38px]">
-            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('userDashboard')}</button>
-            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('ibDashboard')}</button>
+          <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[38px]">
+            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
+            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
+          {/*
           <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
           <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
             <Globe size={16} /> <span>US</span>
           </div>
+          */}
         </div>
       </div>
 
       {/* ── Breadcrumb ─────────────────────────────────────────── */}
       <div className="flex items-center gap-2 text-[15px] mb-7 font-medium">
-        <Home size={17} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white">Web Trader</span>
+        <span className="text-[var(--text-color)]">{t('webTrader')}</span>
       </div>
+
 
       {/* ── Main Content Area (Mockup of MT5 WebTrader) ───────────────── */}
       <div className="w-full bg-[#f0f0f0] rounded-[12px] min-h-[600px] flex items-center justify-center p-10 overflow-hidden relative border border-white/5 shadow-2xl">
@@ -64,7 +79,7 @@ const WebTraderPage = ({ onNavigate }) => {
                 className={`flex items-center gap-4 px-6 py-4 text-[15px] transition-all border-l-[3px] ${activeTab === 'connect' ? 'bg-white border-[#4285F4] text-[#4285F4] font-bold shadow-sm' : 'border-transparent text-[#555] hover:bg-[#ececec]'}`}
               >
                 <Link2 size={20} className={activeTab === 'connect' ? 'text-[#4285F4]' : 'text-gray-400'} />
-                <span>Connect to account</span>
+                <span>{t('connect')}</span>
               </button>
               
               <button 
@@ -72,7 +87,7 @@ const WebTraderPage = ({ onNavigate }) => {
                 className={`flex items-center gap-4 px-6 py-4 text-[15px] transition-all border-l-[3px] ${activeTab === 'demo' ? 'bg-white border-[#4285F4] text-[#4285F4] font-bold shadow-sm' : 'border-transparent text-[#555] hover:bg-[#ececec]'}`}
               >
                 <UserPlus size={20} className={activeTab === 'demo' ? 'text-[#4285F4]' : 'text-gray-400'} />
-                <span>Open Demo account</span>
+                <span>{t('demo')}</span>
               </button>
 
               {/* Spacer */}
@@ -89,10 +104,10 @@ const WebTraderPage = ({ onNavigate }) => {
             <div className="flex-1 p-10 flex flex-col">
               {activeTab === 'connect' ? (
                 <>
-                  <h2 className="text-[18px] font-bold text-[#333] mb-8">Connect to account</h2>
+                  <h2 className="text-[18px] font-bold text-[#333] mb-8">{t('connect')}</h2>
                   <div className="space-y-6 max-w-[450px]">
                     <div className="flex items-center gap-4">
-                      <label className="w-[100px] text-[14px] text-[#555] font-medium">Login</label>
+                      <label className="w-[100px] text-[14px] text-[#555] font-medium">{t('login')}</label>
                       <input 
                         type="text" 
                         placeholder="Enter Login"
@@ -100,34 +115,34 @@ const WebTraderPage = ({ onNavigate }) => {
                       />
                     </div>
                     <div className="flex items-center gap-4">
-                      <label className="w-[100px] text-[14px] text-[#555] font-medium">Password</label>
+                      <label className="w-[100px] text-[14px] text-[#555] font-medium">{t('password')}</label>
                       <div className="flex-1 flex flex-col gap-2">
                         <input 
                           type="password" 
                           placeholder="Enter Password"
                           className="w-full h-11 px-4 bg-white border border-[#dcdcdc] rounded-[4px] text-[14px] focus:border-[#4285F4] focus:ring-1 focus:ring-[#4285F4] outline-none transition-all placeholder:text-gray-300 shadow-sm"
                         />
-                        <div className="flex items-center justify-between mt-1">
-                          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => setSavePassword(!savePassword)}>
-                            <div className={`w-4 h-4 rounded-[2px] border transition-all flex items-center justify-center ${savePassword ? 'bg-[#4285F4] border-[#4285F4]' : 'bg-white border-[#dcdcdc]'}`}>
-                              {savePassword && <span className="text-white text-[10px]">✓</span>}
-                            </div>
-                            <span className="text-[13px] text-[#666] group-hover:text-[#333]">Save password</span>
-                          </div>
-                          <div className="text-[12px] text-[#888]">
-                            Forgot Password? <a href="#" className="text-[#4285F4] hover:underline ml-1">Contact company</a>
-                          </div>
+                        <div className="flex items-center gap-4 pt-2">
+                      <div className="w-[100px]" />
+                      <div className="flex items-center gap-2 cursor-pointer" onClick={() => setSavePassword(!savePassword)}>
+                        <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-all ${savePassword ? 'bg-[#4285F4] border-[#4285F4]' : 'border-gray-300'}`}>
+                          {savePassword && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                         </div>
+                        <span className="text-[13px] text-[#777]">{t('savePassword')}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <label className="w-[100px] text-[14px] text-[#555] font-medium">Server</label>
-                      <div className="flex-1 text-[15px] text-[#333] font-bold">MetaQuotes-Demo</div>
-                    </div>
-                    <div className="pt-6 flex justify-end">
-                      <button className="px-8 py-3 bg-[#4CAF50] hover:bg-[#43a047] text-white text-[14px] font-bold rounded-[4px] shadow-lg shadow-green-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-md">
-                        Connect to account
+
+                    <div className="flex items-center gap-4 pt-6">
+                      <div className="w-[100px]" />
+                      <button className="bg-[#4285F4] hover:bg-[#357abd] text-white px-8 py-2.5 rounded-[4px] text-[14px] font-medium transition-all shadow-sm">
+                        {t('connectBtn')}
                       </button>
+                    </div>
+                    </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <label className="w-[100px] text-[14px] text-[#555] font-medium">{t('server')}</label>
+                      <div className="flex-1 text-[15px] text-[#333] font-bold">MetaQuotes-Demo</div>
                     </div>
                   </div>
                 </>
@@ -149,7 +164,7 @@ const WebTraderPage = ({ onNavigate }) => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                      <label className="w-[110px] text-[14px] text-[#555] font-medium">Email</label>
+                      <label className="w-[100px] text-[14px] text-[#555] font-medium">{t('platform')}</label>
                       <input type="email" placeholder="Email" className="flex-1 h-10 px-4 bg-white border border-[#dcdcdc] rounded-[4px] text-[14px] outline-none" />
                     </div>
 

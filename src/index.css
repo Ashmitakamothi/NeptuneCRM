@@ -3,8 +3,23 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  --bg-color: #ffffff;
+  --text-color: #06120f;
+  --nav-bg: #ffffff;
+  --card-bg: #ffffff;
+  --sub-bg: #f8fafc;
+  --border-color: rgba(0, 0, 0, 0.08);
 }
+
+.dark {
+  --bg-color: #06120f;
+  --text-color: #ffffff;
+  --nav-bg: #06120f;
+  --card-bg: #112320;
+  --sub-bg: #122d32;
+  --border-color: rgba(255, 255, 255, 0.05);
+}
+
 
 body {
   margin: 0;
@@ -13,21 +28,33 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #06120f;
-  color: white;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+::selection {
+  background-color: #c7f284;
+  color: #000000;
+}
+
+
 
 @layer components {
   .card {
-    @apply bg-brand-card rounded-2xl border border-white/5 overflow-hidden;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    @apply rounded-2xl overflow-hidden;
   }
   
   .table-header {
-    @apply text-brand-text text-[10px] uppercase tracking-wider py-3 px-4 text-left font-medium;
+    color: var(--text-color);
+    @apply opacity-60 text-[10px] uppercase tracking-wider py-3 px-4 text-left font-medium;
   }
   
   .table-cell {
-    @apply py-4 px-4 text-xs font-medium border-t border-white/5;
+    border-top: 1px solid var(--border-color);
+    @apply py-4 px-4 text-xs font-medium;
   }
 
   .glass-glow {
