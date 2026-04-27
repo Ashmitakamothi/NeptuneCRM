@@ -16,6 +16,8 @@ import IBRequestPage from './components/IBRequestPage';
 import FAQsPage from './components/FAQsPage';
 import SupportPage from './components/SupportPage';
 import TutorialsPage from './components/TutorialsPage';
+import MessengerPage from './components/MessengerPage';
+
 
 function App() {
   const [activePage, setActivePage] = useState(() => {
@@ -34,7 +36,9 @@ function App() {
       'ib_request': 'More_IBRequest',
       'faq': 'More_FAQs',
       'support': 'More_Support',
+      'messenger': 'More_Messenger',
       'tutorial': 'More_Tutorial'
+
     };
     
     if (urlMap[path]) return urlMap[path];
@@ -61,7 +65,9 @@ function App() {
       'More_IBRequest': 'ib_request',
       'More_FAQs': 'faq',
       'More_Support': 'support',
+      'More_Messenger': 'messenger',
       'More_Tutorial': 'tutorial'
+
     };
 
     const path = pageToPath[activePage] || '';
@@ -93,7 +99,9 @@ function App() {
           'ib_request': 'More_IBRequest',
           'faq': 'More_FAQs',
           'support': 'More_Support',
+          'messenger': 'More_Messenger',
           'tutorial': 'More_Tutorial'
+
         };
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
@@ -138,7 +146,10 @@ function App() {
         return <FAQsPage onNavigate={setActivePage} />;
       case 'More_Support':
         return <SupportPage onNavigate={setActivePage} />;
+      case 'More_Messenger':
+        return <MessengerPage onNavigate={setActivePage} />;
       case 'More_Tutorial':
+
         return <TutorialsPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
