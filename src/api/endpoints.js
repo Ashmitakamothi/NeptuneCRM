@@ -10,4 +10,6 @@ export const endpoints = {
   accountTrades: import.meta.env.VITE_ENDPOINT_TRADES_BY_LOGIN,
   deposits: import.meta.env.VITE_ENDPOINT_DEPOSITES,
   userLogin: '/mt5-api/api/Authentication/User-Login',
+  userRegister: '/mt5-api/api/Authentication/User-Registration',
+  getAllCountry: '/mt5-api/api/Authentication/GetAll-Country',
 };

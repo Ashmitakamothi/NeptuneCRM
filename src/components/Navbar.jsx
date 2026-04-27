@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check } from 'lucide-react';
+import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import homeSmileIcon from '../assets/home-smile.png';
 import internalTransferIcon from '../assets/internal-transfer.png.png';
 import accountsIcon from '../assets/account.png.png';
@@ -13,6 +14,12 @@ import logo from '../assets/logo.png.png';
 const Navbar = ({ onNavigate, activeMenu }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguage();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    onNavigate('Login');
+  };
 
   const t = (key) => {
     const TRANSLATIONS = {
@@ -267,6 +274,14 @@ const Navbar = ({ onNavigate, activeMenu }) => {
           >
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel" alt="Profile" className="w-full h-full object-cover" />
           </div>
+
+          <button 
+            onClick={handleLogout}
+            className="p-1.5 text-red-500 hover:text-red-600 transition-colors ml-1"
+            title="Logout"
+          >
+            <LogOut size={20} strokeWidth={2} />
+          </button>
           
           {/* Mobile Hamburger Menu */}
           <button 

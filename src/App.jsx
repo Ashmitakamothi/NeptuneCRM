@@ -20,11 +20,19 @@ import MessengerPage from './components/MessengerPage';
 import DownloadPage from './components/DownloadPage';
 import ProfilePage from './components/ProfilePage';
 import AccountDetailsPage from './components/AccountDetailsPage';
+import LoginPage from './components/LoginPage';
+import SignupPage from './components/SignupPage';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-const App = () => {
+const AppContent = () => {
+  const { isAuthenticated } = useAuth();
   const [activePage, setActivePageInternal] = useState(() => {
     // 1. Check URL path first
     const path = window.location.pathname.replace(/^\//, '');
+    
+    // If on Login/Signup path, return those
+    if (path === 'login') return 'Login';
+    if (path === 'signup') return 'Signup';
 
     const urlMap = {
       'dashboard': 'Dashboard',
@@ -83,7 +91,9 @@ const App = () => {
       'More_Download': 'download',
       'More_MT5Download': 'download',
       'Profile': 'profile',
-      'Account_Details': 'accounts/details'
+      'Account_Details': 'accounts/details',
+      'Login': 'login',
+      'Signup': 'signup'
     };
 
     const path = pageToPath[activePage] || '';
@@ -120,7 +130,9 @@ const App = () => {
           'download': 'More_Download',
           'mt5-download': 'More_MT5Download',
           'profile': 'Profile',
-          'accounts/details': 'Account_Details'
+          'accounts/details': 'Account_Details',
+          'login': 'Login',
+          'signup': 'Signup'
         };
 
         if (urlMap[path]) setActivePage(urlMap[path]);
@@ -132,6 +144,12 @@ const App = () => {
   }, []);
 
   const renderContent = () => {
+    // Auth Guard
+    if (!isAuthenticated) {
+      if (activePage === 'Signup') return <SignupPage onNavigate={setActivePage} />;
+      return <LoginPage onNavigate={setActivePage} />;
+    }
+
     if (activePage.startsWith('Reports_')) {
       const type = activePage.replace('Reports_', '');
       if (type === 'Logs') return <LogsPage onNavigate={setActivePage} />;
@@ -158,19 +176,29 @@ const App = () => {
       case 'More_Download':
       case 'More_MT5Download': return <DownloadPage onNavigate={setActivePage} />;
       case 'Profile': return <ProfilePage onNavigate={setActivePage} />;
+      case 'Login': return <LoginPage onNavigate={setActivePage} />;
+      case 'Signup': return <SignupPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12">
-      <Navbar onNavigate={setActivePage} activeMenu={activePage} />
+    <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
+      {isAuthenticated && <Navbar onNavigate={setActivePage} activeMenu={activePage} />}
       
-      <main className="max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8">
+      <main className={isAuthenticated ? "max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8" : ""}>
         {renderContent()}
       </main>
     </div>
   );
 };
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
 export default App;

@@ -3,23 +3,30 @@
 @tailwind utilities;
 
 :root {
+  --theme: #00727d;
+  --theme-light: rgba(0, 114, 125, 0.1);
+  --theme-bg-light: #ffffff;
+  --theme-text: #151924;
+  --theme-border: #e5e7eb;
+  
   --bg-color: #ffffff;
-  --text-color: #06120f;
-  --nav-bg: #ffffff;
   --card-bg: #ffffff;
+  --text-color: #1a1a1a;
+  --border-color: #e5e7eb;
+  --primary-color: #00727d;
+  --nav-bg: #ffffff;
   --sub-bg: #f8fafc;
-  --border-color: rgba(0, 0, 0, 0.08);
 }
 
 .dark {
-  --bg-color: #06120f;
-  --text-color: #ffffff;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-color: #f8fafc;
+  --border-color: #334155;
+  --primary-color: #00727d;
   --nav-bg: #06120f;
-  --card-bg: #112320;
   --sub-bg: #122d32;
-  --border-color: rgba(255, 255, 255, 0.05);
 }
-
 
 body {
   margin: 0;
@@ -76,6 +83,63 @@ body {
   }
 }
 
+/* Auth Pages */
+.auth-bg {
+  background: var(--theme-bg-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-bg::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background-image: radial-gradient(var(--theme) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: rotate(-15deg);
+  opacity: 0.05;
+}
+
+.auth-card {
+  background: #f5f5f5;
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  z-index: 10;
+}
+
+.auth-input {
+  border: 1.5px solid var(--theme-border);
+  transition: all 0.2s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--theme);
+  box-shadow: 0 0 0 4px var(--theme-light);
+  outline: none;
+}
+
+.primary-btn {
+  background-color: var(--theme);
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--theme-light);
+}
+
+.primary-text {
+  color: var(--theme);
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -87,12 +151,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: #158B8630;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: #158B8650;
 }
 
 /* Custom Scrollbar for Light Mode Sections (like White Cards) */

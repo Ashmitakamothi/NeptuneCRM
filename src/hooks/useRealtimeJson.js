@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { fetchJson } from '../api/http';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useRealtimeJson(
   path,
@@ -7,18 +8,27 @@ export function useRealtimeJson(
     enabled = true,
     pollIntervalMs = Number(import.meta.env.VITE_POLL_INTERVAL_MS || 5000),
     baseUrl,
-    token,
+    token: overrideToken,
   } = {}
 ) {
+  const { token: authToken, userId } = useAuth();
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(Boolean(enabled && path));
 
-  const key = useMemo(() => (path ? `${baseUrl || ''}::${path}` : null), [baseUrl, path]);
+  // Dynamic path replacement for {userId}
+  const dynamicPath = useMemo(() => {
+    if (!path) return null;
+    return path.replace(/{userId}/g, userId || '');
+  }, [path, userId]);
+
+  const effectiveToken = overrideToken || authToken;
+
+  const key = useMemo(() => (dynamicPath ? `${baseUrl || ''}::${dynamicPath}::${effectiveToken}` : null), [baseUrl, dynamicPath, effectiveToken]);
   const lastKeyRef = useRef(key);
 
   useEffect(() => {
-    if (!enabled || !path) return;
+    if (!enabled || !dynamicPath) return;
 
     let alive = true;
     const ac = new AbortController();
@@ -27,7 +37,12 @@ export function useRealtimeJson(
       try {
         setLoading(true);
         setError(null);
-        const json = await fetchJson(path, { baseUrl, token, signal: ac.signal });
+        // Ensure we pass the token to fetchJson
+        const json = await fetchJson(dynamicPath, { 
+          baseUrl, 
+          token: effectiveToken, 
+          signal: ac.signal 
+        });
         if (!alive) return;
         setData(json);
       } catch (e) {
@@ -39,7 +54,7 @@ export function useRealtimeJson(
       }
     }
 
-    // reset when endpoint changes
+    // reset when endpoint or token changes
     if (lastKeyRef.current !== key) {
       lastKeyRef.current = key;
       setData(null);
@@ -52,7 +67,7 @@ export function useRealtimeJson(
       alive = false;
       ac.abort();
     };
-  }, [enabled, path, baseUrl, token, key]);
+  }, [enabled, dynamicPath, baseUrl, effectiveToken, key]);
 
   return { data, error, loading };
 }
