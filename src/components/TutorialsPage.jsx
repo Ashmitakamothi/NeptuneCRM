@@ -11,6 +11,8 @@ const TRANSLATIONS = {
 };
 
 import { TUTORIALS } from '../data/tutorialsData';
+import youtubeIcon from '../assets/youtubeimage.jpg';
+
 
 
 const TutorialsPage = ({ onNavigate }) => {
@@ -95,7 +97,7 @@ const TutorialsPage = ({ onNavigate }) => {
                 {/* Branding Overlays (Matches Screenshot) */}
                 <div className="absolute top-3 left-3 flex items-center gap-2 z-20">
                   <div className="w-8 h-8 rounded-full bg-white border border-white/20 flex items-center justify-center overflow-hidden">
-                    <img src="/src/assets/youtubeimage.jpg" alt="" className="w-full h-full object-contain" />
+                    <img src={youtubeIcon} alt="" className="w-full h-full object-contain" />
 
 
                   </div>
