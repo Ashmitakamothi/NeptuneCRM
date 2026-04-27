@@ -56,7 +56,7 @@ const Dashboard = ({ onNavigate }) => {
       </div>
 
       {/* Bottom Section: Accounts and Placeholder */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,785fr)_minmax(0,1051fr)] gap-[13.14px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1051fr)_minmax(0,785fr)] gap-[13.14px]">
         <div className="min-w-0">
           <AccountsTable data={slices.accounts} />
         </div>

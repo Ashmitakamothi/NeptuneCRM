@@ -93,19 +93,19 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
         </div>
       )}
 
-      <div className="flex-1 overflow-x-auto min-h-0">
-        <table className="w-full whitespace-nowrap">
+      <div className="flex-1 overflow-x-auto min-h-0 custom-scrollbar">
+        <table className="w-full whitespace-nowrap min-w-[800px]">
           <thead>
             <tr className="bg-[var(--card-bg)] border-b border-[var(--border-color)]">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)]">{t('login')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('platform')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('acType')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('balance')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('leverage')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('createdAt')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('actions')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)]">{t('login')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('platform')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('acType')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('balance')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('leverage')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('createdAt')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
+              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('actions')}</th>
             </tr>
           </thead>
 
@@ -113,40 +113,35 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
             {accounts.length > 0 ? (
               accounts.map((a, idx) => (
                 <tr key={a.id ?? idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {a.accountNo ?? a.account_no ?? a.login ?? '—'}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     MT5
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {a.acType ?? a.type ?? a.accountType ?? '—'}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {typeof a.balance === 'number' ? `$ ${a.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : (a.balance ?? '—')}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {a.leverage ?? '—'}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     USD
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {a.createdDate ? (() => {
                       const date = new Date(a.createdDate);
                       const day = String(date.getDate()).padStart(2, '0');
                       const month = String(date.getMonth() + 1).padStart(2, '0');
                       const year = date.getFullYear();
-                      let hours = date.getHours();
-                      const minutes = String(date.getMinutes()).padStart(2, '0');
-                      const ampm = hours >= 12 ? 'PM' : 'AM';
-                      hours = hours % 12;
-                      hours = hours ? hours : 12;
-                      return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+                      return `${day}-${month}-${year}`;
                     })() : (a.createdAt ?? '—')}
                   </td>
 
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px]">
+                  <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px]">
                     {(() => {
                        const status = (a.status || 'APPROVED').toUpperCase();
                        if (status === 'APPROVED') {
