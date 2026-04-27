@@ -1,0 +1,179 @@
+import React, { useState } from 'react';
+import { Home, ChevronRight, Moon, Globe, Monitor, Apple, Smartphone, Laptop, Download } from 'lucide-react';
+import downloadBg from '../assets/download-bg.jpg';
+import mt5Logo from '../assets/mt5.png';
+
+const TRANSLATIONS = {
+  EN: { 
+    news: 'News', 
+    userDashboard: 'User Dashboard', 
+    ibDashboard: 'IB Dashboard',
+    title: 'DOWNLOAD TERMINAL',
+    heroTitle: 'MT5 Trading App',
+    heroSubtitle: 'Download the MT5 trading app on App Store and Google Play Store',
+    downloadSection: 'Download',
+    mt5Title: 'METATRADER 5',
+    mt5Subtitle: 'Download Meta Trader for PC, web browsers, smartphones and tablets',
+    riskTitle: 'RISK STATEMENT :',
+    riskText: 'All investments entail risks and may result in both profits and losses. In particular, trading leveraged derivative products such as Foreign Exchange (Forex) and Contracts for Difference (CFDs) carries a high level of risk to your capital. All these derivative products, many of which are leveraged, may not be appropriate for all investors.',
+    riskText2: 'It is important that you understand that investments, your capital is at risk. Past performance is not a guide to future performance. You should carefully consider your investment objectives, trading knowledge and experience and affordability.',
+    riskText3: 'MetaTrader is a trading name of MT5, authorised and regulated by the Financial Services Authority of Seychelles with License No. SD049.'
+  }
+};
+
+const DownloadPage = ({ onNavigate }) => {
+  const [dashboardType, setDashboardType] = useState('User');
+  const [language, setLanguage] = useState('EN');
+
+  const t = (key) => TRANSLATIONS[language]?.[key] || key;
+
+  const downloadOptions = [
+    { 
+      id: 'windows', 
+      name: 'Windows', 
+      url: 'https://download.mql5.com/cdn/web/metaquotes.ltd/mt5/mt5setup.exe?utm_source=www.metaquotes.net&utm_campaign=download',
+      icon: (
+        <svg viewBox="0 0 448 512" className="w-5 h-5 fill-current">
+          <path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"/>
+        </svg>
+      )
+    },
+    { 
+      id: 'macos', 
+      name: 'Mac OS', 
+      url: 'https://download.mql5.com/cdn/web/metaquotes.ltd/mt5/mt5setup.exe?utm_source=www.metaquotes.net&utm_campaign=download',
+      icon: (
+        <svg viewBox="0 0 512 512" className="w-5 h-5 fill-current">
+          <path d="M255.9 120.9l9.1-15.7c5.6-9.8 18.1-13.1 27.9-7.5 9.8 5.6 13.1 18.1 7.5 27.9l-87.5 151.5h63.3c20.5 0 32 24.1 23.1 40.8H113.8c-11.3 0-20.4-9.1-20.4-20.4 0-11.3 9.1-20.4 20.4-20.4h52l66.6-115.4-20.8-36.1c-5.6-9.8-2.3-22.2 7.5-27.9 9.8-5.6 22.2-2.3 27.9 7.5l8.9 15.7zm-78.7 218l-19.6 34c-5.6 9.8-18.1 13.1-27.9 7.5-9.8-5.6-13.1-18.1-7.5-27.9l14.6-25.2c16.4-5.1 29.8-1.2 40.4 11.6zm168.9-61.7h53.1c11.3 0 20.4 9.1 20.4 20.4 0 11.3-9.1 20.4-20.4 20.4h-29.5l19.9 34.5c5.6 9.8 2.3 22.2-7.5 27.9-9.8 5.6-22.2 2.3-27.9-7.5-33.5-58.1-58.7-101.6-75.4-130.6-17.1-29.5-4.9-59.1 7.2-69.1 13.4 23 33.4 57.7 60.1 104zM256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm216 248c0 118.7-96.1 216-216 216-118.7 0-216-96.1-216-216 0-118.7 96.1-216 216-216 118.7 0 216 96.1 216 216z"/>
+        </svg>
+      )
+    },
+    { 
+      id: 'ios', 
+      name: 'iPhone/iPad', 
+      url: 'https://apps.apple.com/us/app/metatrader-5/id413251709?utm_campaign=install.metaquotes&utm_source=www.metaquotes.net',
+      icon: (
+        <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
+          <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
+        </svg>
+      )
+    },
+    { 
+      id: 'android', 
+      name: 'Android/Tablet', 
+      url: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5&hl=en&referrer=ref_id%3d5192043324314688962%26hl%3den%26utm_source%3dwww.metaquotes.net%26utm_campaign%3dinstall.metaquotes',
+      icon: (
+        <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
+          <path d="m10.213 1.471.691-1.26q.069-.124-.048-.192-.128-.057-.195.058l-.7 1.27A4.8 4.8 0 0 0 8.005.941q-1.032 0-1.956.404l-.7-1.27Q5.281-.037 5.154.02q-.117.069-.049.193l.691 1.259a4.25 4.25 0 0 0-1.673 1.476A3.7 3.7 0 0 0 3.5 5.02h9q0-1.125-.623-2.072a4.27 4.27 0 0 0-1.664-1.476ZM6.22 3.303a.37.37 0 0 1-.267.11.35.35 0 0 1-.263-.11.37.37 0 0 1-.107-.264.37.37 0 0 1 .107-.265.35.35 0 0 1 .263-.11q.155 0 .267.11a.36.36 0 0 1 .112.265.36.36 0 0 1-.112.264m4.101 0a.35.35 0 0 1-.262.11.37.37 0 0 1-.268-.11.36.36 0 0 1-.112-.264q0-.154.112-.265a.37.37 0 0 1 .268-.11q.155 0 .262.11a.37.37 0 0 1 .107.265q0 .153-.107.264M3.5 11.77q0 .441.311.75.311.306.76.307h.758l.01 2.182q0 .414.292.703a.96.96 0 0 0 .7.288.97.97 0 0 0 .71-.288.95.95 0 0 0 .292-.703v-2.182h1.343v2.182q0 .414.292.703a.97.97 0 0 0 .71.288.97.97 0 0 0 .71-.288.95.95 0 0 0 .292-.703v-2.182h.76q.436 0 .749-.308.31-.307.311-.75V5.365h-9zm10.495-6.587a.98.98 0 0 0-.702.278.9.9 0 0 0-.293.685v4.063q0 .406.293.69a.97.97 0 0 0 .702.284q.42 0 .712-.284a.92.92 0 0 0 .293-.69V6.146a.9.9 0 0 0-.293-.685 1 1 0 0 0-.712-.278m-12.702.283a1 1 0 0 1 .712-.283q.41 0 .702.283a.9.9 0 0 1 .293.68v4.063a.93.93 0 0 1-.288.69.97.97 0 0 1-.707.284 1 1 0 0 1-.712-.284.92.92 0 0 1-.293-.69V6.146q0-.396.293-.68"/>
+        </svg>
+      )
+    },
+    { 
+      id: 'apk', 
+      name: 'Apk', 
+      url: 'https://play.google.com/store/apps/details?id=net.metaquotes.metatrader5&hl=en&referrer=ref_id%3d5192043324314688962%26hl%3den%26utm_source%3dwww.metaquotes.net%26utm_campaign%3dinstall.metaquotes',
+      icon: (
+        <svg viewBox="0 0 16 16" className="w-5 h-5 fill-current">
+          <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z"/>
+        </svg>
+      )
+    },
+  ];
+
+
+
+
+  return (
+    <div className="flex flex-col w-full animate-fade-in pb-12">
+      {/* ── Top Header ─────────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/20 mb-6 shrink-0">
+        <div className="flex items-center gap-3">
+          <h1 className="text-[22px] font-extrabold text-white tracking-tight uppercase">{t('title')}</h1>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#158B86] animate-pulse" />
+            <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+          <div className="bg-[#122D32] p-1.5 rounded-full flex items-center h-[38px]">
+            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('userDashboard')}</button>
+            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-white'}`}>{t('ibDashboard')}</button>
+          </div>
+          <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
+          <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
+            <Globe size={16} /> <span>US</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Breadcrumb ─────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
+        <Home size={17} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
+        <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
+        <span className="text-white">Download Terminal</span>
+      </div>
+
+      {/* ── Hero Banner ────────────────────────────────────────── */}
+      <div 
+        className="relative w-full h-[100px] rounded-[10px] overflow-hidden mb-4 flex flex-col items-center justify-center text-center px-4"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(6, 18, 15, 0.4), rgba(6, 18, 15, 0.8)), url(${downloadBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <h2 className="text-[20px] font-black text-white mb-0.5 tracking-wide">{t('heroTitle')}</h2>
+        <p className="text-white/60 text-[12px] max-w-2xl">{t('heroSubtitle')}</p>
+      </div>
+
+      {/* ── Download Section ───────────────────────────────────── */}
+      <div className="max-w-4xl mx-auto w-full px-2">
+        <h3 className="text-[#158B86] text-[20px] font-bold mb-3 tracking-wider">Download</h3>
+
+        <div className="bg-[#1A1A1A]/30 border border-white/5 rounded-[8px] p-4 backdrop-blur-md">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-white p-0.5 rounded-[2px]">
+              <img src={mt5Logo} alt="MT5" className="w-5 h-5 object-contain" />
+            </div>
+            <h4 className="text-[#158B86] text-[16px] font-black tracking-tight uppercase">{t('mt5Title')}</h4>
+          </div>
+          <p className="text-[#158B86]/70 text-[11px] mb-6">{t('mt5Subtitle')}</p>
+
+
+          <div className="grid grid-cols-5 gap-2">
+            {downloadOptions.map((option) => (
+              <a 
+                key={option.id} 
+                href={option.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-1.5 group cursor-pointer"
+              >
+                <div className="w-10 h-10 rounded-full bg-[#158B86]/10 border border-white/5 flex items-center justify-center text-[#158B86] group-hover:bg-[#158B86]/20 group-hover:border-[#158B86]/30 transition-all duration-300">
+                  {option.icon}
+                </div>
+                <span className="text-[#158B86] text-[11px] font-medium group-hover:text-white transition-colors">{option.name}</span>
+              </a>
+            ))}
+          </div>
+
+        </div>
+
+        {/* ── Risk Statement ────────────────────────────────────── */}
+        <div className="mt-6 space-y-1.5">
+          <h5 className="text-white text-[12px] font-black tracking-wider uppercase">{t('riskTitle')}</h5>
+          <div className="space-y-1">
+            <p className="text-white/80 text-[10px] leading-tight italic">{t('riskText')}</p>
+            <p className="text-white/80 text-[10px] leading-tight italic text-justify">{t('riskText2')}</p>
+            <p className="text-white/80 text-[10px] leading-tight italic">{t('riskText3')}</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  );
+};
+
+export default DownloadPage;

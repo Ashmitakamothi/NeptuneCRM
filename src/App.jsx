@@ -17,6 +17,8 @@ import FAQsPage from './components/FAQsPage';
 import SupportPage from './components/SupportPage';
 import TutorialsPage from './components/TutorialsPage';
 import MessengerPage from './components/MessengerPage';
+import DownloadPage from './components/DownloadPage';
+
 
 
 function App() {
@@ -37,9 +39,10 @@ function App() {
       'faq': 'More_FAQs',
       'support': 'More_Support',
       'messenger': 'More_Messenger',
-      'tutorial': 'More_Tutorial'
-
+      'tutorial': 'More_Tutorial',
+      'download': 'More_Download'
     };
+
     
     if (urlMap[path]) return urlMap[path];
     
@@ -66,9 +69,10 @@ function App() {
       'More_FAQs': 'faq',
       'More_Support': 'support',
       'More_Messenger': 'messenger',
-      'More_Tutorial': 'tutorial'
-
+      'More_Tutorial': 'tutorial',
+      'More_Download': 'download'
     };
+
 
     const path = pageToPath[activePage] || '';
     const currentPath = window.location.pathname.replace(/^\//, '');
@@ -100,9 +104,10 @@ function App() {
           'faq': 'More_FAQs',
           'support': 'More_Support',
           'messenger': 'More_Messenger',
-          'tutorial': 'More_Tutorial'
-
+          'tutorial': 'More_Tutorial',
+          'download': 'More_Download'
         };
+
         if (urlMap[path]) setActivePage(urlMap[path]);
       }
     };
@@ -149,10 +154,12 @@ function App() {
       case 'More_Messenger':
         return <MessengerPage onNavigate={setActivePage} />;
       case 'More_Tutorial':
-
         return <TutorialsPage onNavigate={setActivePage} />;
+      case 'More_Download':
+        return <DownloadPage onNavigate={setActivePage} />;
       default:
         return <PlaceholderPage title={activePage} />;
+
     }
   };
 

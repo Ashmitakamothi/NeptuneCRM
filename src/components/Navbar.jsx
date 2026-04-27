@@ -55,7 +55,8 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         { name: 'IBRequest', label: 'IB Request', icon: <Users size={18} strokeWidth={2} /> },
         { name: 'Messenger', label: 'Messenger', icon: <Mail size={18} strokeWidth={2} /> },
         { name: 'Tutorial', label: 'Tutorial', icon: <PlaySquare size={18} strokeWidth={2} /> },
-        { name: 'MT5Download', label: 'MT5 Download', icon: <Download size={18} strokeWidth={2} /> },
+        { name: 'Download', label: 'MT5 Download', icon: <Download size={18} strokeWidth={2} /> },
+
         { name: 'Support', label: 'Support', icon: <Headphones size={18} strokeWidth={2} /> },
         { name: 'FAQs', label: 'FAQs', icon: <ClipboardList size={18} strokeWidth={2} /> },
       ]
