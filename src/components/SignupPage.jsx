@@ -5,6 +5,8 @@ import { endpoints } from '../api/endpoints';
 import logo from '../assets/logom.png';
 import AuthBackground from './AuthBackground';
 
+
+
 const SignupPage = ({ onNavigate }) => {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -31,13 +33,30 @@ const SignupPage = ({ onNavigate }) => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch(endpoints.getAllCountry);
-        const data = await response.json();
-        if (data.success) {
-          setCountries(data.data || []);
+        const response = await fetch(endpoints.getAllCountry, {
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+          console.warn('Country API failed with status:', response.status);
+          return;
         }
+
+        const data = await response.json();
+
+        // Handle multiple possible response formats
+        let list = [];
+        if (Array.isArray(data)) {
+          list = data;
+        } else if (Array.isArray(data?.data)) {
+          list = data.data;
+        } else if (data?.result && Array.isArray(data?.result)) {
+          list = data.result;
+        }
+
+        if (list.length > 0) setCountries(list);
       } catch (err) {
-        console.error('Error fetching countries:', err);
+        console.error('Country fetch error:', err);
       }
     };
     fetchCountries();
@@ -69,6 +88,7 @@ const SignupPage = ({ onNavigate }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           firstName: formData.firstName,
@@ -78,25 +98,37 @@ const SignupPage = ({ onNavigate }) => {
           phoneNumber: formData.mobile,
           password: formData.password,
           referralCode: formData.referralCode,
-          platformName: 'user' // Changed to match live site
+          platformName: 'user'
         }),
       });
 
-      const data = await response.json();
+      // Safely parse response (might be plain text on 401)
+      let data = null;
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.warn('Non-JSON registration response:', text);
+      }
 
-      if (response.ok && data.success) {
+      if (response.status === 401) {
+        setError('Registration service is currently unavailable. Please try again later or contact support.');
+        return;
+      }
+
+      if (response.ok && (data?.success || data?.isSuccess)) {
         setSuccessMessage('Account created successfully!');
-        // Automatically login on successful signup
         const token = data.data?.token || data.token;
         const userData = data.data?.user || data.user || { email: formData.email };
-        const userId = data.data?._id || data.user?._id || data._id;
-        
+        const userId = data.data?._id || data.data?.userId || data.user?._id || data._id;
+
         setTimeout(() => {
           login(token, userData, userId);
           onNavigate('Dashboard');
         }, 1500);
       } else {
-        setError(data.error?.message || data.message || 'Registration failed. Please try again.');
+        setError(data?.error?.message || data?.message || 'Registration failed. Please try again.');
       }
     } catch (err) {
       setError('Connection failed. Please check your internet and try again.');

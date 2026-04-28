@@ -11,5 +11,8 @@ export const endpoints = {
   deposits: import.meta.env.VITE_ENDPOINT_DEPOSITES,
   userLogin: '/mt5-api/api/Authentication/User-Login',
   userRegister: '/mt5-api/api/Authentication/User-Registration',
-  getAllCountry: '/mt5-api/api/Authentication/GetAll-Country',
+  getAllCountry: '/mt5-api/api/DropDown/GetAll-Country',
+  userProfile: (userId) => `/mt5-api/api/UserMaster/User-GetById/${userId}`,
+  createLiveAccount: '/mt5-api/api/MTFiveAccount/CreateLive-Account',
+  createDemoAccount: '/mt5-api/api/MTFiveAccount/CreateDemo-Account',
 };

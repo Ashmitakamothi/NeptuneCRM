@@ -177,7 +177,10 @@ const AccountsPage = ({ onNavigate }) => {
                )}
 
                
-               <button className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold shadow-[0_4px_10px_rgba(21,139,134,0.3)] transition-all whitespace-nowrap w-full sm:w-auto">
+               <button
+                 className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold shadow-[0_4px_10px_rgba(21,139,134,0.3)] transition-all whitespace-nowrap w-full sm:w-auto"
+                 onClick={() => onNavigate('Account_Types', { isDemo: accountType === 'Demo' })}
+               >
                   {accountType === 'Live' ? t('openLiveAccount') : t('openDemoAccount')}
                </button>
             </div>

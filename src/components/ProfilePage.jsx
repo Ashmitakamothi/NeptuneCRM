@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Home, ChevronRight, Camera, CheckCircle2, Lock, ShieldCheck, CreditCard, Plus, Edit2, Trash2, Eye, EyeOff } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Home, ChevronRight, CheckCircle2, Lock, Plus, Edit2, Trash2, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const TRANSLATIONS = {
@@ -89,6 +90,7 @@ const TRANSLATIONS = {
 
 const ProfilePage = ({ onNavigate }) => {
   const { language } = useLanguage();
+  const { token, userId } = useAuth();
   const [activeTab, setActiveTab] = useState('personal');
   const [dashboardType, setDashboardType] = useState('User');
   const [showPasswords, setShowPasswords] = useState({ current: false, new: false, confirm: false });
@@ -98,6 +100,39 @@ const ProfilePage = ({ onNavigate }) => {
     accountToWallet: true,
     withdraw: true
   });
+
+  // Live user profile state
+  const [profileData, setProfileData] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!userId || !token) return;
+      setProfileLoading(true);
+      setProfileError(null);
+      try {
+        const res = await fetch(`/mt5-api/api/UserMaster/User-GetById/${userId}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        // API may return the object directly or wrapped in data/result
+        const data = json?.data ?? json?.result ?? json;
+        setProfileData(data);
+      } catch (err) {
+        console.error('Profile fetch error:', err);
+        setProfileError(err.message);
+      } finally {
+        setProfileLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [userId, token]);
 
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
@@ -109,9 +144,28 @@ const ProfilePage = ({ onNavigate }) => {
     setVerifications(prev => ({ ...prev, [field]: !prev[field] }));
   };
 
+  // Helper: get value from profileData with fallback
+  const pv = (key, fallback = '') => profileData?.[key] ?? fallback;
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'personal':
+        if (profileLoading) {
+          return (
+            <div className="flex flex-col items-center justify-center py-24 gap-4">
+              <Loader2 className="animate-spin text-[#158B86]" size={36} />
+              <span className="text-[#8e9d9b] text-[14px]">Loading profile...</span>
+            </div>
+          );
+        }
+        if (profileError) {
+          return (
+            <div className="flex flex-col items-center justify-center py-24 gap-4">
+              <AlertCircle className="text-red-400" size={36} />
+              <span className="text-red-400 text-[14px]">Failed to load profile: {profileError}</span>
+            </div>
+          );
+        }
         return (
           <div className="space-y-8">
             {/* KYC Alert */}
@@ -128,7 +182,11 @@ const ProfilePage = ({ onNavigate }) => {
             {/* Photo Section */}
             <div className="flex items-center gap-6">
               <div className="w-[100px] h-[100px] rounded-[12px] bg-[#1A1A1A] overflow-hidden border border-[var(--border-color)]">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel" alt="Profile" className="w-full h-full object-cover" />
+                <img
+                  src={pv('profileImage') || `https://api.dicebear.com/7.x/avataaars/svg?seed=${pv('firstName', 'User')}`}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <button className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold transition-all w-fit">
@@ -142,51 +200,35 @@ const ProfilePage = ({ onNavigate }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('firstName')}</label>
-                <input type="text" readOnly value="Daniel" className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
+                <input type="text" readOnly value={pv('firstName')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('lastName')}</label>
-                <input type="text" readOnly value="Walker" className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
+                <input type="text" readOnly value={pv('lastName')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('email')}</label>
-                <input type="email" readOnly value="daniel@neptunefxcrm.com" className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
+                <input type="email" readOnly value={pv('email')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('mobileNo')}</label>
-                <input type="text" placeholder="Mobile No." className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] outline-none focus:border-[#158B86]/50 transition-colors" />
+                <input type="text" readOnly value={pv('mobile') || pv('mobileNo') || pv('phoneNumber')} placeholder="Mobile No." className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('dob')}</label>
-                <input type="text" readOnly value="11/13/2003" className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
+                <input type="text" readOnly value={pv('dateOfBirth') || pv('dob')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('city')}</label>
-                <input type="text" value="Delhi" className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] outline-none focus:border-[#158B86]/50 transition-colors" />
+                <input type="text" readOnly value={pv('city')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('experienceIB')}</label>
-                <div className="relative">
-                  <select className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] outline-none focus:border-[#158B86]/50 transition-colors appearance-none font-medium">
-                    <option>5-7 Years</option>
-                    <option>1-3 Years</option>
-                    <option>3-5 Years</option>
-                    <option>7+ Years</option>
-                  </select>
-                  <ChevronRight size={16} className="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-[#8e9d9b] pointer-events-none" />
-                </div>
+                <input type="text" readOnly value={pv('experienceAsIB') || pv('ibExperience') || pv('experience')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[14px] font-bold text-[var(--text-color)]">{t('country')}</label>
-                <div className="relative">
-                  <select className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] outline-none focus:border-[#158B86]/50 transition-colors appearance-none font-medium">
-                    <option>United States</option>
-                    <option>India</option>
-                    <option>United Kingdom</option>
-                    <option>Dubai</option>
-                  </select>
-                  <ChevronRight size={16} className="absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-[#8e9d9b] pointer-events-none" />
-                </div>
+                <input type="text" readOnly value={pv('country') || pv('countryName')} className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] opacity-60 cursor-not-allowed outline-none" />
               </div>
             </div>
           </div>

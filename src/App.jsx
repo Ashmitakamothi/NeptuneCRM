@@ -20,6 +20,7 @@ import MessengerPage from './components/MessengerPage';
 import DownloadPage from './components/DownloadPage';
 import ProfilePage from './components/ProfilePage';
 import AccountDetailsPage from './components/AccountDetailsPage';
+import AccountTypesPage from './components/AccountTypesPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -53,7 +54,8 @@ const AppContent = () => {
       'download': 'More_Download',
       'mt5-download': 'More_MT5Download',
       'profile': 'Profile',
-      'accounts/details': 'Account_Details'
+      'accounts/details': 'Account_Details',
+      'accounts/types': 'Account_Types'
     };
 
     if (urlMap[path]) return urlMap[path];
@@ -93,6 +95,7 @@ const AppContent = () => {
       'More_MT5Download': 'download',
       'Profile': 'profile',
       'Account_Details': 'accounts/details',
+      'Account_Types': 'accounts/types',
       'Login': 'login',
       'Signup': 'signup'
     };
@@ -132,6 +135,7 @@ const AppContent = () => {
           'mt5-download': 'More_MT5Download',
           'profile': 'Profile',
           'accounts/details': 'Account_Details',
+          'accounts/types': 'Account_Types',
           'login': 'Login',
           'signup': 'Signup'
         };
@@ -161,6 +165,7 @@ const AppContent = () => {
       case 'Dashboard': return <Dashboard onNavigate={setActivePage} />;
       case 'Accounts': return <AccountsPage onNavigate={setActivePage} />;
       case 'Account_Details': return <AccountDetailsPage onNavigate={setActivePage} pageData={pageData} />;
+      case 'Account_Types': return <AccountTypesPage onNavigate={setActivePage} pageData={pageData} />;
       case 'Internal Transfer': return <InternalTransferPage onNavigate={setActivePage} />;
       case 'My Transactions':
       case 'My Transaction': return <MyTransactionsPage onNavigate={setActivePage} />;
