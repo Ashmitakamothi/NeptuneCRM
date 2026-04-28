@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
 import { endpoints } from '../api/endpoints';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useDashboardSocket } from '../hooks/useDashboardSocket';
+import { useSocket } from '../contexts/SocketContext';
 
 const TRANSLATIONS = {
   EN: {
@@ -63,6 +65,9 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
   const { data: dataRemote, loading } = useRealtimeJson(dynamicAccountsEndpoint, { enabled: Boolean(!dataProp && dynamicAccountsEndpoint) });
   const data = dataProp ?? dataRemote;
   const accountsRaw = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : null;
+
+  // Real-time socket data from global context
+  const { socketData, loginId: socketLoginId } = useSocket();
   const accounts = useMemo(() => {
     const list = accountsRaw || [];
     const t = accountType.toLowerCase();
@@ -166,7 +171,17 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
                     {a.acType ?? a.type ?? a.accountType ?? '—'}
                   </td>
                   <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
-                    {typeof a.balance === 'number' ? `$ ${a.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : (a.balance ?? '—')}
+                    {(() => {
+                      const currentLogin = a.accountNo ?? a.account_no ?? a.login;
+                      // Use socket data if it matches current row's account
+                      const balance = (currentLogin && String(currentLogin) === String(socketLoginId) && socketData?.balance) 
+                        ? socketData.balance 
+                        : a.balance;
+                        
+                      return typeof balance === 'number' 
+                        ? `$ ${balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` 
+                        : (balance ?? '—');
+                    })()}
                   </td>
                   <td className="py-3.5 px-1 md:px-2 text-[12px] md:text-[13px] font-medium text-[var(--text-color)]">
                     {a.leverage ?? '—'}

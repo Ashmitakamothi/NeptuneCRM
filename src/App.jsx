@@ -23,6 +23,7 @@ import AccountDetailsPage from './components/AccountDetailsPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { SocketProvider } from './contexts/SocketContext';
 
 const AppContent = () => {
   const { isAuthenticated } = useAuth();
@@ -196,7 +197,9 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <SocketProvider>
+        <AppContent />
+      </SocketProvider>
     </AuthProvider>
   );
 }
