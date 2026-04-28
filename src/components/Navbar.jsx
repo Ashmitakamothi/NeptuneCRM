@@ -13,6 +13,7 @@ import logo from '../assets/logo.png.png';
 
 const Navbar = ({ onNavigate, activeMenu }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
   const { language, setLanguage } = useLanguage();
   const { logout } = useAuth();
 
@@ -109,7 +110,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
 
         {/* Left Section: Logo & Nav Links grouped together */}
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-6">
           {/* Logo Pill */}
           <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain" onClick={() => handleNavClick('Dashboard')} />
 
@@ -120,15 +121,15 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                 <div className="relative group flex items-center h-[53px]">
                   <button
                     onClick={() => handleNavClick(item.name)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-semibold whitespace-nowrap transition-all duration-200 ${
-                      (activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown) || activeMenu === item.name
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full text-[14px] font-semibold whitespace-nowrap transition-all duration-200 ${
+                      activeMenu === item.name
                         ? 'bg-[#158B86] text-white shadow-[0_2px_10px_rgba(21,139,134,0.3)]'
                         : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
                     }`}
                   >
                     {item.icon && (
                       <span className={`flex items-center justify-center ${
-                        (activeMenu === item.name || (activeMenu && activeMenu.startsWith(item.name + '_') && item.hasDropdown))
+                        activeMenu === item.name
                           ? ''
                           : (!isDark ? '[&>img]:brightness-0 [&>img]:opacity-60' : '[&>img]:opacity-60')
                       }`}>
@@ -215,7 +216,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         </div>
 
         {/* Right Section: User Actions & Mobile Menu */}
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex items-center gap-2">
           {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
@@ -297,19 +298,64 @@ const Navbar = ({ onNavigate, activeMenu }) => {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden absolute top-full left-0 right-0 bg-[var(--nav-bg)] border-b border-[var(--border-color)] py-4 px-6 flex flex-col gap-4 shadow-2xl z-50">
-          {menuItems.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => handleNavClick(item.name)}
-              className={`flex items-center gap-3 py-2 px-3 rounded-md text-sm font-semibold transition-colors ${
-                activeMenu === item.name ? 'bg-[#158B86] text-white shadow-md' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
-              }`}
-            >
-              {item.icon && <span className={`w-5 h-5 flex items-center justify-center ${activeMenu === item.name ? '' : (!isDark ? '[&>img]:brightness-0 [&>img]:opacity-60' : '[&>img]:opacity-60')}`}>{item.icon}</span>}
-              <span>{t(item.name)}</span>
-            </button>
-          ))}
+        <div className="xl:hidden absolute top-full left-0 right-0 bg-[var(--nav-bg)] border-b border-[var(--border-color)] py-4 px-6 flex flex-col gap-1 shadow-2xl z-50 max-h-[80vh] overflow-y-auto animate-fade-in">
+          {menuItems.map((item, index) => {
+            const hasDropdown = item.hasDropdown;
+            const isExpanded = expandedMobileMenu === item.name;
+            const isActive = activeMenu === item.name || (activeMenu && activeMenu.startsWith(item.name + '_'));
+
+            return (
+              <div key={index} className="flex flex-col">
+                <button
+                  onClick={() => {
+                    if (hasDropdown) {
+                      setExpandedMobileMenu(isExpanded ? null : item.name);
+                    } else {
+                      handleNavClick(item.name);
+                    }
+                  }}
+                  className={`flex items-center justify-between py-3 px-4 rounded-lg text-sm font-semibold transition-all ${
+                    isActive ? 'bg-[#158B86] text-white shadow-md' : 'text-[#8e9d9b] hover:text-[var(--text-color)] hover:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    {item.icon && <span className={`w-5 h-5 flex items-center justify-center ${isActive ? '' : (!isDark ? '[&>img]:brightness-0 [&>img]:opacity-60' : '[&>img]:opacity-60')}`}>{item.icon}</span>}
+                    <span>{t(item.name)}</span>
+                  </div>
+                  {hasDropdown && <ChevronDown size={16} className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />}
+                </button>
+
+                {/* Mobile Dropdown Items */}
+                {hasDropdown && isExpanded && (
+                  <div className="ml-8 mt-1 border-l border-[var(--border-color)] pl-4 flex flex-col gap-1 py-1 animate-fade-in">
+                    {item.dropdownItems.map((dropItem, dIdx) => {
+                      const isDropActive = activeMenu === `${item.name}_${dropItem.name}`;
+                      return (
+                        <div key={dIdx} className="flex flex-col">
+                          <button
+                            onClick={() => {
+                              if (dropItem.hasNestedDropdown) {
+                                // For simplicity on mobile, we can just navigate or toggle
+                                handleNavClick(item.name, dropItem.name);
+                              } else {
+                                handleNavClick(item.name, dropItem.name);
+                              }
+                            }}
+                            className={`flex items-center gap-3 py-2.5 px-3 rounded-md text-[13px] font-medium transition-colors ${
+                              isDropActive ? 'text-[#00BFA5] bg-white/5' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
+                            }`}
+                          >
+                            {dropItem.icon && <span className="w-4 h-4 flex items-center justify-center">{dropItem.icon}</span>}
+                            <span>{t(dropItem.label)}</span>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
