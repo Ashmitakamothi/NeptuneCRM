@@ -55,7 +55,11 @@ const AppContent = () => {
       'mt5-download': 'More_MT5Download',
       'profile': 'Profile',
       'accounts/details': 'Account_Details',
-      'accounts/types': 'Account_Types'
+      'accounts/types': 'Account_Types',
+      'deposit_Report': 'Reports_Deposit',
+      'withdrawal_Report': 'Reports_Withdraw',
+      'transfer_Report': 'Reports_Transfer',
+      'logs': 'Reports_Logs'
     };
 
     if (urlMap[path]) return urlMap[path];
@@ -105,7 +109,11 @@ const AppContent = () => {
       'Account_Types': 'accounts/types',
       'Login': 'login',
       'Signup': 'signup',
-      'View_Ticket': 'view_ticket'
+      'View_Ticket': 'view_ticket',
+      'Reports_Deposit': 'deposit_Report',
+      'Reports_Withdraw': 'withdrawal_Report',
+      'Reports_Transfer': 'transfer_Report',
+      'Reports_Logs': 'logs'
     };
 
     let path = pageToPath[activePage] || '';
@@ -154,7 +162,11 @@ const AppContent = () => {
           'accounts/types': 'Account_Types',
           'login': 'Login',
           'signup': 'Signup',
-          'view_ticket': 'View_Ticket'
+          'view_ticket': 'View_Ticket',
+          'deposit_Report': 'Reports_Deposit',
+          'withdrawal_Report': 'Reports_Withdraw',
+          'transfer_Report': 'Reports_Transfer',
+          'logs': 'Reports_Logs'
         };
 
         if (path.startsWith('view_ticket/')) {

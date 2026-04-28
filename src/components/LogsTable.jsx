@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+
+const BASE = 'https://mt5.neptunefxcrm.com/api';
 
 const TRANSLATIONS = {
   EN: {
@@ -17,18 +20,71 @@ const TRANSLATIONS = {
 
 const LogsTable = () => {
   const { language } = useLanguage();
+  const { token, userId } = useAuth();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isRowsDropdownOpen, setIsRowsDropdownOpen] = useState(false);
+  const [logsData, setLogsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalRecords, setTotalRecords] = useState(0);
 
-  // Empty data for now. Will be populated by API later.
-  const mockData = [];
+  const formatDate = (dateStr) => {
+    if (!dateStr || dateStr === '-') return '-';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const strTime = String(hours).padStart(2, '0') + ':' + minutes + ' ' + ampm;
+      
+      return `${day}-${month}-${year}, ${strTime}`;
+    } catch (_) {
+      return dateStr;
+    }
+  };
 
-  const totalPages = Math.max(1, Math.ceil(mockData.length / itemsPerPage));
+  const fetchLogs = async () => {
+    if (!userId) return;
+    setLoading(true);
+    try {
+      const url = `${BASE}/Admin/AuditLog-ByUserId/${userId}?PageNumber=${currentPage}&PageSize=${itemsPerPage}`;
+      
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        setLogsData(json.data || []);
+        setTotalRecords(json.totalRecords || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLogs();
+  }, [currentPage, itemsPerPage, token, userId]);
+
+  const totalPages = Math.max(1, Math.ceil(totalRecords / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = mockData.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = logsData; // API handles pagination
 
   const renderPageNumbers = () => {
     let pages = [];
@@ -62,14 +118,16 @@ const LogsTable = () => {
           </thead>
 
           <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row) => (
-                <tr key={row.id} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
+            {loading ? (
+              <tr><td colSpan="2" className="py-20 text-center text-[#8e9d9b]">Loading logs...</td></tr>
+            ) : paginatedData.length > 0 ? (
+              paginatedData.map((row, idx) => (
+                <tr key={row.id || idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.message}
+                    {row.message || row.Message || '-'}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.updateDate}
+                    {formatDate(row.updateDate || row.UpdateDate || row.createdDate || row.date || row.dateTime)}
                   </td>
                 </tr>
               ))
