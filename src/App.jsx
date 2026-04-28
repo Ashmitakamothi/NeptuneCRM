@@ -60,6 +60,13 @@ const AppContent = () => {
 
     if (urlMap[path]) return urlMap[path];
     
+   
+    if (path.startsWith('view_ticket/')) {
+      const guid = path.split('/')[1];
+      setPageData({ ticketId: guid });
+      return 'View_Ticket';
+    }
+
     // 2. Fallback to localStorage
     return localStorage.getItem('activePage') || 'Dashboard';
   });
@@ -97,17 +104,26 @@ const AppContent = () => {
       'Account_Details': 'accounts/details',
       'Account_Types': 'accounts/types',
       'Login': 'login',
-      'Signup': 'signup'
+      'Signup': 'signup',
+      'View_Ticket': 'view_ticket'
     };
 
-    const path = pageToPath[activePage] || '';
+    let path = pageToPath[activePage] || '';
+    if (activePage === 'View_Ticket' && pageData?.ticketId) {
+      path = `view_ticket/${pageData.ticketId}`;
+    }
+
     const currentPath = window.location.pathname.replace(/^\//, '');
     const currentSearch = window.location.search;
     
     if (path !== currentPath) {
-      window.history.pushState({ page: activePage }, '', `/${path}${activePage === 'Accounts' && !currentSearch ? '?filter=live' : currentSearch}`);
+      // Only append search params for Accounts page, otherwise keep URL clean
+      const search = (activePage === 'Accounts' || activePage === 'Account_Types' || activePage === 'Account_Details') 
+        ? (currentSearch || '?filter=live') 
+        : '';
+      window.history.pushState({ page: activePage, data: pageData }, '', `/${path}${search}`);
     }
-  }, [activePage]);
+  }, [activePage, pageData]);
 
   // Handle browser Back/Forward buttons
   React.useEffect(() => {
@@ -137,10 +153,16 @@ const AppContent = () => {
           'accounts/details': 'Account_Details',
           'accounts/types': 'Account_Types',
           'login': 'Login',
-          'signup': 'Signup'
+          'signup': 'Signup',
+          'view_ticket': 'View_Ticket'
         };
 
-        if (urlMap[path]) setActivePage(urlMap[path]);
+        if (path.startsWith('view_ticket/')) {
+          const guid = path.split('/')[1];
+          setActivePage('View_Ticket', { ticketId: guid });
+        } else if (urlMap[path]) {
+          setActivePage(urlMap[path]);
+        }
       }
     };
 
@@ -177,6 +199,7 @@ const AppContent = () => {
       case 'More_IBRequest': return <IBRequestPage onNavigate={setActivePage} />;
       case 'More_FAQs': return <FAQsPage onNavigate={setActivePage} />;
       case 'More_Support': return <SupportPage onNavigate={setActivePage} />;
+      case 'View_Ticket': return <SupportPage onNavigate={setActivePage} initialTicketId={pageData?.ticketId} />;
       case 'More_Messenger': return <MessengerPage onNavigate={setActivePage} />;
       case 'More_Tutorial': return <TutorialsPage onNavigate={setActivePage} />;
       case 'More_Download':
