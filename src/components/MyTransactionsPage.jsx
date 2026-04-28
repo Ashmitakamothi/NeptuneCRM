@@ -32,15 +32,27 @@ const TRANSLATIONS = {
   }
 };
 
-const MyTransactionsPage = ({ onNavigate }) => {
+const MyTransactionsPage = ({ onNavigate, initialFilter = 'All', onFilterChange }) => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
   const [dashboardType, setDashboardType] = useState('User');
-  const [operationFilter, setOperationFilter] = useState('All');
+  const [operationFilter, setOperationFilter] = useState(initialFilter);
   const [dateRange, setDateRange] = useState(null);
   const [isOperationDropdownOpen, setIsOperationDropdownOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [exportTrigger, setExportTrigger] = useState(0);
+
+  // Sync with prop
+  React.useEffect(() => {
+    if (initialFilter !== operationFilter) {
+      setOperationFilter(initialFilter);
+    }
+  }, [initialFilter]);
+
+  const handleFilterChange = (filter) => {
+    setOperationFilter(filter);
+    if (onFilterChange) onFilterChange(filter);
+  };
 
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
@@ -93,7 +105,7 @@ const MyTransactionsPage = ({ onNavigate }) => {
           {isOperationDropdownOpen && (
             <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-2xl py-2">
 
-              {['All', 'IBWalletToWallet', 'Deposit', 'WalletToAccount', 'Withdrawal'].map((op) => (
+              {['All', 'Deposit', 'Withdrawal', 'Wallet To Account', 'Account To Wallet', 'IB Wallet To Wallet'].map((op) => (
                 <button
                   key={op}
                   className={`w-full px-4 py-2 text-left text-sm transition-colors ${
@@ -102,7 +114,7 @@ const MyTransactionsPage = ({ onNavigate }) => {
                       : 'text-[var(--text-color)] opacity-80 hover:opacity-100 hover:bg-white/5'
                   }`}
                   onClick={() => {
-                    setOperationFilter(op);
+                    handleFilterChange(op);
                     setIsOperationDropdownOpen(false);
                   }}
                 >

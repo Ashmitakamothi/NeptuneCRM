@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+
+const BASE = 'https://mt5.neptunefxcrm.com/api';
 
 const TRANSLATIONS = {
   EN: {
@@ -35,50 +38,83 @@ const TRANSLATIONS = {
 
 const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, exportTrigger = 0 }) => {
   const { language } = useLanguage();
+  const { token, userId } = useAuth();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isRowsDropdownOpen, setIsRowsDropdownOpen] = useState(false);
+  const [transactionsData, setTransactionsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const formatDate = (dateStr) => {
+    if (!dateStr || dateStr === '-') return '-';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const strTime = String(hours).padStart(2, '0') + ':' + minutes + ' ' + ampm;
+      
+      return `${day}-${month}-${year}, ${strTime}`;
+    } catch (_) {
+      return dateStr;
+    }
+  };
+
+  const fetchTransactions = async () => {
+    setLoading(true);
+    try {
+      let filterText = '';
+      if (operationFilter === 'Deposit') filterText = 'Deposit';
+      else if (operationFilter === 'Withdrawal') filterText = 'Withdrawal';
+      else if (operationFilter === 'Wallet To Account') filterText = 'WalletToAccount';
+      else if (operationFilter === 'Account To Wallet') filterText = 'AccountToWallet';
+      else if (operationFilter === 'IB Wallet To Wallet') filterText = 'IBWalletToWallet';
+
+      const fromDate = dateRange?.[0] ? dateRange[0].format('YYYY-MM-DD') : '';
+      const toDate = dateRange?.[1] ? dateRange[1].format('YYYY-MM-DD') : '';
+
+      const url = `${BASE}/UserMaster/GetTransaction-ByUserId?PageNumber=${currentPage}&PageSize=${itemsPerPage}&FromDate=${fromDate}&ToDate=${toDate}&FilterText=${filterText}`;
+      
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        setTransactionsData(json.data || []);
+        setTotalRecords(json.totalRecords || 0);
+      }
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [operationFilter, dateRange, currentPage, itemsPerPage, token]);
 
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [operationFilter, dateRange]);
 
-  // Mock data matching the screenshot (Commented out for API integration)
-  const mockData = [
-
-  ];
-
-  const filteredData = mockData.filter(item => {
-    // 1. Operation Filter
-    if (operationFilter !== 'All' && item.operation !== operationFilter) {
-      return false;
-    }
-    
-    // 2. Date Filter
-    if (dateRange && dateRange[0] && dateRange[1]) {
-      const [datePart, timePart, ampm] = item.transactionDate.split(' ');
-      const [day, month, year] = datePart.split('-');
-      let [hours, minutes] = timePart.split(':');
-      hours = parseInt(hours);
-      if (ampm === 'PM' && hours < 12) hours += 12;
-      if (ampm === 'AM' && hours === 12) hours = 0;
-      
-      const itemDate = new Date(year, month - 1, day, hours, minutes);
-      const start = dateRange[0].toDate();
-      start.setHours(0, 0, 0, 0);
-      const end = dateRange[1].toDate();
-      end.setHours(23, 59, 59, 999);
-      
-      if (itemDate < start || itemDate > end) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
+  const filteredData = transactionsData;
 
   useEffect(() => {
     if (exportTrigger > 0) {
@@ -109,9 +145,9 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
     }
   }, [exportTrigger, filteredData]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+  const totalPages = Math.max(1, Math.ceil(totalRecords / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = transactionsData; // API already paginated
 
   const renderPageNumbers = () => {
     let pages = [];
@@ -164,37 +200,42 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
           </thead>
 
           <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row) => (
-                <tr key={row.id} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
+            {loading ? (
+              <tr><td colSpan="8" className="py-20 text-center text-[#8e9d9b]">Loading transactions...</td></tr>
+            ) : paginatedData.length > 0 ? (
+              paginatedData.map((row, idx) => (
+                <tr key={row.id || idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.operation}
+                    {row.operationType || row.operation || '-'}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.paymentFrom}
+                    {row.fromAccount || row.paymentFrom || '-'}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.paymentTo}
+                    {row.toAccount || row.paymentTo || '-'}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.amount}
+                    {Number(row.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.currency}
+                    {row.currency || 'USD'}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
-                    {row.transactionDate}
+                    {formatDate(row.createdDate || row.transactionDate || row.date || row.dateTime)}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px]">
-                    <span className={`${getStatusColor(row.status)} text-[11px] font-semibold inline-block`}>
-                      {language === 'HI' ? t(row.status.toLowerCase()) : row.status}
+                    <span className={`${getStatusColor(row.status || 'PENDING')} text-[11px] font-semibold inline-block`}>
+                      {language === 'HI' ? t((row.status || 'PENDING').toLowerCase()) : (row.status || 'PENDING')}
                     </span>
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[#158B86]">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-[#00BFA5] hover:text-white transition-colors">
-                      <path d="M4 14c4.5-6.5 11.5-6.5 16 0" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
+                    <div className="flex items-center gap-2">
+                       <span className="text-[12px] opacity-60 truncate max-w-[100px]">{row.remarks || row.remark || '-'}</span>
+                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-[#00BFA5] hover:text-white transition-colors shrink-0">
+                        <path d="M4 14c4.5-6.5 11.5-6.5 16 0" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    </div>
                   </td>
                 </tr>
               ))

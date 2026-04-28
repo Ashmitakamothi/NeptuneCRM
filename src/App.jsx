@@ -75,7 +75,12 @@ const AppContent = () => {
     return localStorage.getItem('activePage') || 'Dashboard';
   });
 
-  const [pageData, setPageData] = useState(null);
+  const [pageData, setPageData] = useState(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const filter = searchParams.get('filter');
+    if (filter) return { filter };
+    return null;
+  });
 
   const setActivePage = (page, data = null) => {
     setActivePageInternal(page);
@@ -125,11 +130,21 @@ const AppContent = () => {
     const currentSearch = window.location.search;
     
     if (path !== currentPath) {
-      // Only append search params for Accounts page, otherwise keep URL clean
-      const search = (activePage === 'Accounts' || activePage === 'Account_Types' || activePage === 'Account_Details') 
-        ? (currentSearch || '?filter=live') 
-        : '';
+      let search = '';
+      if (activePage === 'Accounts' || activePage === 'Account_Types' || activePage === 'Account_Details') {
+        search = (currentSearch || '?filter=live');
+      } else if (activePage === 'My Transaction') {
+        const filter = pageData?.filter || 'All';
+        search = `?filter=${filter}`;
+      }
       window.history.pushState({ page: activePage, data: pageData }, '', `/${path}${search}`);
+    } else if (activePage === 'My Transaction') {
+      // If path is same but filter changed, update URL
+      const filter = pageData?.filter || 'All';
+      const newSearch = `?filter=${filter}`;
+      if (currentSearch !== newSearch) {
+        window.history.replaceState({ page: activePage, data: pageData }, '', `/${path}${newSearch}`);
+      }
     }
   }, [activePage, pageData]);
 
@@ -166,7 +181,8 @@ const AppContent = () => {
           'deposit_Report': 'Reports_Deposit',
           'withdrawal_Report': 'Reports_Withdraw',
           'transfer_Report': 'Reports_Transfer',
-          'logs': 'Reports_Logs'
+          'logs': 'Reports_Logs',
+          'my_transaction': 'My Transaction'
         };
 
         if (path.startsWith('view_ticket/')) {
@@ -202,7 +218,13 @@ const AppContent = () => {
       case 'Account_Types': return <AccountTypesPage onNavigate={setActivePage} pageData={pageData} />;
       case 'Internal Transfer': return <InternalTransferPage onNavigate={setActivePage} />;
       case 'My Transactions':
-      case 'My Transaction': return <MyTransactionsPage onNavigate={setActivePage} />;
+      case 'My Transaction': return (
+        <MyTransactionsPage 
+          onNavigate={setActivePage} 
+          initialFilter={pageData?.filter || 'All'}
+          onFilterChange={(f) => setPageData({ filter: f })}
+        />
+      );
       case 'More_Leaderboard': return <LeaderboardPage onNavigate={setActivePage} />;
       case 'Wallet_Deposit': return <WalletDepositPage onNavigate={setActivePage} />;
       case 'Wallet_Withdraw': return <WalletWithdrawPage onNavigate={setActivePage} />;
