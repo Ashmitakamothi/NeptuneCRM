@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Info, ShieldCheck, Lock, EyeOff, Wallet, Percent, Clock, BadgeDollarSign } from 'lucide-react';
+import { Home, ChevronRight, Info, ShieldCheck, Lock, EyeOff, Wallet, Percent, Clock, BadgeDollarSign, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import WalletDepositTable from './WalletDepositTable';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
@@ -11,6 +11,7 @@ import teriopayImg from '../assets/teriopay.png';
 import bankImg from '../assets/bank.png';
 import zaropayImg from '../assets/zaropay.png';
 import upiImg from '../assets/upiLogo.png';
+import uploadDocumentIcon from '../assets/Upload_Document_icon.svg';
 
 const TRANSLATIONS = {
   EN: { 
@@ -49,14 +50,6 @@ const TRANSLATIONS = {
   },
 };
 
-const SUMMARY_CARDS = [
-  { label: 'Wallet Balance',   value: '$ 6930',    icon: <Wallet size={20} />,          iconBg: 'bg-[#3B1919]', iconColor: 'text-[#E53E3E]' },
-  { label: 'Transaction Fees', value: '0 %',       icon: <Percent size={20} />,         iconBg: 'bg-[#1a1535]', iconColor: 'text-[#9d6bff]' },
-  { label: 'Processing Time:', value: '24 H',      icon: <Clock size={20} />,           iconBg: 'bg-[#0e2535]', iconColor: 'text-[#4dabf7]' },
-  { label: 'Minimum Deposit', value: '$ 10',       icon: <BadgeDollarSign size={20} />, iconBg: 'bg-[#4A2D23]', iconColor: 'text-[#DD6B20]' },
-  { label: 'Maximum Deposit', value: '$ 500000',   icon: <BadgeDollarSign size={20} />, iconBg: 'bg-[#123620]', iconColor: 'text-[#38A169]' },
-];
-
 const WalletDepositPage = ({ onNavigate }) => {
   const { language } = useLanguage();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
@@ -77,12 +70,25 @@ const WalletDepositPage = ({ onNavigate }) => {
   const [isRowsMenuOpen, setIsRowsMenuOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'requestDate', direction: 'desc' });
 
+  // State for Payment Flow
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [depositAmount, setDepositAmount] = useState('');
+  const [transactionId, setTransactionId] = useState('');
+  const [upiId, setUpiId] = useState('');
+  const [comment, setComment] = useState('');
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [currency, setCurrency] = useState('INR (India)');
+  const [zaroStep, setZaroStep] = useState(1);
+
+  React.useEffect(() => {
+    setZaroStep(1);
+  }, [selectedMethod]);
+
   const { data: realData } = useRealtimeJson(endpoints.deposits, {
     enabled: Boolean(endpoints.deposits),
   });
 
   const rawData = React.useMemo(() => {
-    // Extract list from API response. Adjust property name based on actual API structure
     const data = realData?.data || realData || {};
     return data.depositList || data.deposits || [];
   }, [realData]);
@@ -97,8 +103,6 @@ const WalletDepositPage = ({ onNavigate }) => {
       max: d.maxDeposit || '$ 500000'
     };
   }, [realData]);
-
-
 
   const summaryCards = [
     { labelKey: 'walletBalance',      value: summaryData.balance,    icon: <Wallet size={20} />,          iconBg: 'bg-[#3B1919]', iconColor: 'text-[#E53E3E]' },
@@ -144,8 +148,6 @@ const WalletDepositPage = ({ onNavigate }) => {
     }
   };
 
-
-
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
 
@@ -164,25 +166,6 @@ const WalletDepositPage = ({ onNavigate }) => {
             <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
             <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
-          {/* 
-          <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
-          <div className="relative">
-            <button onClick={() => setIsLangMenuOpen(!isLangMenuOpen)} className="flex items-center gap-1 text-[#8e9d9b] hover:text-white text-[14px] font-medium">
-              <Globe size={17} strokeWidth={2} /> {language}
-            </button>
-            {isLangMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-36 bg-[#1A1A1A] border border-white/10 rounded-[8px] shadow-xl py-2 z-50">
-                {['EN', 'HI'].map(lang => (
-                  <button key={lang} onClick={() => { setLanguage(lang); setIsLangMenuOpen(false); }}
-                    className={`w-full px-4 py-2 text-left flex items-center justify-between text-[13px] transition-colors ${language === lang ? 'text-white bg-white/5' : 'text-[#8e9d9b] hover:text-white hover:bg-white/5'}`}>
-                    <span className="flex items-center gap-3"><span className="font-bold opacity-50">{lang === 'EN' ? 'US' : 'IN'}</span>{lang === 'EN' ? 'English' : 'Hindi'}</span>
-                    {language === lang && <span className="text-white text-[11px]">✓</span>}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          */}
         </div>
       </div>
 
@@ -211,75 +194,482 @@ const WalletDepositPage = ({ onNavigate }) => {
       </div>
 
 
-      {/* ── Payment Methods ───────────────────────────────────── */}
+      {/* ── Main Box: Grid or Details ─────────────────────────── */}
       <div className="border border-[var(--border-color)] rounded-[10px] p-6 mb-6">
-        <div className="flex justify-between items-center mb-5">
-          <h2 className="text-[15px] font-bold text-[var(--text-color)]">{t('selectPaymentMethod')}</h2>
+        {!selectedMethod ? (
+          /* GRID VIEW */
+          <>
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-[15px] font-bold text-[var(--text-color)]">{t('selectPaymentMethod')}</h2>
+              <div className="flex items-center gap-1.5 text-[11px] text-[#8e9d9b]">
+                <Info size={12} />
+                {t('secureEncrypted')}
+              </div>
+            </div>
 
-          <div className="flex items-center gap-1.5 text-[11px] text-[#8e9d9b]">
-            <Info size={12} />
-            {t('secureEncrypted')}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {PAYMENT_METHODS.map((m) => (
+                <div key={m.id} className="flex flex-col bg-[var(--card-bg)] p-4 rounded-[10px] border border-[var(--border-color)] hover:border-[var(--theme)] transition-all relative overflow-hidden before:absolute before:top-0 before:left-0 before:w-full before:h-1 before:bg-[var(--theme)] before:opacity-0 hover:before:opacity-100 before:transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-[var(--sub-bg)] border border-[var(--border-color)] shrink-0">
+                        <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-bold text-[var(--text-color)]">{m.name}</p>
+                        <p className="text-[10px] text-[#8e9d9b]">{m.subtext}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800]"></span>
+                      <span className="text-[11px] font-bold text-[var(--text-color)]">{m.time}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2 text-[12px] mb-4">
+                    <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('processingTime')}</span><span className="text-[var(--text-color)]">{m.time}</span></div>
+                    <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('fee')}</span><span className="text-[var(--text-color)]">{m.fee}</span></div>
+                    <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('minMax')}</span><span className="text-[var(--text-color)]">{m.minMax}</span></div>
+                  </div>
+
+                  <button 
+                    onClick={() => setSelectedMethod(m)}
+                    className="w-full py-2 bg-primary hover:opacity-90 border-none text-white font-bold text-[12px] transition-all shadow-md"
+                  >
+                    {t('depositWith')} {m.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-1.5 mt-5 text-[#8e9d9b] text-[11px]">
+              <Info size={12} />
+              {t('footerInfo')}
+            </div>
+          </>
+        ) : (
+          /* DETAIL VIEW (Unified Box inside the same container) */
+          <div className="flex flex-col gap-6">
+            {/* Detail Header */}
+            <div className="flex items-center justify-between mb-4 pb-4">
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => setSelectedMethod(null)}
+                  className="p-1.5 rounded-full hover:bg-white/5 text-[var(--text-color)] transition-all"
+                >
+                  <ArrowLeft size={22} />
+                </button>
+                <h2 className="text-[18px] font-bold text-[var(--text-color)]">Payment Details</h2>
+              </div>
+              
+              <div className="flex items-center gap-3 bg-[var(--sub-bg)] px-4 py-2 rounded-[10px] border border-[var(--border-color)]">
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-white flex items-center justify-center p-1">
+                  <img src={selectedMethod.img} alt={selectedMethod.name} className="w-full h-full object-contain" />
+                </div>
+                <span className="text-[14px] font-bold text-[var(--text-color)]">{selectedMethod.name}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* Main Content Area (Form/QR) */}
+              <div className="flex-1 bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[12px] p-8">
+                {selectedMethod.id === 'bank' ? (
+                  /* BANK TRANSFER SPECIFIC LAYOUT */
+                  <div className="flex flex-col gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {/* Currency */}
+                      <div className="flex flex-col gap-2">
+                         <label className="text-[14px] font-bold text-[var(--text-color)]">Currency</label>
+                         <div className="relative">
+                            <select 
+                              value={currency}
+                              onChange={(e) => setCurrency(e.target.value)}
+                              className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors appearance-none"
+                            >
+                               <option>INR (India)</option>
+                               <option>USD (International)</option>
+                            </select>
+                            <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60 pointer-events-none" />
+                         </div>
+                      </div>
+                      {/* Where to Deposit */}
+                      <div className="flex flex-col gap-2">
+                         <label className="text-[14px] font-bold text-[var(--text-color)]">Where to Deposit</label>
+                         <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#158B86]">
+                               <Wallet size={18} />
+                            </div>
+                            <div className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 pl-11 pr-10 text-[15px] text-[var(--text-color)] flex justify-between items-center cursor-pointer">
+                               <span>Wallet <span className="opacity-60">$0</span></span>
+                               <ChevronDown size={16} className="opacity-60" />
+                            </div>
+                         </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2 max-w-[400px]">
+                       <label className="text-[14px] font-bold text-[var(--text-color)]">Deposit Amount<span className="text-[#158B86] text-[13px] ml-2">($1 = 94 INR)</span></label>
+                       <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60 text-[13px] border-r border-[var(--border-color)] pr-3">INR</span>
+                          <input 
+                            type="number" 
+                            placeholder="0"
+                            value={depositAmount}
+                            onChange={(e) => setDepositAmount(e.target.value)}
+                            className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 pl-14 pr-20 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors font-mono"
+                          />
+                          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60 text-[13px] font-bold">$ 0.00</span>
+                       </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2 max-w-[400px]">
+                       <label className="text-[14px] font-bold text-[var(--text-color)]">UTR Reference Number</label>
+                       <input 
+                         type="text" 
+                         placeholder="Please enter UTR Reference Number"
+                         value={transactionId}
+                         onChange={(e) => setTransactionId(e.target.value)}
+                         className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                       />
+                    </div>
+
+                    {/* Bank Account Details */}
+                    <div className="grid grid-cols-2 gap-y-4 gap-x-12 mt-2">
+                       <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">Bank Name: <span className="text-[#8e9d9b] font-medium ml-1">HDFC</span></span></div>
+                       <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">Account Holder: <span className="text-[#8e9d9b] font-medium ml-1">Neptune</span></span></div>
+                       <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">Account Number: <span className="text-[#8e9d9b] font-medium ml-1">123456</span></span></div>
+                       <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">IFSC Code: <span className="text-[#8e9d9b] font-medium ml-1">HDFCBANK</span></span></div>
+                       <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">Branch: <span className="text-[#8e9d9b] font-medium ml-1">Mumbai</span></span></div>
+                    </div>
+
+                    <div className="border-t border-[var(--border-color)] pt-6 mt-2">
+                       <div className="flex flex-col gap-2 mb-6">
+                          <label className="text-[14px] font-bold text-[var(--text-color)]"><span className="text-[#E53E3E] mr-1">*</span>Upload Document</label>
+                          <button className="w-full max-w-[200px] flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3 px-4 text-[13px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
+                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                               <polyline points="17 8 12 3 7 8"></polyline>
+                               <line x1="12" y1="3" x2="12" y2="15"></line>
+                             </svg>
+                             Click to Upload
+                          </button>
+                       </div>
+
+                       <div className="flex items-center gap-3 mb-6">
+                          <input 
+                            type="checkbox" 
+                            id="terms"
+                            checked={isAgreed}
+                            onChange={(e) => setIsAgreed(e.target.checked)}
+                            className="w-4 h-4 rounded border-[var(--border-color)] text-[#158B86] focus:ring-[#158B86]"
+                          />
+                          <label htmlFor="terms" className="text-[13px] text-[#8e9d9b]">
+                             Yes, I agreed to the <span className="text-[#158B86] cursor-pointer hover:underline">Terms & Conditions</span>
+                          </label>
+                       </div>
+
+                       <button 
+                         className="w-full py-3.5 rounded-[8px] bg-primary text-white font-bold text-[15px] transition-all shadow-[0_4px_15px_rgba(21,139,134,0.4)]"
+                       >
+                          SUBMIT
+                       </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* STANDARD LAYOUT (for Crypto, UPI, etc.) */
+                  <div className="w-full">
+                    {selectedMethod.id === 'zaro' && zaroStep === 2 ? (
+                      /* ZAROPAY STEP 2: QR VIEW */
+                      <div className="flex flex-col gap-8">
+                        {/* Top row: readonly fields to match image */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div className="flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Deposit Amount In USD</label>
+                             <div className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] opacity-80">
+                                $ {depositAmount || '0'}
+                             </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Where to Deposit</label>
+                             <div className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] flex justify-between items-center opacity-80">
+                                <span>Wallet <span className="opacity-60">$0</span></span>
+                                <ChevronDown size={16} className="opacity-60" />
+                             </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom row: details and QR */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                           <div className="flex flex-col gap-5">
+                              <div className="flex items-center gap-4">
+                                 <span className="text-[14px] font-bold text-[var(--text-color)] w-[120px] shrink-0">Address to Pay:</span>
+                                 <span className="text-[14px] text-[var(--text-color)] break-all font-mono">TJMU7yvcDJoFFvNucqMto8161Wya5pkcGr</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                 <span className="text-[14px] font-bold text-[var(--text-color)] w-[120px] shrink-0">Order Id:</span>
+                                 <span className="text-[14px] text-[var(--text-color)] break-all font-mono">ala82a3a-51f5-49de-b6cd-4d41ad117ec5</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                 <span className="text-[14px] font-bold text-[var(--text-color)] w-[120px] shrink-0">Amount:</span>
+                                 <span className="text-[14px] text-[var(--text-color)]">$ {depositAmount || '0'}</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                 <span className="text-[14px] font-bold text-[var(--text-color)] w-[120px] shrink-0">Amount to Pay:</span>
+                                 <span className="text-[14px] font-bold text-[var(--text-color)]">$ {depositAmount ? Number(depositAmount).toFixed(2) : '0.00'}</span>
+                              </div>
+
+                              <button 
+                                className="w-fit px-14 py-3 rounded-[8px] bg-primary text-white font-bold text-[14px] transition-all mt-6 shadow-[0_4px_15px_rgba(21,139,134,0.4)]"
+                              >
+                                 VERIFY
+                              </button>
+                           </div>
+
+                           <div className="flex flex-col items-center justify-center">
+                              <div className="bg-white p-3 rounded-[8px] shadow-xl w-full max-w-[220px]">
+                                 <img 
+                                   src="https://staging.zaropay.com/qr_image/ala82a3a-51f5-49de-b6cd-4d41ad117ec5.svg" 
+                                   alt="Payment QR" 
+                                   className="w-full h-auto object-contain"
+                                 />
+                              </div>
+                           </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                         {/* Left Column: Form Fields */}
+                         <div className="flex flex-col gap-5">
+                            <div className="flex flex-col gap-2">
+                               <label className="text-[14px] font-bold text-[var(--text-color)]">Deposit Amount In USD</label>
+                               <div className="relative">
+                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60">$</span>
+                                  <input 
+                                    type="number" 
+                                    placeholder="0"
+                                    value={depositAmount}
+                                    onChange={(e) => setDepositAmount(e.target.value)}
+                                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 pl-8 pr-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                  />
+                               </div>
+                            </div>
+
+                            {selectedMethod.id === 'upi' && (
+                               <>
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]">UTR Reference Number</label>
+                                     <input 
+                                       type="text" 
+                                       placeholder="Please enter UTR Reference Number"
+                                       value={transactionId}
+                                       onChange={(e) => setTransactionId(e.target.value)}
+                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                     />
+                                  </div>
+
+                                  <div className="flex flex-col gap-2">
+                                     <div className="flex flex-col">
+                                        <label className="text-[14px] font-bold text-[var(--text-color)]">UPI Id</label>
+                                        <span className="text-[11px] text-[#E53E3E] font-medium">Please enter UPI Id from where payment is done.</span>
+                                     </div>
+                                     <input 
+                                       type="text" 
+                                       placeholder="Upi Id"
+                                       value={upiId}
+                                       onChange={(e) => setUpiId(e.target.value)}
+                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                     />
+                                  </div>
+
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Comment</label>
+                                     <input 
+                                       type="text" 
+                                       placeholder="Comment"
+                                       value={comment}
+                                       onChange={(e) => setComment(e.target.value)}
+                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                     />
+                                  </div>
+
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Upload</label>
+                                     <button className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
+                                        <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
+                                        Click to Upload
+                                     </button>
+                                  </div>
+                               </>
+                            )}
+
+                            {!['terio', 'zaro', 'upi'].includes(selectedMethod.id) && (
+                               <>
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]"><span className="text-[#E53E3E] mr-1">*</span>Transaction ID</label>
+                                     <input 
+                                       type="text" 
+                                       placeholder="Transaction ID"
+                                       value={transactionId}
+                                       onChange={(e) => setTransactionId(e.target.value)}
+                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                     />
+                                  </div>
+
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Comment</label>
+                                     <input 
+                                       type="text" 
+                                       placeholder="Comment"
+                                       value={comment}
+                                       onChange={(e) => setComment(e.target.value)}
+                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                     />
+                                  </div>
+
+                                  <div className="flex flex-col gap-2">
+                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Upload Document</label>
+                                     <button className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
+                                        <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
+                                        Click to Upload
+                                     </button>
+                                  </div>
+                               </>
+                            )}
+
+                            <div className="flex items-center gap-3 mt-2">
+                               <input 
+                                 type="checkbox" 
+                                 id="terms"
+                               checked={isAgreed}
+                               onChange={(e) => setIsAgreed(e.target.checked)}
+                               className="w-4 h-4 rounded border-[var(--border-color)] text-[#158B86] focus:ring-[#158B86]"
+                             />
+                             <label htmlFor="terms" className="text-[13px] text-[#8e9d9b]">
+                                Yes, I agreed to the <span className="text-[#158B86] cursor-pointer hover:underline">Terms & Conditions</span>
+                             </label>
+                          </div>
+
+                          <button 
+                            onClick={() => {
+                              if (selectedMethod.id === 'zaro') {
+                                setZaroStep(2);
+                              }
+                            }}
+                            className="w-full py-3.5 rounded-[8px] bg-primary text-white font-bold text-[15px] transition-all mt-4 shadow-[0_4px_15px_rgba(21,139,134,0.4)]"
+                          >
+                             {selectedMethod.id === 'zaro' ? 'NEXT' : 'SUBMIT'}
+                          </button>
+                       </div>
+
+                       {/* Right Column: Where to Deposit / QR Code */}
+                       <div className="flex flex-col items-center">
+                          <div className="flex flex-col gap-2 w-full mb-8">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Where to Deposit</label>
+                             <div className="relative">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#158B86]">
+                                   <Wallet size={18} />
+                                </div>
+                                <div className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 pl-11 pr-10 text-[15px] text-[var(--text-color)] flex justify-between items-center cursor-pointer">
+                                   <span>Wallet <span className="opacity-60">$0</span></span>
+                                   <ChevronDown size={16} className="opacity-60" />
+                                </div>
+                             </div>
+                          </div>
+
+                          {!['terio', 'zaro'].includes(selectedMethod.id) && (
+                             <div className="flex flex-col items-center w-full">
+                                <div className="bg-white p-2 rounded-[12px] shadow-lg mb-6 w-full max-w-[280px]">
+                                   <img 
+                                     src="https://mt5.neptunefxcrm.com/PaymentLogoImage/638991296573891892.png" 
+                                     alt="Payment QR" 
+                                     className="w-full h-auto object-contain"
+                                   />
+                                </div>
+
+                                 {selectedMethod.id !== 'upi' && (
+                                    <div className="text-center w-full max-w-[320px]">
+                                       <p className="text-[13px] font-bold text-[var(--text-color)] mb-2">Wallet Address</p>
+                                       <div className="flex items-center gap-2 bg-[var(--sub-bg)] px-3 py-2.5 rounded-[8px] border border-[var(--border-color)]">
+                                          <span className="text-[11px] text-[var(--text-color)] opacity-80 break-all font-mono">0x149EFbaE3B42441337621B7F17F C705b5507C942</span>
+                                          <button className="text-[#8e9d9b] hover:text-white transition-colors shrink-0">
+                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 )}
+                             </div>
+                          )}
+                       </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Right Sidebar: Summary */}
+            <div className="w-full lg:w-[350px] flex flex-col gap-6">
+              <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[12px] p-6 flex flex-col">
+                 <h3 className="text-[18px] font-bold text-[var(--text-color)] mb-6">Transaction Summary</h3>
+                 
+                 <div className="flex flex-col gap-4 mb-6">
+                    <div className="flex justify-between items-center">
+                       <span className="text-[14px] text-[#8e9d9b]">Deposit Amount:</span>
+                       <span className="text-[14px] font-bold text-[var(--text-color)]">${depositAmount || '0'}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                       <span className="text-[14px] text-[#8e9d9b]">Processing Fee:</span>
+                       <span className="text-[14px] font-bold text-[var(--text-color)]">$0.00</span>
+                    </div>
+                    <div className="border-t border-[var(--border-color)] pt-4 flex justify-between items-center">
+                       <span className="text-[16px] font-bold text-[var(--text-color)]">Total Amount:</span>
+                       <span className="text-[18px] font-bold text-[#4caf50]">${depositAmount || '0'}</span>
+                    </div>
+                 </div>
+
+                 {/* Important Information */}
+                 <div className="pt-6 border-t border-[var(--border-color)]">
+                    <div className="flex items-start gap-2 text-[#3B82F6] mb-4">
+                       <Info size={16} className="shrink-0 mt-0.5" />
+                       <span className="text-[14px] font-bold text-[#3B82F6]">Important Information</span>
+                    </div>
+                    <ul className="flex flex-col gap-3">
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
+                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                          Funds will be available instantly after successful payment
+                       </li>
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
+                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                          All transactions are encrypted with SSL technology
+                       </li>
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
+                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                          Transaction fees may apply based on payment method
+                       </li>
+                    </ul>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+      {/* ── Table Container ────────────────────────────────────────── */}
+      <div className="border border-[var(--border-color)] rounded-[10px] p-4 flex flex-col gap-4 mt-6">
+        <div className="flex items-center justify-between gap-5 mb-2">
+          <div className="bg-[var(--sub-bg)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto hide-scrollbar">
+            {['Approved', 'Pending', 'Rejected'].map(status => (
+              <button key={status} onClick={() => setFilterStatus(status)}
+                className={`whitespace-nowrap px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all ${filterStatus === status ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' : 'text-[var(--text-color)] hover:text-[var(--text-color)]/80 bg-transparent'}`}
+              >{t(status.toLowerCase())}</button>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {PAYMENT_METHODS.map((m) => (
-            <div key={m.id} className="flex flex-col p-4 rounded-[10px] border border-[#158B86]/40 hover:border-[#158B86] transition-all">
-              {/* Card header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full overflow-hidden bg-[var(--sub-bg)] border border-[var(--border-color)] shrink-0">
-                    <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-bold text-[var(--text-color)]">{m.name}</p>
-                    <p className="text-[10px] text-[#8e9d9b]">{m.subtext}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFB800]"></span>
-                  <span className="text-[11px] font-bold text-[var(--text-color)]">{m.time}</span>
-                </div>
-              </div>
-
-              {/* Details */}
-              <div className="flex flex-col gap-2 text-[12px] mb-4">
-                <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('processingTime')}</span><span className="text-[var(--text-color)]">{m.time}</span></div>
-                <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('fee')}</span><span className="text-[var(--text-color)]">{m.fee}</span></div>
-                <div className="flex justify-between"><span className="text-[#8e9d9b]">{t('minMax')}</span><span className="text-[var(--text-color)]">{m.minMax}</span></div>
-              </div>
-
-              {/* Action */}
-              <button className="w-full py-2 rounded-[6px] bg-[#158B86] hover:bg-[#117672] text-white font-bold text-[12px] transition-all shadow-[0_3px_10px_rgba(21,139,134,0.4)]">
-                {t('depositWith')} {m.name}
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-center gap-1.5 mt-5 text-[#8e9d9b] text-[11px]">
-          <Info size={12} />
-          {t('footerInfo')}
-        </div>
-      </div>
-
-      {/* Tab Controls Row — Matching Accounts page layout */}
-      <div className="flex items-center justify-between gap-5 mb-4">
-        <div className="bg-[var(--sub-bg)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto hide-scrollbar">
-          {['Approved', 'Pending', 'Rejected'].map(status => (
-            <button key={status} onClick={() => setFilterStatus(status)}
-              className={`whitespace-nowrap px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all ${filterStatus === status ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' : 'text-[var(--text-color)] hover:text-[var(--text-color)]/80 bg-transparent'}`}
-            >{t(status.toLowerCase())}</button>
-          ))}
-        </div>
-      </div>
-
-
-      {/* ── Table Container wrapped in teal border ── */}
-      <div className="border border-[var(--border-color)] rounded-[10px] p-4 flex flex-col gap-4">
-        {/* INNER table section with its own border */}
         <div className="border border-[var(--border-color)]/50 rounded-[8px] overflow-hidden">
-
           <WalletDepositTable 
             data={currentItems} 
             filterStatus={filterStatus} 
@@ -288,7 +678,6 @@ const WalletDepositPage = ({ onNavigate }) => {
           />
         </div>
 
-        {/* Pagination — inside outer, below inner table */}
         <div className="flex items-center justify-between px-1">
           <div className="relative">
             <button 
@@ -298,7 +687,6 @@ const WalletDepositPage = ({ onNavigate }) => {
               <span>{itemsPerPage} {t('itemsPerPage')}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-
 
             {isRowsMenuOpen && (
               <div className="absolute bottom-full left-0 mb-1 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[5px] shadow-lg z-50 overflow-hidden">
@@ -344,10 +732,9 @@ const WalletDepositPage = ({ onNavigate }) => {
             </button>
           </div>
         </div>
-
       </div>
 
-      {/* ── Security Footer ───────────────────────────────────── */}
+      {/* ── Security Footer ────────────────────────────────────────── */}
       <div className="w-full mt-6 border border-[var(--border-color)] rounded-[10px] p-6">
         <h2 className="text-[17px] font-bold text-[var(--text-color)] mb-8">{t('securityProtection')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

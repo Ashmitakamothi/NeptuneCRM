@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Info, ShieldCheck, Lock, EyeOff, Wallet, Percent, Clock, BadgeDollarSign } from 'lucide-react';
+import { Home, ChevronRight, Info, ShieldCheck, Lock, EyeOff, Wallet, Percent, Clock, BadgeDollarSign, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import WalletWithdrawTable from './WalletWithdrawTable';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
@@ -72,6 +72,10 @@ const WalletWithdrawPage = ({ onNavigate }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isRowsMenuOpen, setIsRowsMenuOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'requestDate', direction: 'desc' });
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
+  const [isAgreed, setIsAgreed] = useState(false);
 
   const { data: realData } = useRealtimeJson(endpoints.deposits, {
     enabled: Boolean(endpoints.deposits),
@@ -186,63 +190,268 @@ const WalletWithdrawPage = ({ onNavigate }) => {
 
 
       {/* ── Select Withdrawal Method ──────────────────────────── */}
-      <div className="border border-[var(--border-color)] rounded-[12px] p-6 mb-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[18px] font-bold text-[var(--text-color)] tracking-tight">{t('selectWithdrawMethod')}</h2>
-          <div className="flex items-center gap-2 text-[11px] text-[#8e9d9b] tracking-wider">
-            <Info size={14} className="text-[#158B86]" /> {t('allWithdrawSecure')}
+      {!selectedMethod ? (
+        <div className="border border-[var(--border-color)] rounded-[12px] p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-[18px] font-bold text-[var(--text-color)] tracking-tight">{t('selectWithdrawMethod')}</h2>
+            <div className="flex items-center gap-2 text-[11px] text-[#8e9d9b] tracking-wider">
+              <Info size={14} className="text-[#158B86]" /> {t('allWithdrawSecure')}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {WITHDRAWAL_METHODS.map((method) => (
+              <div key={method.id} className="flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-5 hover:border-[var(--theme)] transition-all group relative overflow-hidden before:absolute before:top-0 before:left-0 before:w-full before:h-1 before:bg-[var(--theme)] before:opacity-0 hover:before:opacity-100 before:transition-all">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full overflow-hidden bg-[var(--sub-bg)] border border-[var(--border-color)] shrink-0 flex items-center justify-center">
+                      <img src={method.img} alt={method.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[14px] font-bold text-[var(--text-color)] leading-none">{method.name}</span>
+                      <span className="text-[10px] text-[#8e9d9b] mt-1">{method.subtext}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                     <div className="w-1.5 h-1.5 rounded-full bg-[#FFB800]" />
+                     <span className="text-[11px] font-bold text-[var(--text-color)] opacity-80">{method.processing}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between items-center text-[12px]">
+                    <span className="text-[#8e9d9b]">{t('processingTime')}</span>
+                    <span className="text-[var(--text-color)] font-bold">{method.processing}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[12px]">
+                    <span className="text-[#8e9d9b]">{t('fee')}</span>
+                    <span className="text-[var(--text-color)] font-bold">{method.fee}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[12px]">
+                    <span className="text-[#8e9d9b]">{t('minMax')}</span>
+                    <span className="text-[var(--text-color)] font-bold text-[#158B86]">{method.minMax}</span>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setSelectedMethod(method)}
+                  className="w-full py-2.5 bg-primary hover:opacity-90 border-none text-white text-[13px] font-bold rounded-[6px] transition-all shadow-md"
+                >
+                  {t('withdrawVia')} {method.name}
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-center gap-1.5 mt-5 text-[#8e9d9b] text-[11px]">
+            <Info size={12} />
+            {t('footerInfo')}
           </div>
         </div>
+      ) : (
+        <div className="border border-[var(--border-color)] rounded-[12px] p-6 mb-8 flex flex-col">
+           <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-color)]">
+              <div className="flex items-center gap-3">
+                 <button 
+                   onClick={() => {
+                     setSelectedMethod(null);
+                     setWithdrawAmount('');
+                     setWalletAddress('');
+                     setIsAgreed(false);
+                   }}
+                   className="text-[#8e9d9b] hover:text-[var(--text-color)] transition-all"
+                 >
+                    <ArrowLeft size={16} />
+                 </button>
+                 <h2 className="text-[18px] font-bold text-[var(--text-color)] tracking-tight">Withdrawal Details</h2>
+              </div>
+              <div className="flex items-center gap-2 bg-[var(--card-bg)] border border-[var(--border-color)] px-3 py-1.5 rounded-[6px]">
+                 <img src={selectedMethod.img} alt={selectedMethod.name} className="w-4 h-4 object-contain rounded-full" />
+                 <span className="text-[12px] font-medium text-[var(--text-color)]">{selectedMethod.name}</span>
+              </div>
+           </div>
 
+           <div className="flex flex-col lg:flex-row gap-8">
+              {/* Left Column: Form Fields */}
+              <div className="flex-1 flex flex-col gap-6">
+                 {selectedMethod.name === 'Bank Transfer' || selectedMethod.name === 'Cash Withdrawal' ? (
+                    <>
+                       <div className="flex flex-col md:flex-row gap-5">
+                          <div className="flex-1 flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Currency</label>
+                             <div className="relative">
+                                <div className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 pl-4 pr-10 text-[15px] text-[var(--text-color)] flex justify-between items-center cursor-pointer">
+                                   <span>INR (India)</span>
+                                   <ChevronDown size={16} className="opacity-60 absolute right-4 top-1/2 -translate-y-1/2" />
+                                </div>
+                             </div>
+                          </div>
+                          <div className="flex-1 flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Withdrawing From</label>
+                             <div className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] flex justify-between items-center cursor-pointer">
+                                <div className="flex items-center gap-2">
+                                   <Wallet size={16} className="opacity-60" />
+                                   <span>Wallet <span className="opacity-60">$0</span></span>
+                                </div>
+                                <ChevronDown size={16} className="opacity-60" />
+                             </div>
+                          </div>
+                       </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {WITHDRAWAL_METHODS.map((method) => (
-            <div key={method.id} className={`flex flex-col bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-5 hover:border-[#158B86]/50 transition-all group relative overflow-hidden`}>
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full overflow-hidden bg-[var(--sub-bg)] border border-[var(--border-color)] shrink-0 flex items-center justify-center">
-                    <img src={method.img} alt={method.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[14px] font-bold text-[var(--text-color)] leading-none">{method.name}</span>
-                    <span className="text-[10px] text-[#8e9d9b] mt-1">{method.subtext}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1.5">
-                   <div className="w-1.5 h-1.5 rounded-full bg-[#FFB800]" />
-                   <span className="text-[11px] font-bold text-[var(--text-color)] opacity-80">{method.processing}</span>
-                </div>
+                       <div className="flex flex-col md:flex-row gap-5">
+                          <div className="flex-1 flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Withdrawal Amount In <span className="text-[#158B86]">($1 = 90 INR)</span></label>
+                             <div className="flex items-center bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden">
+                                <span className="pl-4 text-[var(--text-color)] opacity-60">$</span>
+                                <input 
+                                  type="number" 
+                                  placeholder="0"
+                                  value={withdrawAmount}
+                                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                                  className="w-full bg-transparent py-3.5 pl-2 pr-4 text-[15px] text-[var(--text-color)] outline-none"
+                                />
+                                <div className="bg-[var(--card-bg)] border-l border-[var(--border-color)] h-full py-3.5 px-4 flex items-center justify-center text-[13px] text-[var(--text-color)] whitespace-nowrap opacity-80">
+                                   INR {(withdrawAmount ? (parseFloat(withdrawAmount) * 90).toFixed(2) : '0.00')}
+                                </div>
+                             </div>
+                          </div>
+                          <div className="flex-1" />
+                       </div>
+
+                       {selectedMethod.name === 'Bank Transfer' ? (
+                          <div className="text-[12px] text-[var(--text-color)] opacity-80 mt-1">
+                             No banks added yet, please add it from profile Payment settings.
+                          </div>
+                       ) : (
+                          <div className="flex flex-col md:flex-row gap-5">
+                             <div className="flex-1 flex flex-col gap-2">
+                                <label className="text-[14px] font-bold text-[var(--text-color)]">
+                                   <span className="text-[#E53E3E] mr-1">*</span>Mobile Number
+                                </label>
+                                <input 
+                                  type="text" 
+                                  placeholder="Mobile Number"
+                                  value={walletAddress}
+                                  onChange={(e) => setWalletAddress(e.target.value)}
+                                  className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                />
+                             </div>
+                             <div className="flex-1" />
+                          </div>
+                       )}
+                    </>
+                 ) : (
+                    <>
+                       <div className="flex flex-col md:flex-row gap-5">
+                          <div className="flex-1 flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Withdrawal Amount In USD</label>
+                             <div className="flex items-center bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden">
+                                <span className="pl-4 text-[var(--text-color)] opacity-60">$</span>
+                                <input 
+                                  type="number" 
+                                  placeholder="0"
+                                  value={withdrawAmount}
+                                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                                  className="w-full bg-transparent py-3.5 pl-2 pr-4 text-[15px] text-[var(--text-color)] outline-none"
+                                />
+                             </div>
+                          </div>
+                          <div className="flex-1 flex flex-col gap-2">
+                             <label className="text-[14px] font-bold text-[var(--text-color)]">Withdrawing From</label>
+                             <div className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] flex justify-between items-center cursor-pointer">
+                                <div className="flex items-center gap-2">
+                                   <Wallet size={16} className="opacity-60" />
+                                   <span>Wallet <span className="opacity-60">$0</span></span>
+                                </div>
+                                <ChevronDown size={16} className="opacity-60" />
+                             </div>
+                          </div>
+                       </div>
+
+                       <div className="flex flex-col gap-2">
+                          <label className="text-[14px] font-bold text-[var(--text-color)]">
+                             <span className="text-[#E53E3E] mr-1">*</span>{`${selectedMethod.name.split('_')[1] || selectedMethod.name} Wallet Address`}
+                          </label>
+                          <input 
+                            type="text" 
+                            placeholder={`${selectedMethod.name.split('_')[1] || selectedMethod.name} Wallet Address`}
+                            value={walletAddress}
+                            onChange={(e) => setWalletAddress(e.target.value)}
+                            className="w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                          />
+                       </div>
+                    </>
+                 )}
+
+                 <div className="flex items-center gap-3 mt-2">
+                    <input 
+                      type="checkbox" 
+                      id="terms-withdraw"
+                      checked={isAgreed}
+                      onChange={(e) => setIsAgreed(e.target.checked)}
+                      className="w-4 h-4 rounded-[3px] bg-white border-none appearance-none cursor-pointer flex items-center justify-center after:content-['✓'] after:text-[#158B86] after:font-bold after:text-[14px] after:leading-none after:opacity-0 checked:after:opacity-100 transition-all"
+                    />
+                    <label htmlFor="terms-withdraw" className="text-[13px] text-[#8e9d9b]">
+                       Yes, I agree to the <span className="text-[#158B86] cursor-pointer hover:underline">Terms & Conditions</span>
+                    </label>
+                 </div>
+
+                 <button 
+                   className="w-[160px] py-3.5 rounded-[8px] bg-primary text-white font-bold text-[15px] transition-all mt-2 shadow-[0_4px_15px_rgba(21,139,134,0.4)]"
+                 >
+                    SUBMIT
+                 </button>
               </div>
 
+              {/* Right Column: Transaction Summary */}
+              <div className="w-full lg:w-[350px] flex flex-col">
+                 <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-6 flex flex-col h-full">
+                    <h3 className="text-[16px] font-bold text-[var(--text-color)] mb-6">Transaction Summary</h3>
+                    
+                    <div className="flex flex-col gap-4 mb-6 text-[13px]">
+                       <div className="flex justify-between items-center text-[#8e9d9b]">
+                          <span>Withdrawal Amount:</span>
+                          <span className="text-[var(--text-color)] font-bold">$ {withdrawAmount || '0'}</span>
+                       </div>
+                       <div className="flex justify-between items-center text-[#8e9d9b]">
+                          <span>Processing Fee:</span>
+                          <span className="text-[var(--text-color)] font-bold">{selectedMethod.fee}</span>
+                       </div>
+                    </div>
+                    <div className="border-t border-[var(--border-color)] pt-4 flex justify-between items-center mb-6">
+                       <span className="text-[15px] font-bold text-[var(--text-color)]">Total Amount:</span>
+                       <span className="text-[16px] font-bold text-[#4caf50]">${withdrawAmount || '0'}</span>
+                    </div>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between items-center text-[12px]">
-                  <span className="text-[#8e9d9b]">{t('processingTime')}</span>
-                  <span className="text-[var(--text-color)] font-bold">{method.processing}</span>
-                </div>
-                <div className="flex justify-between items-center text-[12px]">
-                  <span className="text-[#8e9d9b]">{t('fee')}</span>
-                  <span className="text-[var(--text-color)] font-bold">{method.fee}</span>
-                </div>
-                <div className="flex justify-between items-center text-[12px]">
-                  <span className="text-[#8e9d9b]">{t('minMax')}</span>
-                  <span className="text-[var(--text-color)] font-bold text-[#158B86]">{method.minMax}</span>
-                </div>
-
+                    {/* Important Information */}
+                    <div className="pt-6 border-t border-[var(--border-color)] mt-auto">
+                       <div className="flex items-start gap-2 text-[#3B82F6] mb-4">
+                          <Info size={16} className="shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-bold text-[#3B82F6]">Important Information</span>
+                       </div>
+                       <ul className="flex flex-col gap-1.5">
+                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                             - Processing time: {selectedMethod.processing}
+                          </li>
+                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                             · All transactions are encrypted with SSL technology
+                          </li>
+                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                             · Withdrawal fees may apply based on payment method
+                          </li>
+                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                             · Minimum withdrawal: {selectedMethod.minMax.split(' - ')[0]}
+                          </li>
+                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                             · Maximum withdrawal: {selectedMethod.minMax.split(' - ')[1]}
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
               </div>
-
-              <button className="w-full py-2.5 bg-[#158B86] hover:bg-[#127a75] text-white text-[13px] font-bold rounded-[6px] transition-all shadow-[0_4px_12px_rgba(21,139,134,0.2)]">
-                {t('withdrawVia')} {method.name}
-              </button>
-            </div>
-          ))}
+           </div>
         </div>
-
-        <div className="flex items-center justify-center gap-1.5 mt-5 text-[#8e9d9b] text-[11px]">
-          <Info size={12} />
-          {t('footerInfo')}
-        </div>
-      </div>
+      )}
 
       {/* ── Withdrawal History Table ───────────────────────────── */}
       <div className="border border-[var(--border-color)] rounded-[10px] p-4 flex flex-col gap-4">
