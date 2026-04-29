@@ -10,10 +10,54 @@ import myTransactionIcon from '../assets/my-transaction.png.png';
 import reportsIcon from '../assets/reports.png.png';
 import leaderboardIcon from '../assets/leaderboard.png.png';
 import logo from '../assets/logo.png.png';
+import NotificationSidebar from './NotificationSidebar';
 
 const Navbar = ({ onNavigate, activeMenu }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
+  
+  // Notification Data
+  const notifications = [
+    {
+      id: 1,
+      title: 'Campaign Cancelled',
+      message: 'The campaign "Trade to Win 2026" has been cancelled. xyz',
+      time: 'an hour ago',
+    },
+    {
+      id: 2,
+      title: 'A ticket no: T2604280 has been closed',
+      message: 'A ticket no: T2604280 has been closed by Ashmita Jethava',
+      time: '20 hours ago',
+    },
+    {
+      id: 3,
+      title: 'A ticket no: T2604281 has been closed',
+      message: 'A ticket no: T2604281 has been closed by Ashmita Jethava',
+      time: '20 hours ago',
+    },
+    {
+      id: 4,
+      title: 'A ticket no: T2604282 has been closed',
+      message: 'A ticket no: T2604282 has been closed by Ashmita Jethava',
+      time: '21 hours ago',
+    },
+    {
+      id: 5,
+      title: 'A ticket no: T2604283 has been closed',
+      message: 'A ticket no: T2604283 has been closed by Ashmita Jethava',
+      time: '21 hours ago',
+    },
+    {
+      id: 6,
+      title: 'KYC Request Approved',
+      message: 'Your KYC Request has been approved.',
+      time: 'a day ago',
+    }
+  ];
+  
+  const notificationCount = notifications.length;
   const { language, setLanguage } = useLanguage();
   const { logout } = useAuth();
 
@@ -260,9 +304,17 @@ const Navbar = ({ onNavigate, activeMenu }) => {
 
           <div className="w-[1px] h-5 bg-[var(--border-color)] mx-1 hidden sm:block"></div>
 
-          <button className="relative p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors">
+          <button 
+            onClick={() => setIsNotificationOpen(true)}
+            className="relative p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors group"
+            title={`${notificationCount} Notifications`}
+          >
             <Bell size={20} strokeWidth={2} />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-[#FF4D4F] rounded-full border-2 border-[var(--nav-bg)]"></span>
+            {notificationCount > 0 && (
+              <span className="absolute top-0.5 right-0 bg-[#FF4D4F] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-[1.5px] border-[var(--nav-bg)]">
+                {notificationCount > 9 ? '9+' : notificationCount}
+              </span>
+            )}
           </button>
           
           <button className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors hidden sm:block">
@@ -358,6 +410,13 @@ const Navbar = ({ onNavigate, activeMenu }) => {
           })}
         </div>
       )}
+
+      {/* Notification Sidebar */}
+      <NotificationSidebar 
+        isOpen={isNotificationOpen} 
+        onClose={() => setIsNotificationOpen(false)}
+        notifications={notifications}
+      />
 
     </nav>
   );
