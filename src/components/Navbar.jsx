@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, LayoutDashboard, LayoutGrid, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check, LogOut, ShieldCheck, Presentation, UserPlus, ArrowUpCircle, ArrowDownCircle, Network, BadgePercent, FileBarChart, UserCheck, GitFork } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,8 +11,9 @@ import reportsIcon from '../assets/reports.png.png';
 import leaderboardIcon from '../assets/leaderboard.png.png';
 import logo from '../assets/logo.png.png';
 import NotificationSidebar from './NotificationSidebar';
+import * as IBIcons from './IBIcons';
 
-const Navbar = ({ onNavigate, activeMenu }) => {
+const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
   const { user, logout } = useAuth();
   const { language, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,7 +25,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
     {
       id: 1,
       title: 'Campaign Cancelled',
-      message: 'The campaign "Trade to Win 2026" has been cancelled. xyz',
+      message: 'The campaign "Trade to Win 2026" has been cancelled.',
       time: 'an hour ago',
     },
     {
@@ -72,19 +73,21 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         Dashboard: 'Dashboard', Accounts: 'Accounts', Wallet: 'Wallet', Deposit: 'Deposit', Withdraw: 'Withdraw',
         'Internal Transfer': 'Internal Transfer', 'My Transaction': 'My Transaction', Reports: 'Reports', Transfer: 'Transfer', Logs: 'Logs',
         More: 'More', Leaderboard: 'Leaderboard', Tools: 'Tools', 'Web Trader': 'Web Trader', 'Trade & Win': 'Trade & Win',
-        'IB Request': 'IB Request', Messenger: 'Messenger', Tutorial: 'Tutorial', 'MT5 Download': 'MT5 Download', Support: 'Support', FAQs: 'FAQs'
+        'IB Request': 'IB Request', Messenger: 'Messenger', Tutorial: 'Tutorial', 'MT5 Download': 'MT5 Download', Support: 'Support', FAQs: 'FAQs',
+        'IB Wallet': 'IB Wallet', 'My Team': 'My Team', 'IB Tree': 'IB Tree', Commission: 'Commission', KYC: 'KYC', 'IB Manager': 'IB Manager', 'Live Account': 'Live Account', IB_Dashboard: 'Dashboard'
       },
       HI: {
         Dashboard: 'डैशबोर्ड', Accounts: 'अकाउंट्स', Wallet: 'वॉलेट', Deposit: 'जमा करें', Withdraw: 'निकासी',
         'Internal Transfer': 'आंतरिक स्थानांतरण', 'My Transaction': 'मेरा लेनदेन', Reports: 'रिपोर्ट', Transfer: 'ट्रांसफर', Logs: 'लॉग्स',
         More: 'अधिक', Leaderboard: 'लीडरबोर्ड', Tools: 'उपकरण', 'Web Trader': 'वेब ट्रेडर', 'Trade & Win': 'ट्रेड एंड विन',
-        'IB Request': 'IB अनुरोध', Messenger: 'मैसेंजर', Tutorial: 'ट्यूटोरियल', 'MT5 Download': 'MT5 डाउनलोड', Support: 'समर्थन', FAQs: 'अक्सर पूछे जाने वाले प्रश्न'
+        'IB Request': 'IB अनुरोध', Messenger: 'मैसेंजर', Tutorial: 'ट्यूटोरियल', 'MT5 Download': 'MT5 डाउनलोड', Support: 'समर्थन', FAQs: 'अक्सर पूछे जाने वाले प्रश्न',
+        'IB Wallet': 'IB वॉलेट', 'My Team': 'मेरी टीम', 'IB Tree': 'IB ट्री', Commission: 'कमीशन', KYC: 'KYC', 'IB Manager': 'IB प्रबंधक', 'Live Account': 'लाइव अकाउंट', IB_Dashboard: 'डैशबोर्ड'
       }
     };
     return TRANSLATIONS[language]?.[key] || key;
   };
-  
-  const menuItems = [
+
+  const userMenuItems = [
     { name: 'Dashboard', icon: <img src={homeSmileIcon} alt="Dashboard" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'Accounts', icon: <img src={accountsIcon} alt="Accounts" className="w-[18px] h-[18px] object-contain" /> },
     { 
@@ -114,6 +117,7 @@ const Navbar = ({ onNavigate, activeMenu }) => {
       icon: null, 
       hasDropdown: true,
       dropdownItems: [
+        { name: 'IB_Dashboard', label: 'IB Dashboard', icon: <Users size={18} strokeWidth={2} /> },
         { name: 'Leaderboard', label: 'Leaderboard', icon: <img src={leaderboardIcon} alt="Leaderboard" className="w-[18px] h-[18px] object-contain" /> },
         { 
           name: 'Tools', 
@@ -129,12 +133,46 @@ const Navbar = ({ onNavigate, activeMenu }) => {
         { name: 'Messenger', label: 'Messenger', icon: <Mail size={18} strokeWidth={2} /> },
         { name: 'Tutorial', label: 'Tutorial', icon: <PlaySquare size={18} strokeWidth={2} /> },
         { name: 'Download', label: 'MT5 Download', icon: <Download size={18} strokeWidth={2} /> },
-
         { name: 'Support', label: 'Support', icon: <Headphones size={18} strokeWidth={2} /> },
         { name: 'FAQs', label: 'FAQs', icon: <ClipboardList size={18} strokeWidth={2} /> },
       ]
     },
   ];
+
+  const ibMenuItems = [
+    { name: 'IB_Dashboard', label: 'Dashboard', icon: <IBIcons.DashboardIcon /> },
+    { name: 'IB Wallet', icon: <IBIcons.IBWalletIcon /> },
+    { name: 'Deposit', icon: <IBIcons.DepositIcon /> },
+    { name: 'Withdraw', icon: <IBIcons.WithdrawIcon /> },
+    { name: 'My Team', icon: <IBIcons.MyTeamIcon /> },
+    { name: 'IB Tree', icon: <IBIcons.IBTreeIcon /> },
+    { name: 'Commission', icon: <IBIcons.CommissionIcon /> },
+    { 
+      name: 'Reports', 
+      icon: <IBIcons.ReportsIcon />, 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'Earning', label: 'Earning' },
+        { name: 'Withdraw', label: 'Withdraw' },
+        { name: 'My Team', label: 'My Team' },
+        { name: 'My Sab-IB', label: 'My Sab-IB' },
+      ]
+    },
+    { 
+      name: 'More', 
+      icon: null, 
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'KYC', label: 'KYC', icon: <IBIcons.KYCIcon /> },
+        { name: 'IB Manager', label: 'IB Manager', icon: <IBIcons.IBManagerIcon /> },
+        { name: 'Live Account', label: 'Live Account', icon: <IBIcons.LiveAccountIcon /> },
+        { name: 'TradeAndWin', label: 'Trade & Win', icon: <IBIcons.TradeAndWinIcon /> },
+        { name: 'Messenger', label: 'Messenger', icon: <IBIcons.MessengerIcon /> },
+      ]
+    },
+  ];
+
+  const menuItems = isIB ? ibMenuItems : userMenuItems;
 
   const handleNavClick = (name, dropdownItemName = null) => {
     if (dropdownItemName) {
@@ -165,10 +203,10 @@ const Navbar = ({ onNavigate, activeMenu }) => {
                 <div className="relative group flex items-center h-[53px]">
                   <button
                     onClick={() => handleNavClick(item.name)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-full text-[14px] font-semibold whitespace-nowrap transition-all duration-200 ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[14px] whitespace-nowrap transition-all duration-200 ${
                       activeMenu === item.name
-                        ? 'bg-[#158B86] text-white shadow-[0_2px_10px_rgba(21,139,134,0.3)]'
-                        : 'text-[#8e9d9b] hover:text-[var(--text-color)]'
+                        ? 'bg-gradient-to-r from-[#158B86] to-[#0E5E5A] text-white shadow-inner font-semibold'
+                        : 'text-[#8e9d9b] hover:text-[var(--text-color)] hover:bg-[var(--hover-bg)] font-medium'
                     }`}
                   >
                     {item.icon && (

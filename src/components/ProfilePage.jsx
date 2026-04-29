@@ -448,8 +448,8 @@ const ProfilePage = ({ onNavigate }) => {
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
-                <button onClick={() => setDashboardType('User')} className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
-                <button onClick={() => setDashboardType('IB')}   className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB'   ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
+                <button onClick={() => { setDashboardType('User'); onNavigate('Dashboard'); }} className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
+                <button onClick={() => { setDashboardType('IB'); onNavigate('IB_Dashboard'); }}   className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB'   ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
             </div>
         </div>
       </div>

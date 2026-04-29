@@ -70,11 +70,11 @@ const SummaryCards = ({ onNavigate, data }) => {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
            <div className="bg-[var(--card-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[46px]">
               <button 
-                onClick={() => setDashboardType('User')}
+                onClick={() => { setDashboardType('User'); onNavigate('Dashboard'); }}
                 className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 rounded-full text-[12px] sm:text-[13px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#4C5E62] text-white shadow-sm border border-[var(--border-color)]' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)] border border-transparent'}`}
               >{t('userDashboard')}</button>
               <button 
-                onClick={() => setDashboardType('IB')}
+                onClick={() => { setDashboardType('IB'); onNavigate('IB_Dashboard'); }}
                 className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full text-[12px] sm:text-[13px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#4C5E62] text-white shadow-sm border border-[var(--border-color)]' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)] border border-transparent'}`}
               >{t('ibDashboard')}</button>
            </div>

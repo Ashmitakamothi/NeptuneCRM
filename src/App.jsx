@@ -23,6 +23,8 @@ import AccountDetailsPage from './components/AccountDetailsPage';
 import AccountTypesPage from './components/AccountTypesPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
+import IBDashboard from './components/IBDashboard';
+import IBWalletPage from './components/IBWalletPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -59,7 +61,9 @@ const AppContent = () => {
       'deposit_Report': 'Reports_Deposit',
       'withdrawal_Report': 'Reports_Withdraw',
       'transfer_Report': 'Reports_Transfer',
-      'logs': 'Reports_Logs'
+      'logs': 'Reports_Logs',
+      'ib/dashboard': 'IB_Dashboard',
+      'ib/wallet': 'IB Wallet'
     };
 
     if (urlMap[path]) return urlMap[path];
@@ -118,7 +122,9 @@ const AppContent = () => {
       'Reports_Deposit': 'deposit_Report',
       'Reports_Withdraw': 'withdrawal_Report',
       'Reports_Transfer': 'transfer_Report',
-      'Reports_Logs': 'logs'
+      'Reports_Logs': 'logs',
+      'IB_Dashboard': 'ib/dashboard',
+      'IB Wallet': 'ib/wallet'
     };
 
     let path = pageToPath[activePage] || '';
@@ -241,19 +247,24 @@ const AppContent = () => {
       case 'Profile': return <ProfilePage onNavigate={setActivePage} />;
       case 'Login': return <LoginPage onNavigate={setActivePage} />;
       case 'Signup': return <SignupPage onNavigate={setActivePage} />;
+      case 'IB_Dashboard':
+      case 'More_IB_Dashboard': return <IBDashboard onNavigate={setActivePage} />;
+      case 'IB Wallet': return <IBWalletPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
-  return (
-    <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
-      {isAuthenticated && <Navbar onNavigate={setActivePage} activeMenu={activePage} />}
-      
-      <main className={isAuthenticated ? "max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8" : ""}>
-        {renderContent()}
-      </main>
-    </div>
-  );
+    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet';
+
+    return (
+      <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
+        {isAuthenticated && <Navbar onNavigate={setActivePage} activeMenu={activePage} isIB={isIB} />}
+        
+        <main className={isAuthenticated ? "max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8" : ""}>
+          {renderContent()}
+        </main>
+      </div>
+    );
 };
 
 function App() {
