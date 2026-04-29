@@ -13,6 +13,8 @@ import logo from '../assets/logo.png.png';
 import NotificationSidebar from './NotificationSidebar';
 
 const Navbar = ({ onNavigate, activeMenu }) => {
+  const { user, logout } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
@@ -58,8 +60,6 @@ const Navbar = ({ onNavigate, activeMenu }) => {
   ];
   
   const notificationCount = notifications.length;
-  const { language, setLanguage } = useLanguage();
-  const { logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -323,7 +323,11 @@ const Navbar = ({ onNavigate, activeMenu }) => {
             onClick={() => handleNavClick('Profile')}
             className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1 flex items-center justify-center overflow-hidden"
           >
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel" alt="Profile" className="w-full h-full object-cover" />
+            <img 
+              src={user?.profileImage || "https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel"} 
+              alt="Profile" 
+              className="w-full h-full object-cover" 
+            />
           </div>
 
           <button 

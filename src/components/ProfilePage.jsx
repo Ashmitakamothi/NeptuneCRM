@@ -90,7 +90,7 @@ const TRANSLATIONS = {
 
 const ProfilePage = ({ onNavigate }) => {
   const { language } = useLanguage();
-  const { token, userId } = useAuth();
+  const { token, userId, user, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState('personal');
   const [dashboardType, setDashboardType] = useState('User');
   const [showPasswords, setShowPasswords] = useState({ current: false, new: false, confirm: false });
@@ -126,6 +126,11 @@ const ProfilePage = ({ onNavigate }) => {
         // API may return the object directly or wrapped in data/result
         const data = json?.data ?? json?.result ?? json;
         setProfileData(data);
+        
+        // Sync global user state if it's missing image
+        if (data?.profileImage && !user?.profileImage) {
+           updateUser({ profileImage: data.profileImage });
+        }
       } catch (err) {
         console.error('Profile fetch error:', err);
         setProfileError(err.message);
@@ -157,12 +162,20 @@ const ProfilePage = ({ onNavigate }) => {
     }
 
     setUploading(true);
-    // Note: This would typically be a real API call. 
-    // For now, we just mock the success state or name change.
-    setTimeout(() => {
+    
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageData = reader.result;
+      setProfileData(prev => ({
+        ...prev,
+        profileImage: imageData
+      }));
+      // Update global context so navbar reflects changes
+      updateUser({ profileImage: imageData });
       alert("Photo uploaded successfully!");
       setUploading(false);
-    }, 1500);
+    };
+    reader.readAsDataURL(file);
   };
 
   // Helper: get value from profileData with fallback
