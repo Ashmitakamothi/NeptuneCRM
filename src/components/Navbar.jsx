@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bell, Settings, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check, LogOut } from 'lucide-react';
+import { Bell, ChevronDown, LayoutDashboard, Users, RefreshCcw, ClipboardList, BarChart3, Trophy, Menu, X, Wallet, Mail, PlaySquare, Download, Headphones, Moon, Sun, Globe, Check, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -315,10 +315,10 @@ const Navbar = ({ onNavigate, activeMenu }) => {
             </span>
           </button>
           
-          <button className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors hidden sm:block">
+          {/* <button className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors hidden sm:block">
             <Settings size={20} strokeWidth={2} />
           </button>
-          
+           */}
           <div 
             onClick={() => handleNavClick('Profile')}
             className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1 flex items-center justify-center overflow-hidden"
