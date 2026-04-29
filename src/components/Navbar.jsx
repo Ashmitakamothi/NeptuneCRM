@@ -307,14 +307,12 @@ const Navbar = ({ onNavigate, activeMenu }) => {
           <button 
             onClick={() => setIsNotificationOpen(true)}
             className="relative p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors group"
-            title={`${notificationCount} Notifications`}
+            title={`${notificationCount} `}
           >
             <Bell size={20} strokeWidth={2} />
-            {notificationCount > 0 && (
-              <span className="absolute top-0.5 right-0 bg-[#FF4D4F] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-[1.5px] border-[var(--nav-bg)]">
-                {notificationCount > 9 ? '9+' : notificationCount}
-              </span>
-            )}
+            <span className="absolute top-0.5 right-0 bg-[#FF4D4F] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-[1.5px] border-[var(--nav-bg)]">
+              5+
+            </span>
           </button>
           
           <button className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors hidden sm:block">
