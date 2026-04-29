@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Home, ChevronRight, Info, ShieldCheck, Lock, EyeOff, Wallet, Percent, Clock, BadgeDollarSign, ArrowLeft, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import WalletDepositTable from './WalletDepositTable';
@@ -79,6 +79,15 @@ const WalletDepositPage = ({ onNavigate }) => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [currency, setCurrency] = useState('INR (India)');
   const [zaroStep, setZaroStep] = useState(1);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const fileInputRef2 = useRef(null);
+  const fileInputRef3 = useRef(null);
+
+  const handleFileChange = (e, setter) => {
+    const file = e.target.files[0];
+    if (file) setter(file);
+  };
 
   React.useEffect(() => {
     setZaroStep(1);
@@ -333,6 +342,29 @@ const WalletDepositPage = ({ onNavigate }) => {
                        />
                     </div>
 
+                    <div className="flex flex-col gap-2 mb-6">
+                      <label className="text-[14px] font-bold text-[var(--text-color)]"><span className="text-[#E53E3E] mr-1">*</span>Upload Document</label>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*,application/pdf"
+                        className="hidden"
+                        onChange={(e) => handleFileChange(e, setUploadedFile)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full max-w-[400px] flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3 px-4 text-[13px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="17 8 12 3 7 8"></polyline>
+                          <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        {uploadedFile ? uploadedFile.name : 'Click to Upload'}
+                      </button>
+                    </div>
+
                     {/* Bank Account Details */}
                     <div className="grid grid-cols-2 gap-y-4 gap-x-12 mt-2">
                        <div className="flex flex-col"><span className="text-[12px] text-[var(--text-color)] font-bold">Bank Name: <span className="text-[#8e9d9b] font-medium ml-1">HDFC</span></span></div>
@@ -343,18 +375,6 @@ const WalletDepositPage = ({ onNavigate }) => {
                     </div>
 
                     <div className="border-t border-[var(--border-color)] pt-6 mt-2">
-                       <div className="flex flex-col gap-2 mb-6">
-                          <label className="text-[14px] font-bold text-[var(--text-color)]"><span className="text-[#E53E3E] mr-1">*</span>Upload Document</label>
-                          <button className="w-full max-w-[200px] flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3 px-4 text-[13px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
-                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                               <polyline points="17 8 12 3 7 8"></polyline>
-                               <line x1="12" y1="3" x2="12" y2="15"></line>
-                             </svg>
-                             Click to Upload
-                          </button>
-                       </div>
-
                        <div className="flex items-center gap-3 mb-6">
                           <input 
                             type="checkbox" 
@@ -482,23 +502,34 @@ const WalletDepositPage = ({ onNavigate }) => {
                                   </div>
 
                                   <div className="flex flex-col gap-2">
-                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Comment</label>
-                                     <input 
-                                       type="text" 
-                                       placeholder="Comment"
-                                       value={comment}
-                                       onChange={(e) => setComment(e.target.value)}
-                                       className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
-                                     />
-                                  </div>
+                                      <label className="text-[14px] font-bold text-[var(--text-color)]">Comment</label>
+                                      <input 
+                                        type="text" 
+                                        placeholder="Comment"
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                        className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] py-3.5 px-4 text-[15px] text-[var(--text-color)] focus:border-[#158B86] outline-none transition-colors"
+                                      />
+                                   </div>
 
-                                  <div className="flex flex-col gap-2">
-                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Upload</label>
-                                     <button className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
-                                        <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
-                                        Click to Upload
-                                     </button>
-                                  </div>
+                                   <div className="flex flex-col gap-2">
+                                      <label className="text-[14px] font-bold text-[var(--text-color)]">Upload</label>
+                                      <input
+                                        ref={fileInputRef2}
+                                        type="file"
+                                        accept="image/*,application/pdf"
+                                        className="hidden"
+                                        onChange={(e) => handleFileChange(e, setUploadedFile)}
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => fileInputRef2.current?.click()}
+                                        className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all"
+                                      >
+                                         <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
+                                         {uploadedFile ? uploadedFile.name : 'Click to Upload'}
+                                      </button>
+                                   </div>
                                </>
                             )}
 
@@ -527,12 +558,23 @@ const WalletDepositPage = ({ onNavigate }) => {
                                   </div>
 
                                   <div className="flex flex-col gap-2">
-                                     <label className="text-[14px] font-bold text-[var(--text-color)]">Upload Document</label>
-                                     <button className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all">
-                                        <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
-                                        Click to Upload
-                                     </button>
-                                  </div>
+                                      <label className="text-[14px] font-bold text-[var(--text-color)]">Upload Document</label>
+                                      <input
+                                        ref={fileInputRef3}
+                                        type="file"
+                                        accept="image/*,application/pdf"
+                                        className="hidden"
+                                        onChange={(e) => handleFileChange(e, setUploadedFile)}
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => fileInputRef3.current?.click()}
+                                        className="w-full flex items-center justify-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] hover:border-[#158B86] rounded-[8px] py-3.5 px-4 text-[14px] text-[var(--text-color)] opacity-70 hover:opacity-100 transition-all"
+                                      >
+                                         <img src={uploadDocumentIcon} alt="Upload" className="w-[18px] h-[18px]" />
+                                         {uploadedFile ? uploadedFile.name : 'Click to Upload'}
+                                      </button>
+                                   </div>
                                </>
                             )}
 

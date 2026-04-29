@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Home, ChevronRight, CheckCircle2, Lock, Plus, Edit2, Trash2, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -105,6 +105,8 @@ const ProfilePage = ({ onNavigate }) => {
   const [profileData, setProfileData] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileError, setProfileError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -142,6 +144,25 @@ const ProfilePage = ({ onNavigate }) => {
 
   const toggleVerif = (field) => {
     setVerifications(prev => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check size (800KB)
+    if (file.size > 800 * 1024) {
+      alert("Photo size should be less than 800KB");
+      return;
+    }
+
+    setUploading(true);
+    // Note: This would typically be a real API call. 
+    // For now, we just mock the success state or name change.
+    setTimeout(() => {
+      alert("Photo uploaded successfully!");
+      setUploading(false);
+    }, 1500);
   };
 
   // Helper: get value from profileData with fallback
@@ -189,7 +210,19 @@ const ProfilePage = ({ onNavigate }) => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <button className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold transition-all w-fit">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhotoUpload}
+                />
+                <button 
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold transition-all w-fit flex items-center gap-2"
+                >
+                  {uploading && <Loader2 size={16} className="animate-spin" />}
                   {t('uploadPhoto')}
                 </button>
                 <span className="text-[#8e9d9b] text-[12px]">{t('photoRequirement')}</span>
