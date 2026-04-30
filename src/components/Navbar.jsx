@@ -230,7 +230,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
 
                       <div className="py-2">
                         {item.dropdownItems.map((dropItem, dropIndex) => {
-                          const isActive = activeMenu === `${item.name}_${dropItem.name}`;
+                          const isActive = activeMenu === `${item.name}_${dropItem.name}` || activeMenu === dropItem.name;
                           return (
                             <div key={dropIndex} className="relative group/nested">
                               <button
@@ -261,7 +261,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
                               {dropItem.hasNestedDropdown && (
                                 <div className="hidden group-hover/nested:block bg-[var(--sub-bg)]">
                                   {dropItem.nestedItems.map((nested, nIndex) => {
-                                    const isNestedActive = activeMenu === `${item.name}_${nested.name}`;
+                                    const isNestedActive = activeMenu === `${item.name}_${nested.name}` || activeMenu === nested.name;
                                     return (
                                       <button
                                         key={nIndex}

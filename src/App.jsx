@@ -36,6 +36,7 @@ import IBKYCPage from './components/IBKYCPage';
 import IBManagerPage from './components/IBManagerPage';
 import IBLiveAccountPage from './components/IBLiveAccountPage';
 import IBTradeAndWinPage from './components/IBTradeAndWinPage';
+import IBWithdrawReportPage from './components/IBWithdrawReportPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -99,7 +100,12 @@ const AppContent = () => {
   });
 
   const setActivePage = (page, data = null) => {
-    setActivePageInternal(page);
+    let resolvedPage = page;
+    if (page === 'More_My Sab-IB') resolvedPage = 'IB Manager';
+    if (page === 'More_My Team') resolvedPage = 'IB_MyTeam';
+    if (page === 'More_Earning') resolvedPage = 'IB_Commission';
+
+    setActivePageInternal(resolvedPage);
     setPageData(data);
   };
 
@@ -140,11 +146,15 @@ const AppContent = () => {
       'IB_TeamDeposit': 'ib/team_deposit',
       'IB_TeamWithdraw': 'ib/team_withdraw',
       'IB_MyTeam': 'ib/my_trader_team',
+      'More_My Team': 'ib/my_trader_team',
       'IB_Tree': 'ib/tree',
       'IB_Commission': 'ib/commission',
+      'More_Earning': 'ib/commission',
+      'More_Withdraw': 'ib/withdraw_report',
       'KYC': 'ib/kyc',
       'IB Manager': 'ib/manager',
       'More_IB Manager': 'ib/manager',
+      'More_My Sab-IB': 'ib/manager',
       'Live Account': 'ib/live_account',
       'More_Live Account': 'ib/live_account',
       'IBTradeAndWin': 'ib/trade_and_win',
@@ -219,9 +229,10 @@ const AppContent = () => {
           'ib/wallet': 'IB Wallet',
           'ib/team_deposit': 'IB_TeamDeposit',
           'ib/team_withdraw': 'IB_TeamWithdraw',
-          'ib/my_trader_team': 'IB_MyTeam',
+          'ib/my_trader_team': 'More_My Team',
           'ib/tree': 'IB_Tree',
           'ib/commission': 'IB_Commission',
+          'ib/withdraw_report': 'More_Withdraw',
           'ib/kyc': 'KYC',
           'ib/manager': 'IB Manager',
           'ib/live_account': 'Live Account',
@@ -290,12 +301,16 @@ const AppContent = () => {
       case 'IB Wallet': return <IBWalletPage onNavigate={setActivePage} />;
       case 'IB_TeamDeposit': return <IBTeamDepositPage onNavigate={setActivePage} />;
       case 'IB_TeamWithdraw': return <IBTeamWithdrawPage onNavigate={setActivePage} />;
-      case 'IB_MyTeam': return <IBMyTeamPage onNavigate={setActivePage} />;
+      case 'IB_MyTeam': 
+      case 'More_My Team': return <IBMyTeamPage onNavigate={setActivePage} />;
       case 'IB_Tree': return <IBTreePage onNavigate={setActivePage} />;
-      case 'IB_Commission': return <IBCommissionPage onNavigate={setActivePage} />;
+      case 'IB_Commission': 
+      case 'More_Earning': return <IBCommissionPage onNavigate={setActivePage} />;
+      case 'More_Withdraw': return <IBWithdrawReportPage onNavigate={setActivePage} />;
       case 'KYC': return <IBKYCPage onNavigate={setActivePage} />;
       case 'IB Manager':
-      case 'More_IB Manager': return <IBManagerPage onNavigate={setActivePage} />;
+      case 'More_IB Manager': 
+      case 'More_My Sab-IB': return <IBManagerPage onNavigate={setActivePage} />;
       case 'Live Account':
       case 'More_Live Account': return <IBLiveAccountPage onNavigate={setActivePage} />;
       case 'IBMessenger':
@@ -311,9 +326,9 @@ const AppContent = () => {
     const isIB = [
       'IB_Dashboard', 'More_IB_Dashboard', 'IB Wallet', 
       'IB_TeamDeposit', 'Deposit', 'IB_TeamWithdraw', 'Withdraw',
-      'IB_MyTeam', 'My Team', 'IB_Tree', 'IB Tree', 
-      'IB_Commission', 'Commission', 'KYC', 
-      'IB Manager', 'More_IB Manager', 
+      'IB_MyTeam', 'More_My Team', 'My Team', 'IB_Tree', 'IB Tree', 
+      'IB_Commission', 'Commission', 'More_Earning', 'More_Withdraw', 'KYC', 
+      'IB Manager', 'More_IB Manager', 'More_My Sab-IB', 
       'Live Account', 'More_Live Account', 
       'IBTradeAndWin', 'Trade & Win', 'More_IBTradeAndWin',
       'Messenger', 'IBMessenger', 'More_IBMessenger'
