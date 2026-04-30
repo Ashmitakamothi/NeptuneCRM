@@ -248,6 +248,12 @@ body {
   background: transparent !important;
 }
 
+/* Tooltip text color override requested by user */
+.ant-tooltip-inner {
+  color: #ff5722 !important;
+  font-weight: 500;
+}
+
 .ant-table-thead > tr > th {
   background: #1a1a1a !important;
   color: white !important;
