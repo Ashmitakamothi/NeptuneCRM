@@ -241,10 +241,23 @@ body {
 .ib-table .ant-table-thead > tr > th {
   background: var(--sub-bg) !important;
   color: var(--text-color) !important;
-  opacity: 0.6;
-  font-size: 11px;
-  text-transform: uppercase;
+  opacity: 0.9;
+  font-size: 13px;
+  text-transform: none;
   border-bottom: 1px solid var(--border-color) !important;
+}
+
+.ib-table .ant-table-column-sorter {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.ib-table .ant-table-column-sorter-up.active,
+.ib-table .ant-table-column-sorter-down.active {
+  color: #12716E !important;
+}
+
+.ib-table .ant-table-column-sort {
+  background: transparent !important;
 }
 
 .ib-table .ant-table-tbody > tr > td {
@@ -260,7 +273,7 @@ body {
 /* IB Wallet Specific Styles */
 .ib-input {
   background: #111818 !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 8px !important;
   color: white !important;
 }
@@ -273,6 +286,14 @@ body {
 .ib-input .ant-input {
   background: transparent !important;
   color: white !important;
+}
+
+.ib-input::placeholder,
+.ib-input .ant-input::placeholder,
+.ib-input input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .ib-checkbox .ant-checkbox-inner {

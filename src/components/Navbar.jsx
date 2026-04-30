@@ -74,14 +74,14 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
         'Internal Transfer': 'Internal Transfer', 'My Transaction': 'My Transaction', Reports: 'Reports', Transfer: 'Transfer', Logs: 'Logs',
         More: 'More', Leaderboard: 'Leaderboard', Tools: 'Tools', 'Web Trader': 'Web Trader', 'Trade & Win': 'Trade & Win',
         'IB Request': 'IB Request', Messenger: 'Messenger', Tutorial: 'Tutorial', 'MT5 Download': 'MT5 Download', Support: 'Support', FAQs: 'FAQs',
-        'IB Wallet': 'IB Wallet', 'My Team': 'My Team', 'IB Tree': 'IB Tree', Commission: 'Commission', KYC: 'KYC', 'IB Manager': 'IB Manager', 'Live Account': 'Live Account', IB_Dashboard: 'Dashboard'
+        'IB Wallet': 'IB Wallet', 'My Team': 'My Team', 'IB Tree': 'IB Tree', Commission: 'Commission', KYC: 'KYC', 'IB Manager': 'IB Manager', 'Live Account': 'Live Account', IB_Dashboard: 'Dashboard', IB_TeamDeposit: 'Deposit'
       },
       HI: {
         Dashboard: 'डैशबोर्ड', Accounts: 'अकाउंट्स', Wallet: 'वॉलेट', Deposit: 'जमा करें', Withdraw: 'निकासी',
         'Internal Transfer': 'आंतरिक स्थानांतरण', 'My Transaction': 'मेरा लेनदेन', Reports: 'रिपोर्ट', Transfer: 'ट्रांसफर', Logs: 'लॉग्स',
         More: 'अधिक', Leaderboard: 'लीडरबोर्ड', Tools: 'उपकरण', 'Web Trader': 'वेब ट्रेडर', 'Trade & Win': 'ट्रेड एंड विन',
         'IB Request': 'IB अनुरोध', Messenger: 'मैसेंजर', Tutorial: 'ट्यूटोरियल', 'MT5 Download': 'MT5 डाउनलोड', Support: 'समर्थन', FAQs: 'अक्सर पूछे जाने वाले प्रश्न',
-        'IB Wallet': 'IB वॉलेट', 'My Team': 'मेरी टीम', 'IB Tree': 'IB ट्री', Commission: 'कमीशन', KYC: 'KYC', 'IB Manager': 'IB प्रबंधक', 'Live Account': 'लाइव अकाउंट', IB_Dashboard: 'डैशबोर्ड'
+        'IB Wallet': 'IB वॉलेट', 'My Team': 'मेरी टीम', 'IB Tree': 'IB ट्री', Commission: 'कमीशन', KYC: 'KYC', 'IB Manager': 'IB प्रबंधक', 'Live Account': 'लाइव अकाउंट', IB_Dashboard: 'डैशबोर्ड', IB_TeamDeposit: 'जमा'
       }
     };
     return TRANSLATIONS[language]?.[key] || key;
@@ -142,7 +142,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
   const ibMenuItems = [
     { name: 'IB_Dashboard', label: 'Dashboard', icon: <IBIcons.DashboardIcon /> },
     { name: 'IB Wallet', icon: <IBIcons.IBWalletIcon /> },
-    { name: 'Deposit', icon: <IBIcons.DepositIcon /> },
+    { name: 'IB_TeamDeposit', icon: <IBIcons.DepositIcon /> },
     { name: 'Withdraw', icon: <IBIcons.WithdrawIcon /> },
     { name: 'My Team', icon: <IBIcons.MyTeamIcon /> },
     { name: 'IB Tree', icon: <IBIcons.IBTreeIcon /> },

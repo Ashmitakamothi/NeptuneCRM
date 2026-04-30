@@ -25,6 +25,7 @@ import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import IBDashboard from './components/IBDashboard';
 import IBWalletPage from './components/IBWalletPage';
+import IBTeamDepositPage from './components/IBTeamDepositPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -63,7 +64,8 @@ const AppContent = () => {
       'transfer_Report': 'Reports_Transfer',
       'logs': 'Reports_Logs',
       'ib/dashboard': 'IB_Dashboard',
-      'ib/wallet': 'IB Wallet'
+      'ib/wallet': 'IB Wallet',
+      'ib/team_deposit': 'IB_TeamDeposit'
     };
 
     if (urlMap[path]) return urlMap[path];
@@ -124,7 +126,8 @@ const AppContent = () => {
       'Reports_Transfer': 'transfer_Report',
       'Reports_Logs': 'logs',
       'IB_Dashboard': 'ib/dashboard',
-      'IB Wallet': 'ib/wallet'
+      'IB Wallet': 'ib/wallet',
+      'IB_TeamDeposit': 'ib/team_deposit'
     };
 
     let path = pageToPath[activePage] || '';
@@ -250,11 +253,12 @@ const AppContent = () => {
       case 'IB_Dashboard':
       case 'More_IB_Dashboard': return <IBDashboard onNavigate={setActivePage} />;
       case 'IB Wallet': return <IBWalletPage onNavigate={setActivePage} />;
+      case 'IB_TeamDeposit': return <IBTeamDepositPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
-    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet';
+    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit';
 
     return (
       <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
