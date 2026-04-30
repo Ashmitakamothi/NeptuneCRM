@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import WalletWithdrawTable from './WalletWithdrawTable';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
 import { endpoints } from '../api/endpoints';
+import DashboardHeader from './DashboardHeader';
 
 // Reuse images or use relevant ones if available
 import bep20Img from '../assets/BEP_20.jpg';
@@ -66,7 +67,6 @@ const WalletWithdrawPage = ({ onNavigate }) => {
     { id: 'cash',  name: 'Cash Withdrawal', subtext: t('secureCash'), img: bankImg, processing: '24 H', fee: '0%', minMax: '$10 - $50000', isCash: true },
   ];
 
-  const [dashboardType, setDashboardType] = useState('User');
   const [filterStatus, setFilterStatus] = useState('Approved');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -140,37 +140,12 @@ const WalletWithdrawPage = ({ onNavigate }) => {
 
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
-      {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
-        <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('withdraw')}</h1>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
-            <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[38px]">
-            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
-            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
-          </div>
-          {/*
-          <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
-          <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
-            <Globe size={16} /> <span>US</span>
-          </div>
-          */}
-        </div>
-      </div>
-
-
-      {/* ── Breadcrumb ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium">
-        <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
-        <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-[var(--text-color)]">{t('breadcrumb')}</span>
-      </div>
+      <DashboardHeader 
+        title={t('withdraw')}
+        breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
+        onNavigate={onNavigate}
+        activeTab="User Dashboard"
+      />
 
 
       {/* ── Summary Cards ─────────────────────────────────────── */}

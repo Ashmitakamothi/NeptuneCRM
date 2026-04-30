@@ -4,6 +4,7 @@ import { DatePicker, ConfigProvider, theme as antdTheme } from 'antd';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import MyTransactionsTable from './MyTransactionsTable';
+import DashboardHeader from './DashboardHeader';
 
 const { RangePicker } = DatePicker;
 
@@ -35,7 +36,6 @@ const TRANSLATIONS = {
 const MyTransactionsPage = ({ onNavigate, initialFilter = 'All', onFilterChange }) => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
-  const [dashboardType, setDashboardType] = useState('User');
   const [operationFilter, setOperationFilter] = useState(initialFilter);
   const [dateRange, setDateRange] = useState(null);
   const [isOperationDropdownOpen, setIsOperationDropdownOpen] = useState(false);
@@ -59,36 +59,12 @@ const MyTransactionsPage = ({ onNavigate, initialFilter = 'All', onFilterChange 
 
   return (
     <div className="flex flex-col w-full h-full animate-fade-in pb-20">
-      {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
-        <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none">{t('transactions')}</h1>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" style={{ animationDuration: '1s' }}></div>
-            <span className="bg-[#158B86] text-white text-sm sm:text-lg font-medium px-2 rounded-sm cursor-pointer">{t('news')}</span>
-          </div>
-        </div>
-        
-        <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-           <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
-              <button 
-                onClick={() => setDashboardType('User')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'User' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
-              >{t('userDashboard')}</button>
-              <button 
-                onClick={() => setDashboardType('IB')}
-                className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${dashboardType === 'IB' ? 'font-semibold bg-[#158B86] text-white shadow-sm' : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
-              >{t('ibDashboard')}</button>
-           </div>
-        </div>
-      </div>
-
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-[15px] mb-6 font-medium">
-        <Home size={18} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
-        <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
-        <span className="text-[var(--text-color)] cursor-default tracking-wide">{t('breadcrumb')}</span>
-      </div>
+      <DashboardHeader 
+        title={t('transactions')}
+        breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
+        onNavigate={onNavigate}
+        activeTab="User Dashboard"
+      />
 
       {/* Top Filters & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
