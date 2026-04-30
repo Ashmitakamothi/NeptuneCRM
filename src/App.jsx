@@ -31,6 +31,7 @@ import IBTeamDepositPage from './components/IBTeamDepositPage';
 import IBTeamWithdrawPage from './components/IBTeamWithdrawPage';
 import IBMyTeamPage from './components/IBMyTeamPage';
 import IBTreePage from './components/IBTreePage';
+import IBCommissionPage from './components/IBCommissionPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -135,7 +136,8 @@ const AppContent = () => {
       'IB_TeamDeposit': 'ib/team_deposit',
       'IB_TeamWithdraw': 'ib/team_withdraw',
       'IB_MyTeam': 'ib/my_trader_team',
-      'IB_Tree': 'ib/tree'
+      'IB_Tree': 'ib/tree',
+      'IB_Commission': 'ib/commission'
     };
 
     let path = pageToPath[activePage] || '';
@@ -265,12 +267,13 @@ const AppContent = () => {
       case 'IB_TeamWithdraw': return <IBTeamWithdrawPage onNavigate={setActivePage} />;
       case 'IB_MyTeam': return <IBMyTeamPage onNavigate={setActivePage} />;
       case 'IB_Tree': return <IBTreePage onNavigate={setActivePage} />;
+      case 'IB_Commission': return <IBCommissionPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
     const { isDark } = useTheme();
-    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree';
+    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree' || activePage === 'IB_Commission';
 
     return (
       <ConfigProvider
