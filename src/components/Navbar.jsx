@@ -155,8 +155,10 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
       dropdownItems: [
         { name: 'IB Manager', label: 'IB Manager', icon: <IBIcons.IBManagerIcon /> },
         { name: 'Live Account', label: 'Live Account', icon: <IBIcons.LiveAccountIcon /> },
-        { name: 'TradeAndWin', label: 'Trade & Win', icon: <IBIcons.TradeAndWinIcon /> },
-        { 
+        { name: 'IBTradeAndWin', label: 'Trade & Win', icon: <IBIcons.TradeAndWinIcon /> },
+       
+        { name: 'IBMessenger', label: 'Messenger', icon: <IBIcons.MessengerIcon /> },
+         { 
           name: 'Reports', 
           label: 'Reports',
           icon: <IBIcons.ReportsIcon />, 
@@ -168,7 +170,6 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
             { name: 'My Sab-IB', label: 'My Sab-IB' },
           ]
         },
-        { name: 'Messenger', label: 'Messenger', icon: <IBIcons.MessengerIcon /> },
       ]
     },
   ];

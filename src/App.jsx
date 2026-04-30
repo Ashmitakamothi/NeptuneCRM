@@ -35,6 +35,7 @@ import IBCommissionPage from './components/IBCommissionPage';
 import IBKYCPage from './components/IBKYCPage';
 import IBManagerPage from './components/IBManagerPage';
 import IBLiveAccountPage from './components/IBLiveAccountPage';
+import IBTradeAndWinPage from './components/IBTradeAndWinPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -143,7 +144,13 @@ const AppContent = () => {
       'IB_Commission': 'ib/commission',
       'KYC': 'ib/kyc',
       'IB Manager': 'ib/manager',
-      'Live Account': 'ib/live_account'
+      'More_IB Manager': 'ib/manager',
+      'Live Account': 'ib/live_account',
+      'More_Live Account': 'ib/live_account',
+      'IBTradeAndWin': 'ib/trade_and_win',
+      'More_IBTradeAndWin': 'ib/trade_and_win',
+      'IBMessenger': 'ib/inbox',
+      'More_IBMessenger': 'ib/inbox'
     };
 
     let path = pageToPath[activePage] || '';
@@ -217,7 +224,9 @@ const AppContent = () => {
           'ib/commission': 'IB_Commission',
           'ib/kyc': 'KYC',
           'ib/manager': 'IB Manager',
-          'ib/live_account': 'Live Account'
+          'ib/live_account': 'Live Account',
+          'ib/trade_and_win': 'More_IBTradeAndWin',
+          'ib/inbox': 'More_IBMessenger'
         };
 
         if (path.startsWith('view_ticket/')) {
@@ -289,12 +298,26 @@ const AppContent = () => {
       case 'More_IB Manager': return <IBManagerPage onNavigate={setActivePage} />;
       case 'Live Account':
       case 'More_Live Account': return <IBLiveAccountPage onNavigate={setActivePage} />;
+      case 'IBMessenger':
+      case 'More_IBMessenger': return <MessengerPage onNavigate={setActivePage} isIBMode={true} />;
+      case 'IBTradeAndWin':
+      case 'Trade & Win':
+      case 'More_IBTradeAndWin': return <IBTradeAndWinPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
     const { isDark } = useTheme();
-    const isIB = activePage === 'IB_Dashboard' || activePage === 'More_IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree' || activePage === 'IB_Commission' || activePage === 'KYC' || activePage === 'IB Manager' || activePage === 'More_IB Manager' || activePage === 'Live Account' || activePage === 'More_Live Account';
+    const isIB = [
+      'IB_Dashboard', 'More_IB_Dashboard', 'IB Wallet', 
+      'IB_TeamDeposit', 'Deposit', 'IB_TeamWithdraw', 'Withdraw',
+      'IB_MyTeam', 'My Team', 'IB_Tree', 'IB Tree', 
+      'IB_Commission', 'Commission', 'KYC', 
+      'IB Manager', 'More_IB Manager', 
+      'Live Account', 'More_Live Account', 
+      'IBTradeAndWin', 'Trade & Win', 'More_IBTradeAndWin',
+      'Messenger', 'IBMessenger', 'More_IBMessenger'
+    ].includes(activePage);
 
     return (
       <ConfigProvider

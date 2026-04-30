@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, ChevronRight, Moon, Globe, Search, MessageSquare, X, Paperclip, Send, RefreshCcw } from 'lucide-react';
+import { Home, ChevronRight, Moon, Globe, Search, MessageSquare, X, Paperclip, Send, RefreshCcw, Copy } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import logom from '../assets/logom.png';
@@ -10,13 +10,15 @@ const TRANSLATIONS = {
     news: 'News', userDashboard: 'User Dashboard', ibDashboard: 'IB Dashboard',
     inbox: 'INBOX', inboxBread: 'Inbox', users: 'Users', active: 'Active', archived: 'Archived',
     startChat: 'Start Chat', search: 'Search', noChatsPrefix: 'No', noChatsSuffix: 'chats',
-    endChat: 'End Chat', typeMessage: 'Type a message...', startNewChat: 'Start new chat with Uplink'
+    endChat: 'End Chat', typeMessage: 'Type a message...', startNewChat: 'Start new chat with Uplink',
+    ibInbox: 'IB INBOX', ibInboxBread: 'IB Inbox', referralLink: 'My Referral Link'
   },
   HI: { 
     news: 'समाचार', userDashboard: 'यूजर डैशबोर्ड', ibDashboard: 'आईबी डैशबोर्ड',
     inbox: 'इनबॉक्स', inboxBread: 'इनबॉक्स', users: 'उपयोगकर्ता', active: 'सक्रिय', archived: 'संग्रहीत',
     startChat: 'चैट शुरू करें', search: 'खोज', noChatsPrefix: 'कोई', noChatsSuffix: 'चैट नहीं',
-    endChat: 'चैट समाप्त करें', typeMessage: 'संदेश लिखें...', startNewChat: 'अपलिंक के साथ नई चैट शुरू करें'
+    endChat: 'चैट समाप्त करें', typeMessage: 'संदेश लिखें...', startNewChat: 'अपलिंक के साथ नई चैट शुरू करें',
+    ibInbox: 'IB INBOX', ibInboxBread: 'IB Inbox', referralLink: 'मेरा रेफरल लिंक'
   },
 };
 
@@ -24,14 +26,8 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
-  const uplinks = [
-    { id: 1, name: 'Test SubAdmin1', role: 'Uplink', email: 'testsubadmin145+1@yopmail.com', initial: 'TS', color: 'bg-teal-500/20 text-teal-500' },
-    { id: 2, name: 'Moin Pathan', role: 'Uplink', email: 'moinpathan@yopmail.com', initial: 'MP', color: 'bg-teal-500/20 text-teal-500' },
-    { id: 3, name: 'Isha Patel', role: 'Uplink', email: 'isha198@yopmail.com', initial: 'IP', color: 'bg-teal-500/20 text-teal-500' },
-    { id: 4, name: 'Aryan Singh', role: 'Uplink', email: 'aryansingh1703@yopmail.com', initial: 'AS', color: 'bg-teal-500/20 text-teal-500' },
-    { id: 5, name: 'man Donda', role: 'Uplink', email: 'jason.mann00@yopmail.com', initial: 'MD', color: 'bg-teal-500/20 text-teal-500' },
-    { id: 6, name: 'Test SubAdmin', role: 'Uplink', email: 'testsubadmin145@yopmail.com', initial: 'TS', color: 'bg-teal-500/20 text-teal-500' },
-  ];
+  const uplinks = [];
+
 
   if (!isOpen) return null;
 
@@ -97,25 +93,20 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
   );
 };
 
-const MessengerPage = ({ onNavigate }) => {
+const MessengerPage = ({ onNavigate, isIBMode = false }) => {
   const { isDark } = useTheme();
   const { language } = useLanguage();
-  const [dashboardType, setDashboardType] = useState('User');
+  const [dashboardType, setDashboardType] = useState(isIBMode ? 'IB' : 'User');
   const [activeTab, setActiveTab] = useState('Active');
   const [isStartChatOpen, setIsStartChatOpen] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState('');
 
-  const t = (key) => TRANSLATIONS[language]?.[key] || key;
+  const currentLang = language?.toUpperCase() || 'EN';
+  const t = (key) => (TRANSLATIONS[currentLang] || TRANSLATIONS.EN)?.[key] || key;
 
-  const users = [
+  const users = [];
 
-    { id: 1, name: 'Mike JH', role: 'Downlink', lastMsg: 'hi', initial: 'MJ', color: 'bg-[#158B86]/20 text-[#158B86]', status: 'Active' },
-    { id: 2, name: 'Brayden Conner IB', role: 'Downlink', lastMsg: 'hello', initial: 'BI', color: 'bg-green-500/20 text-green-500', status: 'Active' },
-    { id: 3, name: 'Moin Pathan', role: 'Downlink', lastMsg: 'Hello', initial: 'MP', color: 'bg-teal-500/20 text-teal-500', status: 'Active' },
-    { id: 4, name: 'Tom David', role: 'Uplink', lastMsg: 'Hi Sam', initial: 'TD', color: 'bg-green-600/20 text-green-600', status: 'Active' },
-    { id: 5, name: 'Old Client', role: 'Downlink', lastMsg: 'Old chat', initial: 'OC', color: 'bg-gray-500/20 text-gray-500', status: 'Archived' },
-  ];
 
   const filteredUsers = users.filter(user => user.status === activeTab);
 
@@ -129,7 +120,7 @@ const MessengerPage = ({ onNavigate }) => {
       {/* ── Top Header ─────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
         <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('inbox')}</h1>
+          <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{isIBMode ? t('ibInbox') : t('inbox')}</h1>
           <div className="flex items-center gap-1.5">
             <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56] animate-pulse" />
             <span className="bg-[#158B86] text-white text-sm font-medium px-2 rounded-sm">{t('news')}</span>
@@ -137,9 +128,17 @@ const MessengerPage = ({ onNavigate }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+          {isIBMode && (
+            <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl h-[38px]">
+               <p className="text-[14px] font-medium text-white">{t('referralLink') || 'My Referral Link'}: <span className="text-white">IFAHGGAP</span></p>
+               <button className="text-white hover:opacity-80 transition-all">
+                 <Copy size={16} />
+               </button>
+            </div>
+          )}
           <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[38px]">
-            <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
-            <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
+            <button onClick={() => { setDashboardType('User'); onNavigate('Dashboard'); }} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
+            <button onClick={() => { setDashboardType('IB'); onNavigate('IB_Dashboard'); }}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
           {/*
           <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
@@ -154,7 +153,7 @@ const MessengerPage = ({ onNavigate }) => {
       <div className="flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
         <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-[var(--text-color)]">{t('inboxBread')}</span>
+        <span className="text-[var(--text-color)]">{isIBMode ? (t('ibInboxBread') || 'IB Inbox') : t('inboxBread')}</span>
       </div>
 
       {/* ── Main Layout ────────────────────────────────────────── */}
