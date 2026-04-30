@@ -2,7 +2,7 @@ import React from 'react';
 import { Breadcrumb, Segmented, Button } from 'antd';
 import { Home, ChevronRight, Copy, Sun, Globe } from 'lucide-react';
 
-const DashboardHeader = ({ title, breadcrumbs, activeTab = 'User Dashboard', onNavigate }) => {
+const DashboardHeader = ({ title, breadcrumbs, activeTab = 'User Dashboard', onNavigate, extra }) => {
   return (
     <div className="mb-6">
       {/* Main Header Row */}
@@ -16,6 +16,7 @@ const DashboardHeader = ({ title, breadcrumbs, activeTab = 'User Dashboard', onN
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
+          {extra}
           {/* Dashboard Toggle */}
           <Segmented
             options={['User Dashboard', 'IB Dashboard']}

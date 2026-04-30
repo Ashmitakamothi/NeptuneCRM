@@ -216,22 +216,31 @@ body {
 }
 
 .ib-datepicker {
-  background: #111818 !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: var(--sub-bg) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 10px !important;
 }
 
 .ib-datepicker .ant-picker-input > input {
-  color: white !important;
+  color: var(--text-color) !important;
   font-weight: 500 !important;
 }
 
 .ib-datepicker .ant-picker-input > input::placeholder {
-  color: rgba(255, 255, 255, 0.3) !important;
+  color: var(--text-color) !important;
+  opacity: 0.3 !important;
 }
 
-.ib-datepicker .ant-picker-suffix {
-  color: rgba(255, 255, 255, 0.3) !important;
+.ib-datepicker .ant-picker-suffix,
+.ib-datepicker .ant-picker-clear {
+  color: var(--text-color) !important;
+  opacity: 0.4 !important;
+}
+
+.ib-datepicker:hover,
+.ib-datepicker.ant-picker-focused {
+  border-color: #158B86 !important;
+  box-shadow: 0 0 0 2px rgba(21, 139, 134, 0.1) !important;
 }
 
 .ib-table .ant-table {
@@ -286,6 +295,23 @@ body {
 .ib-input .ant-input {
   background: transparent !important;
   color: white !important;
+}
+
+.ib-input.ant-input-affix-wrapper {
+  background: #111818 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 8px !important;
+}
+
+.ib-input.ant-input-affix-wrapper:hover,
+.ib-input.ant-input-affix-wrapper-focused {
+  border-color: #12716E !important;
+  box-shadow: 0 0 0 2px rgba(18, 113, 110, 0.1) !important;
+}
+
+.ib-input .ant-input-prefix {
+  color: rgba(255, 255, 255, 0.3) !important;
+  margin-right: 8px !important;
 }
 
 .ib-input::placeholder,

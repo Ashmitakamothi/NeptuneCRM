@@ -12,6 +12,7 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 import { useLanguage } from '../contexts/LanguageContext';
+import DashboardHeader from './DashboardHeader';
 import userWalletImg from '../assets/userWallet.png';
 import * as IBIcons from './IBIcons';
 
@@ -135,51 +136,24 @@ const IBDashboard = ({ onNavigate }) => {
     { name: 'Apr 29', lot: 0, commission: 0 },
   ];
 
+  const extraHeader = (
+    <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
+       <p className="text-[14px] font-medium text-white">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
+       <button className="text-white hover:opacity-80 transition-all">
+         <Copy size={16} />
+       </button>
+    </div>
+  );
+
   return (
     <div className="animate-fade-in space-y-4 pb-10">
-      {/* Sub-Header Section */}
-      <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-b border-[var(--border-color)]">
-        <div className="flex items-center gap-3">
-          <h1 className="text-[22px] font-bold uppercase tracking-tight text-white">{t.ibDashboard}</h1>
-          <div className="flex items-center gap-2">
-             <div className="w-2.5 h-2.5 bg-[#AF6C56] rounded-full dotanim"></div>
-             <div className="bg-[#12716E] text-white text-[13px] font-medium px-3 py-1 rounded-[4px] cursor-pointer">
-                {t.news}
-             </div>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-4">
-          {/* Referral Link */}
-          <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
-             <p className="text-[14px] font-medium text-white/70">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
-             <button className="text-white/50 hover:text-white transition-colors">
-               <Copy size={14} />
-             </button>
-          </div>
-
-          {/* Dashboard Toggle */}
-          <Segmented
-            options={[t.userDashboard, t.ibDashboard]}
-            value={activeTab === 'IB Dashboard' ? t.ibDashboard : t.userDashboard}
-            onChange={(val) => {
-              if (val === t.userDashboard) onNavigate('Dashboard');
-            }}
-            className="ib-segmented"
-          />
-        </div>
-      </div>
-
-      {/* Breadcrumb Section */}
-      <div className="flex items-center gap-2 py-2">
-         <Breadcrumb
-           separator={<ChevronRight size={14} className="text-[#8e9d9b] mt-0.5" />}
-           items={[
-             { title: <Home size={18} className="text-[#00727d] cursor-pointer opacity-65" onClick={() => onNavigate('Dashboard')} /> },
-             { title: <span className="text-[var(--text-color)] font-medium">{t.ibDashboard}</span> },
-           ]}
-         />
-      </div>
+      <DashboardHeader 
+        title={t.ibDashboard}
+        breadcrumbs={[{ title: t.ibDashboard, active: true }]}
+        onNavigate={onNavigate}
+        activeTab="IB Dashboard"
+        extra={extraHeader}
+      />
 
       {/* Welcome & Wallet Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-4">

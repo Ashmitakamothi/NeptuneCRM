@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
+import { ConfigProvider, theme as antdTheme } from 'antd';
+import { useTheme } from './contexts/ThemeContext';
 import Dashboard from './components/Dashboard';
 import AccountsPage from './components/AccountsPage';
 import InternalTransferPage from './components/InternalTransferPage';
@@ -26,6 +28,9 @@ import SignupPage from './components/SignupPage';
 import IBDashboard from './components/IBDashboard';
 import IBWalletPage from './components/IBWalletPage';
 import IBTeamDepositPage from './components/IBTeamDepositPage';
+import IBTeamWithdrawPage from './components/IBTeamWithdrawPage';
+import IBMyTeamPage from './components/IBMyTeamPage';
+import IBTreePage from './components/IBTreePage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -127,7 +132,10 @@ const AppContent = () => {
       'Reports_Logs': 'logs',
       'IB_Dashboard': 'ib/dashboard',
       'IB Wallet': 'ib/wallet',
-      'IB_TeamDeposit': 'ib/team_deposit'
+      'IB_TeamDeposit': 'ib/team_deposit',
+      'IB_TeamWithdraw': 'ib/team_withdraw',
+      'IB_MyTeam': 'ib/my_trader_team',
+      'IB_Tree': 'ib/tree'
     };
 
     let path = pageToPath[activePage] || '';
@@ -254,20 +262,41 @@ const AppContent = () => {
       case 'More_IB_Dashboard': return <IBDashboard onNavigate={setActivePage} />;
       case 'IB Wallet': return <IBWalletPage onNavigate={setActivePage} />;
       case 'IB_TeamDeposit': return <IBTeamDepositPage onNavigate={setActivePage} />;
+      case 'IB_TeamWithdraw': return <IBTeamWithdrawPage onNavigate={setActivePage} />;
+      case 'IB_MyTeam': return <IBMyTeamPage onNavigate={setActivePage} />;
+      case 'IB_Tree': return <IBTreePage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
-    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit';
+    const { isDark } = useTheme();
+    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree';
 
     return (
-      <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
+      <ConfigProvider
+        theme={{
+          algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+          token: isDark ? {
+            colorBgBase: '#101013',
+            colorBgContainer: '#1a1a1a',
+            colorBgElevated: '#1a1a1a',
+            colorBorder: 'rgba(255, 255, 255, 0.1)',
+            colorPrimary: '#158B86',
+            colorText: '#ffffff',
+            colorTextHeading: '#ffffff',
+          } : {
+            colorPrimary: '#158B86',
+          }
+        }}
+      >
+        <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
         {isAuthenticated && <Navbar onNavigate={setActivePage} activeMenu={activePage} isIB={isIB} />}
         
         <main className={isAuthenticated ? "max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8" : ""}>
           {renderContent()}
         </main>
       </div>
+    </ConfigProvider>
     );
 };
 
