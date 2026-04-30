@@ -32,6 +32,9 @@ import IBTeamWithdrawPage from './components/IBTeamWithdrawPage';
 import IBMyTeamPage from './components/IBMyTeamPage';
 import IBTreePage from './components/IBTreePage';
 import IBCommissionPage from './components/IBCommissionPage';
+import IBKYCPage from './components/IBKYCPage';
+import IBManagerPage from './components/IBManagerPage';
+import IBLiveAccountPage from './components/IBLiveAccountPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
 
@@ -137,7 +140,10 @@ const AppContent = () => {
       'IB_TeamWithdraw': 'ib/team_withdraw',
       'IB_MyTeam': 'ib/my_trader_team',
       'IB_Tree': 'ib/tree',
-      'IB_Commission': 'ib/commission'
+      'IB_Commission': 'ib/commission',
+      'KYC': 'ib/kyc',
+      'IB Manager': 'ib/manager',
+      'Live Account': 'ib/live_account'
     };
 
     let path = pageToPath[activePage] || '';
@@ -201,7 +207,17 @@ const AppContent = () => {
           'withdrawal_Report': 'Reports_Withdraw',
           'transfer_Report': 'Reports_Transfer',
           'logs': 'Reports_Logs',
-          'my_transaction': 'My Transaction'
+          'my_transaction': 'My Transaction',
+          'ib/dashboard': 'IB_Dashboard',
+          'ib/wallet': 'IB Wallet',
+          'ib/team_deposit': 'IB_TeamDeposit',
+          'ib/team_withdraw': 'IB_TeamWithdraw',
+          'ib/my_trader_team': 'IB_MyTeam',
+          'ib/tree': 'IB_Tree',
+          'ib/commission': 'IB_Commission',
+          'ib/kyc': 'KYC',
+          'ib/manager': 'IB Manager',
+          'ib/live_account': 'Live Account'
         };
 
         if (path.startsWith('view_ticket/')) {
@@ -268,12 +284,17 @@ const AppContent = () => {
       case 'IB_MyTeam': return <IBMyTeamPage onNavigate={setActivePage} />;
       case 'IB_Tree': return <IBTreePage onNavigate={setActivePage} />;
       case 'IB_Commission': return <IBCommissionPage onNavigate={setActivePage} />;
+      case 'KYC': return <IBKYCPage onNavigate={setActivePage} />;
+      case 'IB Manager':
+      case 'More_IB Manager': return <IBManagerPage onNavigate={setActivePage} />;
+      case 'Live Account':
+      case 'More_Live Account': return <IBLiveAccountPage onNavigate={setActivePage} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
 
     const { isDark } = useTheme();
-    const isIB = activePage === 'IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree' || activePage === 'IB_Commission';
+    const isIB = activePage === 'IB_Dashboard' || activePage === 'More_IB_Dashboard' || activePage === 'IB Wallet' || activePage === 'IB_TeamDeposit' || activePage === 'IB_TeamWithdraw' || activePage === 'IB_MyTeam' || activePage === 'IB_Tree' || activePage === 'IB_Commission' || activePage === 'KYC' || activePage === 'IB Manager' || activePage === 'More_IB Manager' || activePage === 'Live Account' || activePage === 'More_Live Account';
 
     return (
       <ConfigProvider
@@ -283,12 +304,14 @@ const AppContent = () => {
             colorBgBase: '#101013',
             colorBgContainer: '#1a1a1a',
             colorBgElevated: '#1a1a1a',
+            colorBgSpotlight: '#1d1d1d',
             colorBorder: 'rgba(255, 255, 255, 0.1)',
             colorPrimary: '#158B86',
             colorText: '#ffffff',
             colorTextHeading: '#ffffff',
           } : {
             colorPrimary: '#158B86',
+            colorBgSpotlight: '#1d1d1d',
           }
         }}
       >

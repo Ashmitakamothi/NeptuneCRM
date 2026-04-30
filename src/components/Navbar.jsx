@@ -147,26 +147,27 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
     { name: 'IB_MyTeam', icon: <IBIcons.MyTeamIcon /> },
     { name: 'IB_Tree', icon: <IBIcons.IBTreeIcon /> },
     { name: 'IB_Commission', icon: <IBIcons.CommissionIcon /> },
-    { 
-      name: 'Reports', 
-      icon: <IBIcons.ReportsIcon />, 
-      hasDropdown: true,
-      dropdownItems: [
-        { name: 'Earning', label: 'Earning' },
-        { name: 'Withdraw', label: 'Withdraw' },
-        { name: 'My Team', label: 'My Team' },
-        { name: 'My Sab-IB', label: 'My Sab-IB' },
-      ]
-    },
+    { name: 'KYC', label: 'KYC', icon: <IBIcons.KYCIcon /> },
     { 
       name: 'More', 
       icon: null, 
       hasDropdown: true,
       dropdownItems: [
-        { name: 'KYC', label: 'KYC', icon: <IBIcons.KYCIcon /> },
         { name: 'IB Manager', label: 'IB Manager', icon: <IBIcons.IBManagerIcon /> },
         { name: 'Live Account', label: 'Live Account', icon: <IBIcons.LiveAccountIcon /> },
         { name: 'TradeAndWin', label: 'Trade & Win', icon: <IBIcons.TradeAndWinIcon /> },
+        { 
+          name: 'Reports', 
+          label: 'Reports',
+          icon: <IBIcons.ReportsIcon />, 
+          hasNestedDropdown: true,
+          nestedItems: [
+            { name: 'Earning', label: 'Earning' },
+            { name: 'Withdraw', label: 'Withdraw' },
+            { name: 'My Team', label: 'My Team' },
+            { name: 'My Sab-IB', label: 'My Sab-IB' },
+          ]
+        },
         { name: 'Messenger', label: 'Messenger', icon: <IBIcons.MessengerIcon /> },
       ]
     },
@@ -197,7 +198,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
           <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain shrink-0" onClick={() => handleNavClick('Dashboard')} />
 
           {/* Navigation Links */}
-          <div className="hidden xl:flex items-center gap-0.5 min-w-0 overflow-hidden">
+          <div className="hidden xl:flex items-center gap-0.5 min-w-0">
             {menuItems.map((item, index) => (
               <React.Fragment key={index}>
                 <div className="relative group flex items-center h-[53px]">
