@@ -186,6 +186,7 @@ const IBMyTeamPage = ({ onNavigate }) => {
         {isLoading ? (
           <SkeletonTable />
         ) : (
+          <div className="overflow-x-auto w-full">
           <Table 
             columns={columns}
             dataSource={dataSource}
@@ -194,6 +195,7 @@ const IBMyTeamPage = ({ onNavigate }) => {
               className: "ib-pagination px-6 py-4",
             }}
             className="ib-table"
+            scroll={{ x: 1300 }}
             locale={{
               emptyText: (
                 <div className="flex flex-col items-center justify-center py-12 text-[#8e9d9b]">
@@ -208,6 +210,7 @@ const IBMyTeamPage = ({ onNavigate }) => {
               )
             }}
           />
+          </div>
         )}
       </div>
     </div>

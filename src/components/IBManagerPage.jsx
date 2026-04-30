@@ -190,12 +190,12 @@ const IBManagerPage = ({ onNavigate }) => {
       </div>
 
       {/* Main Content Card - Matching provided HTML structure */}
-      <div className="border-[2px] border-[var(--theme-light)] bg-[var(--bg-color)] rounded-xl pt-3 lg:pt-4 w-full mt-3 shadow-sm min-h-[400px]">
+      <div className="border-[2px] border-[var(--theme-light)] bg-[var(--bg-color)] rounded-xl pt-3 lg:pt-4 w-full mt-3 shadow-sm min-h-[400px] overflow-hidden flex flex-col">
         <div className="px-4 lg:px-6">
           <p className="text-xl font-semibold text-white">{tableTitle}</p>
         </div>
         
-        <div className="my-4">
+        <div className="my-4 flex-1">
           {isLoading ? (
             <div className="w-full p-6 space-y-4 animate-pulse">
               <div className="grid grid-cols-7 gap-4 mb-8">
@@ -212,6 +212,7 @@ const IBManagerPage = ({ onNavigate }) => {
               ))}
             </div>
           ) : (
+            <div className="overflow-x-auto w-full">
             <Table 
               columns={columns}
               dataSource={dataSource}
@@ -220,6 +221,7 @@ const IBManagerPage = ({ onNavigate }) => {
                 className: "ib-pagination px-6 py-4",
               }}
               className="ib-table"
+              scroll={{ x: 1000 }}
               locale={{
                 emptyText: (
                   <div className="flex flex-col items-center justify-center py-12 text-[#8e9d9b]">
@@ -234,6 +236,7 @@ const IBManagerPage = ({ onNavigate }) => {
                 )
               }}
             />
+            </div>
           )}
         </div>
       </div>

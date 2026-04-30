@@ -160,7 +160,7 @@ body {
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
-  height: 6px;
+  height: 8px; /* Increased height for better horizontal visibility */
 }
 
 ::-webkit-scrollbar-track {
@@ -168,12 +168,31 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #158B8630;
+  background: #158B8660; /* Increased opacity from 30 to 60 */
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #158B8650;
+  background: #158B8690;
+}
+
+/* Specific scrollbar styling for IB Tables to ensure high visibility */
+.ib-table ::-webkit-scrollbar {
+  height: 8px;
+}
+
+.ib-table ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.ib-table ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+}
+
+.ib-table ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* Custom Scrollbar for Light Mode Sections (like White Cards) */
@@ -248,6 +267,16 @@ body {
   background: transparent !important;
 }
 
+/* Force horizontal scrolling for tables on mobile */
+.ib-table .ant-table-content {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ib-table table {
+  min-width: max-content !important;
+}
+
 /* Tooltip text color override requested by user */
 .ant-tooltip-inner {
   color: #ff5722 !important;
@@ -261,6 +290,7 @@ body {
   font-size: 14px;
   font-weight: 700 !important;
   text-transform: none;
+  white-space: nowrap;
   border-bottom: 1px solid var(--border-color) !important;
   transition: all 0.2s ease !important;
 }
@@ -286,6 +316,7 @@ body {
   border-bottom: 1px solid var(--border-color) !important;
   color: var(--text-color) !important;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 .ib-table .ant-table-tbody > tr:hover > td {

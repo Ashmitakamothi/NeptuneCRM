@@ -200,11 +200,12 @@ const IBKYCPage = ({ onNavigate }) => {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-0 overflow-hidden shadow-sm min-h-[400px]">
+      <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-0 overflow-hidden shadow-sm min-h-[400px] w-full max-w-full">
         {isLoading ? (
           <SkeletonTable />
         ) : (
-          <Table 
+          <div className="overflow-x-auto w-full">
+            <Table 
             columns={columns}
             dataSource={dataSource}
             pagination={{
@@ -212,6 +213,7 @@ const IBKYCPage = ({ onNavigate }) => {
               className: "ib-pagination px-6 py-4",
             }}
             className="ib-table"
+            scroll={{ x: 1300 }}
             locale={{
               emptyText: (
                 <div className="flex flex-col items-center justify-center py-12 text-[#8e9d9b]">
@@ -226,6 +228,7 @@ const IBKYCPage = ({ onNavigate }) => {
               )
             }}
           />
+          </div>
         )}
       </div>
     </div>
