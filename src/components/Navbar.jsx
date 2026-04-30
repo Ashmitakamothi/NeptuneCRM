@@ -192,18 +192,18 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
 
         {/* Left Section: Logo & Nav Links grouped together */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 flex-1 min-w-0">
           {/* Logo Pill */}
-          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain" onClick={() => handleNavClick('Dashboard')} />
+          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain shrink-0" onClick={() => handleNavClick('Dashboard')} />
 
           {/* Navigation Links */}
-          <div className="hidden xl:flex items-center gap-0.5">
+          <div className="hidden xl:flex items-center gap-0.5 min-w-0 overflow-hidden">
             {menuItems.map((item, index) => (
               <React.Fragment key={index}>
                 <div className="relative group flex items-center h-[53px]">
                   <button
                     onClick={() => handleNavClick(item.name)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[14px] whitespace-nowrap transition-all duration-200 ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[14px] whitespace-nowrap transition-all duration-200 ${
                       activeMenu === item.name
                         ? 'bg-gradient-to-r from-[#158B86] to-[#0E5E5A] text-white shadow-inner font-semibold'
                         : 'text-[#8e9d9b] hover:text-[var(--text-color)] hover:bg-[var(--hover-bg)] font-medium'
@@ -224,7 +224,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
                   
                   {/* Dropdown Menu */}
                   {item.dropdownItems && (
-                    <div className="absolute top-[53px] left-0 min-w-[180px] bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0">
+                    <div className={`absolute top-[53px] ${item.name === 'More' ? 'right-0' : 'left-0'} min-w-[180px] bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto transform translate-y-2 group-hover:translate-y-0`}>
 
                       <div className="py-2">
                         {item.dropdownItems.map((dropItem, dropIndex) => {
@@ -298,7 +298,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
         </div>
 
         {/* Right Section: User Actions & Mobile Menu */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Theme Toggle */}
           <button 
             onClick={toggleTheme}
