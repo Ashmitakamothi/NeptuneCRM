@@ -25,11 +25,13 @@ const LoginPage = ({ onNavigate }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({ 
           email, 
+          userName: email,
           password,
-          platformName: 'user' // Changed to match live site
+          platformName: 'user'
         }),
       });
 
@@ -37,7 +39,7 @@ const LoginPage = ({ onNavigate }) => {
 
       if (response.ok && data.success) {
         setSuccessMessage(data.message || 'Logged in successfully.');
-        const token = data.data?.access_token || data.access_token || data.token;
+        const token = data.data?.access_token || data.access_token || data.token || data.data?.token;
         const userData = data.data || data.user || { email };
         const userId = data.data?._id || data.user?._id || data._id;
         
@@ -47,6 +49,7 @@ const LoginPage = ({ onNavigate }) => {
           onNavigate('Dashboard');
         }, 1500);
       } else {
+        console.error('[LoginPage] Login failed:', response.status, data);
         setError(data.error?.message || data.message || 'Invalid email or password');
       }
     } catch (err) {

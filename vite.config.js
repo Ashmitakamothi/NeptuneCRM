@@ -14,7 +14,6 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/live-api/, ''),
         headers: {
-          'Cookie': 'token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIzYzc4NzQ1ZC0xNWJhLTQxYmUtYjhlMi0xYTJlNzUyMjg3NDMiLCJyb2xlIjpbIklCVXNlciIsIlVzZXIiXSwibmJmIjoxNzc3MDAzNTY4LCJleHAiOjE3NzcwMTA3NjcsImlhdCI6MTc3NzAwMzU2OCwiaXNzIjoiTmVwdHVuZSIsImF1ZCI6Ik5lcHR1bmUifQ.GXl8QThgzD0vBNMzp9yPbPb5JdhtkLC4oRDPanBnlCvWmyUgv-BW516PPxz_kXbmzjE8XkcYrNH4lqkN0Dz7yw',
           'Origin': 'https://cabinet.neptunefxcrm.com',
           'Referer': 'https://cabinet.neptunefxcrm.com/dashboard',
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36',
@@ -35,6 +34,7 @@ export default defineConfig({
         target: 'https://mt5.neptunefxcrm.com',
         changeOrigin: true,
         secure: false,
+        ws: true,
         rewrite: (path) => path.replace(/^\/mt5-api/, ''),
         headers: {
           'Origin': 'https://cabinet.neptunefxcrm.com',

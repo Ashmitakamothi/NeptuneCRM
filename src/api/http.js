@@ -31,6 +31,13 @@ export async function fetchJson(path, { baseUrl, token, signal, timeoutMs } = {}
     });
 
     if (!res.ok) {
+      console.error(`[fetchJson] Error ${res.status} for ${url}`);
+      if (res.status === 401) {
+        // Clear auth data and reload to force login redirect
+        localStorage.removeItem('neptune_token');
+        localStorage.removeItem('neptune_user_id');
+        window.location.reload();
+      }
       const text = await res.text().catch(() => '');
       const err = new Error(`HTTP ${res.status} for ${url}${text ? `: ${text}` : ''}`);
       err.status = res.status;

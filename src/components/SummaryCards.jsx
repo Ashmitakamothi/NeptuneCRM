@@ -45,11 +45,16 @@ const SummaryCards = ({ onNavigate, data }) => {
     enabled: Boolean(!data && import.meta.env.VITE_ENDPOINT_SUMMARY),
   });
   const summaryData = data ?? summaryDataRemote;
+  if (summaryData) console.log('[SummaryCards] Data received:', summaryData);
 
   const rawBalance =
     summaryData?.walletAmount ??
     summaryData?.walletBalance ??
     summaryData?.balance ??
+    summaryData?.data?.walletAmount ??
+    summaryData?.data?.balance ??
+    summaryData?.data?.amount ??
+    summaryData?.amount ??
     0;
     
   const balanceValue = typeof rawBalance === 'number' 
