@@ -9,12 +9,14 @@ import { useDashboardSocket } from '../hooks/useDashboardSocket';
 import { endpoints } from '../api/endpoints';
 import DashboardHeader from './DashboardHeader';
 
+import NoAccountsState from './NoAccountsState';
+
 const Dashboard = ({ onNavigate }) => {
-  const { data: dashboardData } = useRealtimeJson(endpoints.dashboard, {
+  const { data: dashboardData, loading: dashLoading } = useRealtimeJson(endpoints.dashboard, {
     enabled: Boolean(endpoints.dashboard),
   });
 
-  const { data: mt5Data } = useRealtimeJson(endpoints.deposits, {
+  const { data: mt5Data, loading: mt5Loading } = useRealtimeJson(endpoints.deposits, {
     enabled: Boolean(endpoints.deposits),
   });
 
@@ -40,6 +42,13 @@ const Dashboard = ({ onNavigate }) => {
     };
   }, [dashboardData, mt5Data, socketData]);
 
+  const hasAccounts = useMemo(() => {
+    const list = slices.accounts;
+    return Array.isArray(list) && list.length > 0;
+  }, [slices.accounts]);
+
+  const isLoading = dashLoading || mt5Loading;
+
   return (
     <div className="space-y-6 md:space-y-8 animate-fade-in">
       <div className="hidden lg:block">
@@ -49,28 +58,38 @@ const Dashboard = ({ onNavigate }) => {
           onNavigate={onNavigate} 
         />
       </div>
-      {/* Top Section: Hello and Balance */}
-      <SummaryCards onNavigate={onNavigate} data={slices.summary} />
 
-      {/* Middle Section: Trades and Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1196fr)_minmax(0,603fr)] gap-[13.14px]">
-        <div className="min-w-0">
-          <TradesTable data={slices.openTrades} />
+      {isLoading ? (
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="w-12 h-12 border-4 border-[var(--primary-color)] border-t-transparent rounded-full animate-spin"></div>
         </div>
-        <div className="min-w-0 w-full lg:h-[434px] flex flex-col gap-[13.14px]">
-          <ActionCards onNavigate={onNavigate} data={slices.summary} />
-          <TransactionsList data={slices.recentTransactions} />
-        </div>
-      </div>
+      ) : !hasAccounts ? (
+        <NoAccountsState onNavigate={onNavigate} />
+      ) : (
+        <>
+          {/* Top Section: Hello and Balance */}
+          <SummaryCards onNavigate={onNavigate} data={slices.summary} />
 
-      {/* Bottom Section: Accounts and Placeholder */}
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1051fr)_minmax(0,785fr)] gap-[13.14px]">
-        <div className="min-w-0">
-          <AccountsTable data={slices.accounts} isDashboard={true} onNavigate={onNavigate} />
-        </div>
-        <div className="min-w-0 bg-[var(--card-bg)] rounded-[20px] border border-[var(--border-color)] shadow-[0_4px_6px_rgba(207,207,207,0.10)] h-[325px]" />
-      </div>
+          {/* Middle Section: Trades and Quick Actions */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1196fr)_minmax(0,603fr)] gap-[13.14px]">
+            <div className="min-w-0">
+              <TradesTable data={slices.openTrades} />
+            </div>
+            <div className="min-w-0 w-full lg:h-[434px] flex flex-col gap-[13.14px]">
+              <ActionCards onNavigate={onNavigate} data={slices.summary} />
+              <TransactionsList data={slices.recentTransactions} />
+            </div>
+          </div>
 
+          {/* Bottom Section: Accounts and Placeholder */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1051fr)_minmax(0,785fr)] gap-[13.14px]">
+            <div className="min-w-0">
+              <AccountsTable data={slices.accounts} isDashboard={true} onNavigate={onNavigate} />
+            </div>
+            <div className="min-w-0 bg-[var(--card-bg)] rounded-[20px] border border-[var(--border-color)] shadow-[0_4px_6px_rgba(207,207,207,0.10)] h-[325px]" />
+          </div>
+        </>
+      )}
     </div>
   );
 };

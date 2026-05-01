@@ -356,9 +356,9 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
 
 
       {/* ── Desktop Header Bar (hidden on mobile) ── */}
-      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6 shrink-0">
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
         <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none">
+          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none">
             {t('accountTypes')}
           </h1>
           <div className="flex items-center gap-1.5">
@@ -370,13 +370,13 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          <div className="bg-[#1a1a1e] border border-white/5 p-1.5 rounded-full flex items-center h-[40px]">
+          <div className="bg-[var(--segmented-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
             <button
               onClick={() => setDashboardType('User')}
               className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${
                 dashboardType === 'User'
                   ? 'font-semibold bg-[#158B86] text-white shadow-sm'
-                  : 'font-medium text-[#8e9d9b] hover:text-white'
+                  : 'font-medium text-[var(--text-color)] opacity-60 hover:opacity-100'
               }`}
             >
               {t('userDashboard')}
@@ -386,7 +386,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
               className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${
                 dashboardType === 'IB'
                   ? 'font-semibold bg-[#158B86] text-white shadow-sm'
-                  : 'font-medium text-[#8e9d9b] hover:text-white'
+                  : 'font-medium text-[var(--text-color)] opacity-60 hover:opacity-100'
               }`}
             >
               {t('ibDashboard')}
@@ -405,7 +405,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
         />
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
         <span
-          className="text-[#8e9d9b] cursor-pointer hover:text-white transition-colors"
+          className="text-[var(--text-color)] opacity-60 cursor-pointer hover:opacity-100 transition-colors"
           onClick={() => onNavigate('Accounts')}
         >
           {t('breadcrumbAccounts')}
@@ -434,7 +434,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
           {types.map((type, idx) => (
             <div
               key={type.id}
-              className="bg-[#1a1a1e] border border-white/5 rounded-[12px] p-8 flex flex-col w-full max-w-[280px] transition-all duration-300"
+              className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-8 flex flex-col w-full max-w-[280px] transition-all duration-300 shadow-sm hover:shadow-md"
             >
               {/* Number Badge */}
               <div className="w-9 h-9 rounded-[8px] bg-[#158B86] text-white text-[15px] font-extrabold flex items-center justify-center mb-5">
@@ -446,11 +446,11 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
                 <h2 className="text-[22px] font-extrabold text-[#158B86] tracking-tight leading-tight">
                   {type.name}
                 </h2>
-                <p className="text-[#8e9d9b] text-[13px] mt-1">{type.description}</p>
+                <p className="text-[var(--text-color)] opacity-60 text-[13px] mt-1">{type.description}</p>
               </div>
 
               {/* Divider */}
-              <div className="h-px bg-white/5 mb-5" />
+              <div className="h-px bg-[var(--border-color)] mb-5" />
 
               {/* Feature List */}
               <ul className="flex flex-col gap-3.5 flex-1">
@@ -476,7 +476,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
                       <circle cx="12" cy="12" r="10" />
                       <polyline points="9 12 11 14 15 10" />
                     </svg>
-                    <span className="text-gray-500 text-[13px] font-medium">{feat}</span>
+                    <span className="text-[var(--text-color)] opacity-70 text-[13px] font-medium">{feat}</span>
                   </li>
                 ))}
               </ul>
