@@ -117,7 +117,6 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
       icon: null, 
       hasDropdown: true,
       dropdownItems: [
-        { name: 'IB_Dashboard', label: 'IB Dashboard', icon: <Users size={18} strokeWidth={2} /> },
         { name: 'Leaderboard', label: 'Leaderboard', icon: <img src={leaderboardIcon} alt="Leaderboard" className="w-[18px] h-[18px] object-contain" /> },
         { 
           name: 'Tools', 

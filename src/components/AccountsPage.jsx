@@ -66,59 +66,108 @@ const AccountsPage = ({ onNavigate }) => {
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   return (
-    <div className="animate-fade-in flex flex-col h-full">
-      <DashboardHeader 
-        title={t('accounts')}
-        breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
-        onNavigate={onNavigate}
-        activeTab="User Dashboard"
-      />
+    <div className="animate-fade-in flex flex-col h-full pb-20">
+      {/* ── Mobile Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Dashboard')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">Accounts</h1>
+      </div>
+
+      <div className="hidden lg:block">
+        <DashboardHeader 
+          title={t('accounts')}
+          breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
+          onNavigate={onNavigate}
+          activeTab="User Dashboard"
+          showMobileBack={false}
+        />
+      </div>
 
 
       {/* Main Content Area */}
       <div className="flex flex-col flex-1">
          
-         {/* Tab Controls Row */}
-         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-5 mb-6">
-            {/* Left: Live / Demo */}
-            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center w-full xl:w-auto overflow-x-auto hide-scrollbar">
+         {/* ── Mobile Segmented Controls (lg:hidden) ── */}
+         <div className="lg:hidden flex flex-col gap-5 mb-6">
+            <div className="flex flex-col gap-3">
+              <div className="bg-[#1a1a1e] p-1 rounded-xl flex items-center w-full">
+                <button 
+                  onClick={() => setAccountType('Live')}
+                  className={`flex-1 py-2.5 rounded-lg text-[14px] font-bold transition-all ${accountType === 'Live' ? 'bg-[#3B82F6] text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                >
+                  {t('liveAccount')}
+                </button>
+                <button 
+                  onClick={() => setAccountType('Demo')}
+                  className={`flex-1 py-2.5 rounded-lg text-[14px] font-bold transition-all ${accountType === 'Demo' ? 'bg-[#3B82F6] text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+                >
+                  {t('demoAccount')}
+                </button>
+              </div>
+
+              {accountType === 'Live' && (
+                <div className="bg-[#1a1a1e] p-1 rounded-xl flex items-center w-full">
+                  {['Pending', 'Approved', 'Declined'].map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setStatusFilter(status)}
+                      className={`flex-1 py-2.5 rounded-lg text-[14px] font-bold transition-all ${
+                        statusFilter === status 
+                          ? 'bg-[#3B82F6] text-white shadow-lg' 
+                          : 'text-white/40 hover:text-white'
+                      }`}
+                    >
+                      {t(status.toLowerCase())}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <button
+              className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-8 py-3.5 rounded-xl text-[14px] font-bold shadow-lg shadow-blue-500/20 transition-all"
+              onClick={() => onNavigate('Account_Types', { isDemo: accountType === 'Demo' })}
+            >
+              {accountType === 'Live' ? t('openLiveAccount') : t('openDemoAccount')}
+            </button>
+         </div>
+
+         {/* ── Desktop Tab Row (hidden lg:flex) ── */}
+         <div className="hidden lg:flex flex-row items-center justify-between gap-5 mb-6">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center gap-1">
                <button 
                  onClick={() => setAccountType('Live')}
-                 className={`whitespace-nowrap px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all flex-shrink-0 ${accountType === 'Live' ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' : 'bg-transparent text-[var(--text-color)] hover:opacity-80'}`}
+                 className={`px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all ${accountType === 'Live' ? 'bg-[#158B86] text-white shadow-md' : 'text-[var(--text-color)] hover:opacity-80'}`}
                >{t('liveAccount')}</button>
                <button 
                  onClick={() => setAccountType('Demo')}
-                 className={`whitespace-nowrap px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all flex-shrink-0 ${accountType === 'Demo' ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' : 'bg-transparent text-[var(--text-color)] hover:opacity-80'}`}
+                 className={`px-6 py-2 rounded-[8px] text-[14px] font-bold transition-all ${accountType === 'Demo' ? 'bg-[#158B86] text-white shadow-md' : 'text-[var(--text-color)] hover:opacity-80'}`}
                >{t('demoAccount')}</button>
             </div>
 
-
-            {/* Right: Status Filters & Action Button */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full xl:w-auto">
+            <div className="flex items-center gap-3">
                {accountType === 'Live' && (
-                 <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center gap-1 overflow-x-auto w-full sm:w-auto hide-scrollbar">
-                   {['Pending', 'Approved', 'Declined'].map((status) => {
-                      const statusKey = status.toLowerCase();
-                      return (
-                        <button
-                          key={status}
-                          onClick={() => setStatusFilter(status)}
-                          className={`whitespace-nowrap flex-shrink-0 px-5 py-2 rounded-[8px] text-[13px] font-bold transition-all ${
-                             statusFilter === status 
-                             ? 'bg-[#158B86] text-white shadow-[0_2px_8px_rgba(21,139,134,0.3)]' 
-                             : 'bg-transparent text-[var(--text-color)] hover:opacity-80'
-                          }`}
-                        >
-                          {t(statusKey)}
-                        </button>
-                      );
-                   })}
+                 <div className="bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 rounded-[10px] flex items-center gap-1">
+                   {['Pending', 'Approved', 'Declined'].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => setStatusFilter(status)}
+                        className={`px-5 py-2 rounded-[8px] text-[13px] font-bold transition-all ${
+                           statusFilter === status 
+                           ? 'bg-[#158B86] text-white shadow-md' 
+                           : 'text-[var(--text-color)] hover:opacity-80'
+                        }`}
+                      >
+                        {t(status.toLowerCase())}
+                      </button>
+                   ))}
                  </div>
                )}
 
-               
                <button
-                 className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold shadow-[0_4px_10px_rgba(21,139,134,0.3)] transition-all whitespace-nowrap w-full sm:w-auto"
+                 className="bg-[#158B86] hover:bg-[#117672] text-white px-6 py-2.5 rounded-[8px] text-[14px] font-bold shadow-md transition-all whitespace-nowrap"
                  onClick={() => onNavigate('Account_Types', { isDemo: accountType === 'Demo' })}
                >
                   {accountType === 'Live' ? t('openLiveAccount') : t('openDemoAccount')}
@@ -128,7 +177,6 @@ const AccountsPage = ({ onNavigate }) => {
 
          {/* Table Container */}
          <div className="flex-1 min-h-0">
-            {/* Reusing the exact AccountsTable but passing hideHeader and our new state controls */}
             <AccountsTable 
                hideHeader={true} 
                externalAccountType={accountType} 

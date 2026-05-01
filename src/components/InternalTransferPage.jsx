@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import InternalTransferTable from './InternalTransferTable';
 import DashboardHeader from './DashboardHeader';
+import MobileInternalTransfer from './MobileInternalTransfer';
 
 import mt5Logo from '../assets/mt5.png';
 
@@ -120,6 +121,21 @@ const InternalTransferPage = ({ onNavigate }) => {
 
   return (
     <div className="animate-fade-in flex flex-col h-full">
+
+      {/* ════════ MOBILE VIEW (hidden on lg+) ════════ */}
+      <div className="block lg:hidden">
+        <MobileInternalTransfer
+          onNavigate={onNavigate}
+          t={t}
+          currentItems={[]} // Assuming empty or you can pass actual data if available
+          sortConfig={{ key: '', direction: '' }}
+          handleSort={() => {}}
+        />
+      </div>
+
+      {/* ════════ DESKTOP VIEW (hidden on mobile) ════════ */}
+      <div className="hidden lg:block">
+
       <DashboardHeader 
         title={t('transfer')}
         breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
@@ -350,8 +366,8 @@ const InternalTransferPage = ({ onNavigate }) => {
              dateRange={dateRange}
            />
          </div>
-
-      </div>
+       </div>
+      </div> {/* end desktop wrapper */}
     </div>
   );
 };

@@ -71,17 +71,50 @@ const ReportsPage = ({ type, onNavigate }) => {
 
   return (
     <div className="flex flex-col w-full h-full animate-fade-in pb-20">
-      <DashboardHeader 
-        title={reportTitle}
-        breadcrumbs={[{ title: breadcrumbText, active: true }]}
-        onNavigate={onNavigate}
-        activeTab="User Dashboard"
-      />
+      {/* ── Mobile Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Settings')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">Reports</h1>
+      </div>
+
+      <div className="hidden lg:block">
+        <DashboardHeader 
+          title={reportTitle}
+          breadcrumbs={[{ title: breadcrumbText, active: true }]}
+          onNavigate={onNavigate}
+          activeTab="User Dashboard"
+          showMobileBack={false}
+        />
+      </div>
+
+      {/* ── Mobile Tabs (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center justify-center gap-1 bg-[#1a1a1e] p-1 rounded-xl mb-6 overflow-x-auto custom-scrollbar">
+        {[
+          { id: 'Deposit', label: 'Deposit', page: 'Reports_Deposit' },
+          { id: 'Withdraw', label: 'Withdraw', page: 'Reports_Withdraw' },
+          { id: 'Transfer', label: 'Transfer', page: 'Reports_Transfer' },
+          { id: 'Logs', label: 'Logs', page: 'Reports_Logs' }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => onNavigate(tab.page)}
+            className={`flex-1 min-w-[90px] py-2.5 rounded-lg text-[14px] font-bold transition-all ${
+              type?.toLowerCase() === tab.id.toLowerCase() || (type === 'Logs' && tab.id === 'Logs')
+                ? 'bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] text-white shadow-lg'
+                : 'text-white/40 hover:text-white'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
 
       {/* Top Actions: Date Picker & Export Only */}
-      <div className="flex justify-end w-full mb-6">
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+      <div className="flex flex-col items-center justify-center w-full mb-6 lg:justify-end lg:flex-row">
+        <div className="flex flex-col items-center gap-3 sm:gap-4 w-full max-w-[400px] lg:max-w-none lg:flex-row">
           <ConfigProvider
             theme={{
                algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
@@ -114,7 +147,7 @@ const ReportsPage = ({ type, onNavigate }) => {
           <div className="relative w-full sm:w-auto">
             <button 
               onClick={() => setIsExportOpen(!isExportOpen)}
-              className="flex items-center justify-center gap-2 bg-[#158B86] hover:bg-[#117672] text-white px-5 py-2.5 rounded-[6px] font-bold text-sm transition-colors w-full shadow-[0_4px_14px_0_rgba(21,139,134,0.39)] hover:shadow-[0_6px_20px_rgba(21,139,134,0.23)]"
+              className="flex items-center justify-center gap-2 lg:bg-[#158B86] lg:hover:bg-[#117672] bg-[#3B82F6] hover:bg-[#2563EB] text-white px-5 py-2.5 rounded-[6px] font-bold text-sm transition-colors w-full lg:shadow-md shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.23)]"
             >
               <Download size={18} />
               {t('export')}

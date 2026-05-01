@@ -8,23 +8,23 @@ const TRANSLATIONS = {
   HI: { walletAccountNo: 'वॉलेट अकाउंट नं.', withdrawType: 'निकासी प्रकार', amount: 'राशि', balance: 'बैलेंस', requestDate: 'अनुरोध तिथि', actionDate: 'कार्रवाई तिथि', status: 'स्थिति', remark: 'रिमार्क', noRecords: 'कोई नहीं' },
 };
 
-const WalletWithdrawTable = ({ data, filterStatus, sortConfig, onSort }) => {
+const WalletWithdrawTable = ({ data, filterStatus, sortConfig, onSort, isMobile = false }) => {
   const { language } = useLanguage();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   const displayData = data || [];
+  const themeColor = isMobile ? '#3B82F6' : '#158B86';
 
   const renderSortIcon = (key) => {
     const isActive = sortConfig?.key === key;
     return (
       <div className="flex flex-col ml-2 gap-[1px]">
-        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig?.direction === 'asc' ? 'opacity-100 fill-[#158B86]' : 'opacity-40 fill-[var(--text-color)]'}`}>
+        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig?.direction === 'asc' ? 'opacity-100' : 'opacity-40 fill-[var(--text-color)]'}`} style={isActive && sortConfig?.direction === 'asc' ? { fill: themeColor } : {}}>
           <polygon points="12,6 4,16 20,16" />
         </svg>
-        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig?.direction === 'desc' ? 'opacity-100 fill-[#158B86]' : 'opacity-40 fill-[var(--text-color)]'}`}>
+        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig?.direction === 'desc' ? 'opacity-100' : 'opacity-40 fill-[var(--text-color)]'}`} style={isActive && sortConfig?.direction === 'desc' ? { fill: themeColor } : {}}>
           <polygon points="12,18 4,8 20,8" />
         </svg>
       </div>
-
     );
   };
 
@@ -64,14 +64,12 @@ const WalletWithdrawTable = ({ data, filterStatus, sortConfig, onSort }) => {
             </th>
             <th className="py-3.5 px-5 font-bold whitespace-nowrap text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
             <th className="py-3.5 px-5 font-bold whitespace-nowrap text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
-
           </tr>
         </thead>
         <tbody>
           {displayData.length > 0 ? (
             displayData.map((row) => (
               <tr key={row.id} className="text-[14px] text-[var(--text-color)] border-b border-[var(--border-color)] hover:bg-white/5 transition-colors">
-
                 <td className="py-3 px-5 whitespace-nowrap">{row.accountNo}</td>
                 <td className="py-3 px-5 whitespace-nowrap">{row.withdrawType}</td>
                 <td className="py-3 px-5 whitespace-nowrap">{row.amount}</td>
@@ -82,7 +80,7 @@ const WalletWithdrawTable = ({ data, filterStatus, sortConfig, onSort }) => {
                    <span className="opacity-80">{row.status}</span>
                 </td>
                 <td className="py-3 px-5 whitespace-nowrap">
-                  <Eye size={15} className="text-[#158B86] cursor-pointer hover:text-white transition-colors" />
+                  <Eye size={15} className="cursor-pointer hover:text-white transition-colors" style={{ color: themeColor }} />
                 </td>
               </tr>
             ))

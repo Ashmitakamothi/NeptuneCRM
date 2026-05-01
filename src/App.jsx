@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
+import MobileHeader from './components/MobileHeader';
+import MobileBottomNav from './components/MobileBottomNav';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import { useTheme } from './contexts/ThemeContext';
 import Dashboard from './components/Dashboard';
@@ -21,8 +23,10 @@ import TutorialsPage from './components/TutorialsPage';
 import MessengerPage from './components/MessengerPage';
 import DownloadPage from './components/DownloadPage';
 import ProfilePage from './components/ProfilePage';
+import ChangePasswordPage from './components/ChangePasswordPage';
 import AccountDetailsPage from './components/AccountDetailsPage';
 import AccountTypesPage from './components/AccountTypesPage';
+import PaymentDetailsPage from './components/PaymentDetailsPage';
 import LoginPage from './components/LoginPage';
 import SignupPage from './components/SignupPage';
 import IBDashboard from './components/IBDashboard';
@@ -39,6 +43,7 @@ import IBTradeAndWinPage from './components/IBTradeAndWinPage';
 import IBWithdrawReportPage from './components/IBWithdrawReportPage';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SocketProvider } from './contexts/SocketContext';
+import MobileSettings from './components/MobileSettings';
 
 const AppContent = () => {
   const { isAuthenticated } = useAuth();
@@ -76,10 +81,14 @@ const AppContent = () => {
       'logs': 'Reports_Logs',
       'ib/dashboard': 'IB_Dashboard',
       'ib/wallet': 'IB Wallet',
-      'ib/team_deposit': 'IB_TeamDeposit'
+      'ib/team_deposit': 'IB_TeamDeposit',
+      'payment_details': 'Payment_Details',
+      'change_password': 'Change_Password'
     };
 
     if (urlMap[path]) return urlMap[path];
+    if (path === 'settings') return 'Settings';
+    if (path === 'ib/settings') return 'IB_Settings';
     
    
     if (path.startsWith('view_ticket/')) {
@@ -134,6 +143,8 @@ const AppContent = () => {
       'Profile': 'profile',
       'Account_Details': 'accounts/details',
       'Account_Types': 'accounts/types',
+      'Payment_Details': 'payment_details',
+      'Change_Password': 'change_password',
       'Login': 'login',
       'Signup': 'signup',
       'View_Ticket': 'view_ticket',
@@ -162,8 +173,10 @@ const AppContent = () => {
       'IBMessenger': 'ib/inbox',
       'More_IBMessenger': 'ib/inbox'
     };
-
+    
     let path = pageToPath[activePage] || '';
+    if (activePage === 'Settings') path = 'settings';
+    if (activePage === 'IB_Settings') path = 'ib/settings';
     if (activePage === 'View_Ticket' && pageData?.ticketId) {
       path = `view_ticket/${pageData.ticketId}`;
     }
@@ -243,6 +256,8 @@ const AppContent = () => {
         if (path.startsWith('view_ticket/')) {
           const guid = path.split('/')[1];
           setActivePage('View_Ticket', { ticketId: guid });
+        } else if (path === 'settings') {
+          setActivePage('Settings');
         } else if (urlMap[path]) {
           setActivePage(urlMap[path]);
         }
@@ -271,6 +286,7 @@ const AppContent = () => {
       case 'Accounts': return <AccountsPage onNavigate={setActivePage} />;
       case 'Account_Details': return <AccountDetailsPage onNavigate={setActivePage} pageData={pageData} />;
       case 'Account_Types': return <AccountTypesPage onNavigate={setActivePage} pageData={pageData} />;
+      case 'Payment_Details': return <PaymentDetailsPage onNavigate={setActivePage} />;
       case 'Internal Transfer': return <InternalTransferPage onNavigate={setActivePage} />;
       case 'My Transactions':
       case 'My Transaction': return (
@@ -293,6 +309,7 @@ const AppContent = () => {
       case 'More_Tutorial': return <TutorialsPage onNavigate={setActivePage} />;
       case 'More_Download':
       case 'More_MT5Download': return <DownloadPage onNavigate={setActivePage} />;
+      case 'Change_Password': return <ChangePasswordPage onNavigate={setActivePage} />;
       case 'Profile': return <ProfilePage onNavigate={setActivePage} />;
       case 'Login': return <LoginPage onNavigate={setActivePage} />;
       case 'Signup': return <SignupPage onNavigate={setActivePage} />;
@@ -318,6 +335,8 @@ const AppContent = () => {
       case 'IBTradeAndWin':
       case 'Trade & Win':
       case 'More_IBTradeAndWin': return <IBTradeAndWinPage onNavigate={setActivePage} />;
+      case 'Settings': return <MobileSettings onNavigate={setActivePage} />;
+      case 'IB_Settings': return <MobileSettings onNavigate={setActivePage} isIB={true} />;
       default: return <PlaceholderPage title={activePage} />;
     }
   };
@@ -331,34 +350,60 @@ const AppContent = () => {
       'IB Manager', 'More_IB Manager', 'More_My Sab-IB', 
       'Live Account', 'More_Live Account', 
       'IBTradeAndWin', 'Trade & Win', 'More_IBTradeAndWin',
-      'Messenger', 'IBMessenger', 'More_IBMessenger'
+      'Messenger', 'IBMessenger', 'More_IBMessenger', 'IB_Settings'
     ].includes(activePage);
 
     return (
-      <ConfigProvider
-        theme={{
-          algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
-          token: isDark ? {
-            colorBgBase: '#101013',
-            colorBgContainer: '#1a1a1a',
-            colorBgElevated: '#1a1a1a',
-            colorBgSpotlight: '#1d1d1d',
-            colorBorder: 'rgba(255, 255, 255, 0.1)',
-            colorPrimary: '#158B86',
-            colorText: '#ffffff',
-            colorTextHeading: '#ffffff',
-          } : {
-            colorPrimary: '#158B86',
-            colorBgSpotlight: '#1d1d1d',
-          }
-        }}
-      >
-        <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--bg-color)] text-[var(--text-color)] transition-colors duration-300 pb-12'}`}>
-        {isAuthenticated && <Navbar onNavigate={setActivePage} activeMenu={activePage} isIB={isIB} />}
-        
-        <main className={isAuthenticated ? "max-w-[1860px] mx-auto px-4 md:px-6 mt-4 md:mt-8" : ""}>
+    <ConfigProvider
+      theme={{
+        algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+        token: isDark ? {
+          colorBgBase: '#101013',
+          colorBgContainer: '#1a1a1a',
+          colorBgElevated: '#1a1a1a',
+          colorBgSpotlight: '#1d1d1d',
+          colorBorder: 'rgba(255, 255, 255, 0.1)',
+          colorPrimary: '#158B86',
+          colorText: '#ffffff',
+          colorTextHeading: '#ffffff',
+        } : {
+          colorPrimary: '#158B86',
+          colorBgSpotlight: '#1d1d1d',
+        }
+      }}
+    >
+      <div className={`min-h-screen ${!isAuthenticated ? '' : 'bg-[var(--theme-bg)] text-[var(--text-color)] transition-colors duration-300'}`}>
+
+        {/* ── Desktop Navbar (hidden on mobile) ── */}
+        {isAuthenticated && (
+          <div className="hidden lg:block">
+            <Navbar onNavigate={setActivePage} activeMenu={activePage} isIB={isIB} />
+          </div>
+        )}
+
+        {/* ── Mobile Header (only on Dashboard in mobile) ── */}
+        {isAuthenticated && (activePage === 'Dashboard' || activePage === 'IB_Dashboard') && (
+          <MobileHeader
+            onNavigate={setActivePage}
+            activePage={activePage}
+          />
+        )}
+
+        {/* ── Main Content ── */}
+        <main className={isAuthenticated
+          ? `${(activePage === 'Settings' || activePage === 'Profile' || activePage.startsWith('More_')) ? '' : 'px-4 mt-4'} max-w-[1860px] mx-auto md:px-6 md:mt-8 pb-24 lg:pb-12`
+          : ""
+        }>
           {renderContent()}
         </main>
+
+        {/* ── Mobile Bottom Nav (hidden on desktop) ── */}
+        {isAuthenticated && (
+          <MobileBottomNav
+            onNavigate={setActivePage}
+            activePage={activePage}
+          />
+        )}
       </div>
     </ConfigProvider>
     );

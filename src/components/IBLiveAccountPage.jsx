@@ -161,16 +161,19 @@ const IBLiveAccountPage = ({ onNavigate }) => {
         onNavigate={onNavigate}
         activeTab="IB Dashboard"
         extra={extraHeader}
+        showMobileBack={true}
+        mobileBackTo="IB_Dashboard"
       />
 
       {/* Tabs & Filters Section */}
       <div className="flex items-center justify-between flex-wrap gap-5">
         <div className="w-full md:w-auto">
           <Segmented
+            block
             options={[t.approved, t.pending, t.declined]}
             value={statusFilter === 'Approved' ? t.approved : statusFilter === 'Pending' ? t.pending : t.declined}
             onChange={handleStatusChange}
-            className="ib-segmented"
+            className="ib-segmented w-full"
           />
         </div>
 

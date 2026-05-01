@@ -154,12 +154,11 @@ const ReportsTable = ({ type, dateRange = null, exportTrigger = 0 }) => {
         <button 
           key={i}
           onClick={() => setCurrentPage(i)}
-          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
+          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
-              ? 'bg-[#158B86] text-white' 
-              : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)]'
+              ? 'bg-[#3B82F6] md:bg-[#158B86] text-white shadow-lg' 
+              : 'text-white/40 hover:text-white hover:bg-white/5'
           }`}
-
         >
           {i}
         </button>
@@ -187,15 +186,15 @@ const ReportsTable = ({ type, dateRange = null, exportTrigger = 0 }) => {
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)]">{t('operation')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentFrom')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentTo')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('amount')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('transactionDate')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
+            <tr className="bg-[#1a1a1e] border-b border-white/5">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider">{t('operation')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentFrom')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentTo')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('amount')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('transactionDate')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('status')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('remark')}</th>
             </tr>
           </thead>
           <tbody>

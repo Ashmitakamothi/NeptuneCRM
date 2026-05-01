@@ -277,10 +277,88 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
 
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
-      {/* Top Header Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
+      {/* ── Mobile Back Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Accounts')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">{t('breadcrumbTypes')}</h1>
+      </div>
+
+      {/* ── Mobile Tabs (lg:hidden) ── */}
+      <div className="lg:hidden px-4 mb-8">
+        <div className="bg-[#1a1a1e] rounded-lg shadow-sm py-2 px-3">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-tabs-scrollbar">
+            {types.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setSelectedType(type)}
+                className={`whitespace-nowrap px-8 py-2.5 rounded-xl text-[15px] font-bold transition-all ${
+                  (selectedType?.id === type.id || (!selectedType && types[0]?.id === type.id))
+                    ? 'bg-[#3B82F6] text-white shadow-lg'
+                    : 'text-white hover:text-white/80'
+                }`}
+              >
+                {type.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Active Type Title (lg:hidden) ── */}
+      <div className="lg:hidden flex flex-col items-center mb-8">
+        <h2 className="text-[24px] font-bold bg-gradient-to-r from-[#155DFC] to-[#193CB8] bg-clip-text text-transparent mb-1">
+          {(selectedType || types[0])?.name}
+        </h2>
+        <div className="w-14 h-1.5 mt-1 rounded-full bg-gradient-to-r from-[#51A2FF] to-[#155DFC]" />
+      </div>
+
+      {/* ── Mobile Spec Cards (lg:hidden) ── */}
+      <div className="lg:hidden flex flex-col gap-4 mb-8">
+        {(() => {
+          const activeType = selectedType || types[0];
+          if (!activeType) return null;
+          
+          const specs = [
+            { label: t('minDeposit'), value: activeType.minDeposit },
+            { label: t('pipsSpread'), value: activeType.pipsSpread.split(' ')[0] },
+            ...(activeType.swapFree ? [{ label: t('swapFree'), value: 'Yes' }] : []),
+            { label: t('marginCall'), value: activeType.marginCall.split(' ')[0] },
+            { label: t('leverage'), value: activeType.leverage.split(' ')[0] }
+          ];
+
+          return specs.map((spec, i) => (
+            <div key={i} className="flex items-center justify-between px-6 py-6 rounded-3xl bg-gradient-to-tl from-[#0d3064] to-[#000308] border border-white/5 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="w-7 h-7 rounded-full bg-[#7367f038] flex items-center justify-center">
+                  <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <span className="text-[16px] font-medium text-white/90 tracking-wide">{spec.label}</span>
+              </div>
+              <span className="text-[16px] font-bold text-white tabular-nums">{spec.value}</span>
+            </div>
+          ));
+        })()}
+      </div>
+
+      {/* ── Mobile CTA (lg:hidden) ── */}
+      <div className="lg:hidden mb-8">
+        <button
+          className="w-full bg-[#193CB8] hover:bg-[#1534a1] text-white py-4 rounded-2xl text-[18px] font-bold shadow-xl shadow-blue-900/20 transition-all active:scale-[0.98]"
+          onClick={() => openModal(selectedType || types[0])}
+        >
+          {isDemo ? t('openDemoAccount') : t('openLiveAccount')}
+        </button>
+      </div>
+
+
+      {/* ── Desktop Header Bar (hidden on mobile) ── */}
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5 mb-6 shrink-0">
         <div className="flex items-center gap-3">
-          <h1 className="text-[20px] md:text-[24px] font-extrabold text-[var(--text-color)] tracking-tight leading-none">
+          <h1 className="text-[20px] md:text-[24px] font-extrabold text-white tracking-tight leading-none">
             {t('accountTypes')}
           </h1>
           <div className="flex items-center gap-1.5">
@@ -292,13 +370,13 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
-          <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] p-1.5 rounded-full flex items-center h-[40px]">
+          <div className="bg-[#1a1a1e] border border-white/5 p-1.5 rounded-full flex items-center h-[40px]">
             <button
               onClick={() => setDashboardType('User')}
               className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${
                 dashboardType === 'User'
                   ? 'font-semibold bg-[#158B86] text-white shadow-sm'
-                  : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'
+                  : 'font-medium text-[#8e9d9b] hover:text-white'
               }`}
             >
               {t('userDashboard')}
@@ -308,7 +386,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
               className={`px-4 sm:px-5 py-1.5 rounded-full text-[13px] sm:text-[14px] transition-colors ${
                 dashboardType === 'IB'
                   ? 'font-semibold bg-[#158B86] text-white shadow-sm'
-                  : 'font-medium text-[#8e9d9b] hover:text-[var(--text-color)]'
+                  : 'font-medium text-[#8e9d9b] hover:text-white'
               }`}
             >
               {t('ibDashboard')}
@@ -317,8 +395,8 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
         </div>
       </div>
 
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-[15px] mb-10 font-medium shrink-0">
+      {/* Breadcrumb (Desktop) */}
+      <div className="hidden lg:flex items-center gap-2 text-[15px] mb-10 font-medium shrink-0">
         <Home
           size={18}
           className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors"
@@ -327,19 +405,18 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
         />
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
         <span
-          className="text-[#8e9d9b] cursor-pointer hover:text-[var(--text-color)] transition-colors"
+          className="text-[#8e9d9b] cursor-pointer hover:text-white transition-colors"
           onClick={() => onNavigate('Accounts')}
         >
           {t('breadcrumbAccounts')}
         </span>
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
-        <span className="text-[var(--text-color)]">{t('breadcrumbTypes')}</span>
+        <span className="text-white">{t('breadcrumbTypes')}</span>
       </div>
 
       {/* Content */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-40 gap-4">
-          {/* Dotted orbital spinner matching live site */}
           <div className="relative w-10 h-10 animate-spin" style={{ animationDuration: '1s' }}>
             <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#158B86] opacity-100" />
             <span className="absolute top-1/2 right-0 -translate-y-1/2 w-2 h-2 rounded-full bg-[#158B86] opacity-70" />
@@ -353,13 +430,13 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
           <span className="text-red-400 text-[14px]">{error}</span>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center items-stretch gap-8 pt-2">
+        <div className="hidden lg:flex flex-wrap justify-center items-stretch gap-8 pt-2">
           {types.map((type, idx) => (
             <div
               key={type.id}
-              className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] p-8 flex flex-col w-full max-w-[280px] transition-all duration-300"
+              className="bg-[#1a1a1e] border border-white/5 rounded-[12px] p-8 flex flex-col w-full max-w-[280px] transition-all duration-300"
             >
-              {/* Number Badge — square with rounded corners, teal */}
+              {/* Number Badge */}
               <div className="w-9 h-9 rounded-[8px] bg-[#158B86] text-white text-[15px] font-extrabold flex items-center justify-center mb-5">
                 {idx + 1}
               </div>
@@ -373,9 +450,9 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
               </div>
 
               {/* Divider */}
-              <div className="h-px bg-[var(--border-color)] mb-5" />
+              <div className="h-px bg-white/5 mb-5" />
 
-              {/* Feature List — flex-1 so it fills remaining space, pushing button to bottom */}
+              {/* Feature List */}
               <ul className="flex flex-col gap-3.5 flex-1">
                 {[
                   ...(!isDemo ? [`${type.minDeposit} Minimum Deposit`] : []),
@@ -404,12 +481,12 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
                 ))}
               </ul>
 
-              {/* CTA Button — always at bottom due to flex-1 on ul above */}
+              {/* CTA Button */}
               <button
-                className="mt-5 w-full bg-[#158B86] hover:bg-[#117672] active:scale-[0.98] text-white py-3 rounded-[8px] text-[14px] font-semibold transition-all"
+                className="mt-5 w-full bg-[#158B86] hover:bg-[#117672] active:scale-[0.98] text-white py-3 rounded-[8px] text-[14px] font-semibold transition-all shadow-lg shadow-[#158B86]/10"
                 onClick={() => openModal(type)}
               >
-                {isDemo ? 'Open Demo Account' : t('openLiveAccount')}
+                {isDemo ? t('openDemoAccount') : t('openLiveAccount')}
               </button>
             </div>
           ))}

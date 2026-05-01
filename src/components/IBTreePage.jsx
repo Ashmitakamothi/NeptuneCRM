@@ -94,6 +94,8 @@ const IBTreePage = ({ onNavigate }) => {
         onNavigate={onNavigate}
         activeTab="IB Dashboard"
         extra={extraHeader}
+        showMobileBack={true}
+        mobileBackTo="IB_Dashboard"
       />
 
       {/* Main Content Card */}

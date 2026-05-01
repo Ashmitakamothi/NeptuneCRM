@@ -29,64 +29,64 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
   const uplinks = [];
 
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] w-full max-w-[450px] rounded-[12px] shadow-2xl relative overflow-hidden animate-scale-in">
-        <div className="flex items-center justify-between p-5 border-b border-[var(--border-color)]">
-          <h2 className="text-[17px] font-bold text-[var(--text-color)]">{t('startNewChat')}</h2>
-          <button onClick={onClose} className="text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors">
-            <X size={20} />
+    <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className={`relative bg-[#1a1a1e] border border-white/5 w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
+        
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
+          <h2 className="text-[20px] font-bold text-[#3B82F6]">{t('startNewChat')}</h2>
+          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
+            <X size={24} />
           </button>
         </div>
 
-        
-        <div className="p-5">
+        {/* Body */}
+        <div className="px-6 py-6">
           <div className="relative mb-6">
-            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-40" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
             <input 
               type="text" 
               placeholder={t('search')} 
-              className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] pl-10 pr-4 py-2.5 text-[var(--text-color)] text-[14px] outline-none focus:border-[#00BFA5]/50 transition-all"
+              className="w-full bg-[#000000] border border-white/5 rounded-[8px] pl-11 pr-4 py-3 text-white text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-white/20"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-
-          <div className="space-y-1 max-h-[400px] overflow-y-auto custom-scrollbar">
-            {uplinks
+          <div className="space-y-1 max-h-[400px] overflow-y-auto custom-scrollbar -mx-2 px-2">
+            {(uplinks.length > 0 ? uplinks : [
+              { id: 1, name: 'Test SubAdmin1', initial: 'TS', email: 'testsubadmin145+1@yopmail.com', role: 'Uplink', color: 'bg-blue-500' },
+              { id: 2, name: 'Moin Pathan', initial: 'MP', email: 'moinpathan@yopmail.com', role: 'Uplink', color: 'bg-blue-600' },
+              { id: 3, name: 'Isha Patel', initial: 'IP', email: 'isha198@yopmail.com', role: 'Uplink', color: 'bg-blue-700' },
+              { id: 4, name: 'man Donda', initial: 'MD', email: 'jason.mann00@yopmail.com', role: 'Uplink', color: 'bg-blue-800' },
+              { id: 5, name: 'Test SubAdmin', initial: 'TS', email: 'testsubadmin145@yopmail.com', role: 'Uplink', color: 'bg-blue-500' },
+              { id: 6, name: 'Aryan Singh', initial: 'AS', email: 'aryansingh1703@yopmail.com', role: 'Uplink', color: 'bg-blue-600' },
+            ])
               .filter(user => {
                 const search = searchQuery.toLowerCase();
-                const nameMatch = user.name.toLowerCase().includes(search);
-                const emailPrefix = user.email.split('@')[0].toLowerCase();
-                const emailMatch = emailPrefix.includes(search);
-                return nameMatch || emailMatch;
+                return user.name.toLowerCase().includes(search) || user.email.toLowerCase().includes(search);
               })
-
               .map((user) => (
                 <div 
                   key={user.id} 
-                  className="flex items-center gap-4 p-3 rounded-[8px] hover:bg-[var(--sub-bg)] cursor-pointer transition-colors border border-transparent hover:border-[var(--border-color)]"
+                  className="flex items-center gap-4 p-3 rounded-[12px] hover:bg-white/5 cursor-pointer transition-all border border-transparent"
                   onClick={() => onSelectUser(user)}
                 >
-                  <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-[14px] ${user.color}`}>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-[16px] text-white shrink-0 ${user.color}`}>
                     {user.initial}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[var(--text-color)] font-bold text-[15px]">{user.name}</span>
-                      <span className="bg-[#00BFA5]/10 text-[#00BFA5] text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">{user.role}</span>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-white font-bold text-[15px]">{user.name}</span>
+                      <span className="bg-[#3B82F6]/20 text-[#3B82F6] text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-[#3B82F6]/30">{user.role}</span>
                     </div>
-                    <div className="text-[var(--text-color)] opacity-40 text-[13px] truncate">{user.email}</div>
+                    <div className="text-white/40 text-[13px] truncate">{user.email}</div>
                   </div>
                 </div>
-
               ))}
           </div>
-
         </div>
       </div>
     </div>
@@ -106,8 +106,6 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
   const t = (key) => (TRANSLATIONS[currentLang] || TRANSLATIONS.EN)?.[key] || key;
 
   const users = [];
-
-
   const filteredUsers = users.filter(user => user.status === activeTab);
 
   const handleSelectUser = (user) => {
@@ -116,9 +114,17 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
   };
 
   return (
-    <div className="flex flex-col w-full animate-fade-in h-[calc(100vh-140px)]">
-      {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
+    <div className="h-[calc(100vh-160px)] min-h-fit p-4 pb-[100px] animate-fade-in">
+      {/* ── Mobile Back Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => selectedChat ? setSelectedChat(null) : onNavigate('Settings')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">Inbox</h1>
+      </div>
+
+      {/* ── Top Header (Desktop only) ─────────────────────────────────── */}
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
         <div className="flex items-center gap-3">
           <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{isIBMode ? t('ibInbox') : t('inbox')}</h1>
           <div className="flex items-center gap-1.5">
@@ -128,56 +134,22 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          {isIBMode && (
-            <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl h-[38px]">
-               <p className="text-[14px] font-medium text-white">{t('referralLink') || 'My Referral Link'}: <span className="text-white">IFAHGGAP</span></p>
-               <button className="text-white hover:opacity-80 transition-all">
-                 <Copy size={16} />
-               </button>
-            </div>
-          )}
           <div className="bg-[var(--sub-bg)] p-1.5 rounded-full border border-[var(--border-color)] flex items-center h-[38px]">
             <button onClick={() => { setDashboardType('User'); onNavigate('Dashboard'); }} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
             <button onClick={() => { setDashboardType('IB'); onNavigate('IB_Dashboard'); }}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
-          {/*
-          <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
-          <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
-            <Globe size={16} /> <span>US</span>
-          </div>
-          */}
         </div>
       </div>
 
-      {/* ── Breadcrumb ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
-        <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
-        <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
-        <span className="text-[var(--text-color)]">{isIBMode ? (t('ibInboxBread') || 'IB Inbox') : t('inboxBread')}</span>
-      </div>
-
-      {/* ── Main Layout ────────────────────────────────────────── */}
-      <div className="flex flex-1 border border-[var(--border-color)] rounded-[12px] overflow-hidden backdrop-blur-sm">
-        {/* Sidebar */}
-        <div className="w-[320px] border-r border-[var(--border-color)] flex flex-col">
-          <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between">
-            <span className="text-[var(--text-color)] font-bold text-[18px]">{t('users')}</span>
-
+      <div className="border-2 border-[var(--border-color)] rounded-xl flex overflow-hidden h-full">
+        {/* Sidebar (Desktop only) */}
+        <div className={`hidden xl:flex w-1/4 border-r-2 border-[var(--border-color)] flex-col bg-[#1a1a1a]`}>
+          <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between sticky top-0 z-10 shadow-sm bg-[#1a1a1a]">
+            <span className="text-[var(--text-color)] font-semibold text-lg">{t('users')}</span>
             <div className="flex bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] p-1 scale-90">
-              <button 
-                onClick={() => setActiveTab('Active')}
-                className={`px-3 py-1 rounded-[6px] text-[12px] font-bold transition-all ${activeTab === 'Active' ? 'bg-[#158B86] text-white shadow-lg' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
-              >
-                {t('active')}
-              </button>
-              <button 
-                onClick={() => setActiveTab('Archived')}
-                className={`px-3 py-1 rounded-[6px] text-[12px] font-bold transition-all ${activeTab === 'Archived' ? 'bg-[#158B86] text-white shadow-lg' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}
-              >
-                {t('archived')}
-              </button>
+              <button onClick={() => setActiveTab('Active')} className={`px-3 py-1 rounded-[6px] text-[12px] font-bold transition-all ${activeTab === 'Active' ? 'bg-[#158B86] text-white' : 'text-[#8e9d9b]'}`}>{t('active')}</button>
+              <button onClick={() => setActiveTab('Archived')} className={`px-3 py-1 rounded-[6px] text-[12px] font-bold transition-all ${activeTab === 'Archived' ? 'bg-[#158B86] text-white' : 'text-[#8e9d9b]'}`}>{t('archived')}</button>
             </div>
-
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -194,100 +166,58 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-[var(--text-color)] font-bold text-[14px] truncate">{user.name}</span>
-                      <span className={`${user.role === 'Downlink' ? 'bg-[#158B86]/10 text-[#158B86]' : 'bg-green-500/10 text-green-500'} text-[10px] px-1.5 py-0.5 rounded font-bold uppercase`}>{user.role}</span>
                     </div>
                     <div className="text-[var(--text-color)] opacity-40 text-[12px] truncate font-medium">{user.lastMsg}</div>
                   </div>
                 </div>
-
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center h-full p-8 text-center opacity-40">
-                <div className="w-12 h-12 rounded-full border-2 border-dashed border-[var(--border-color)] flex items-center justify-center mb-3">
-                  <MessageSquare size={20} className="text-[var(--text-color)]" />
-                </div>
-                <p className="text-[var(--text-color)] opacity-60 text-sm font-medium">{t('noChatsPrefix')} {activeTab === 'Active' ? t('active') : t('archived')} {t('noChatsSuffix')}</p>
-              </div>
+              <p className="text-gray-400 text-center mt-10 text-[14px]">No previous chat available</p>
             )}
           </div>
+          
           <div className="p-4 border-t border-[var(--border-color)]">
-
-            <button 
-              onClick={() => setIsStartChatOpen(true)}
-              className="w-full flex items-center justify-center gap-2 bg-[#158B86] hover:bg-[#117672] text-white py-3 rounded-[8px] font-bold transition-all shadow-lg text-[14px]"
-            >
+            <button onClick={() => setIsStartChatOpen(true)} className="w-full flex items-center justify-center gap-2 bg-[#158B86] hover:bg-[#117672] text-white py-3 rounded-lg font-semibold transition-all text-[14px] shadow-lg lg:shadow-md">
               <MessageSquare size={18} />
               {t('startChat')}
             </button>
           </div>
         </div>
 
-
         {/* Content Area */}
-        <div className="flex-1 flex flex-col">
-
+        <div className="flex-1 flex flex-col relative overflow-hidden bg-[#1a1a1a]">
           {selectedChat ? (
             <>
               {/* Chat Header */}
               <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--sub-bg)]">
-
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-[14px] ${selectedChat.color}`}>
                     {selectedChat.initial}
                   </div>
                   <span className="text-[var(--text-color)] font-bold text-[16px]">{selectedChat.name}</span>
                 </div>
-
-                <div className="flex items-center gap-4">
-                  <button 
-                    onClick={() => setSelectedChat(null)}
-                    className="text-red-500 hover:text-red-400 font-bold text-[14px] transition-colors"
-                  >
-                    {t('endChat')}
-                  </button>
-                  <button className="text-[#158B86] hover:text-[#117672] transition-colors">
-                    <RefreshCcw size={20} />
-                  </button>
-                </div>
+                <button onClick={() => setSelectedChat(null)} className="text-red-500 hover:text-red-400 font-bold text-[14px]">{t('endChat')}</button>
               </div>
-
-              {/* Message Area */}
-              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                {/* Messages would go here */}
-              </div>
-
-              {/* Input Area */}
+              <div className="flex-1 overflow-y-auto p-6" />
               <div className="p-6 border-t border-[var(--border-color)]">
-
-                <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[12px] flex items-center gap-3 px-4 py-2 focus-within:border-[#158B86]/50 transition-all backdrop-blur-md">
-                  <button className="text-[#00BFA5] hover:text-[#00BFA5]/80 transition-colors">
-                    <Paperclip size={20} />
-                  </button>
-
-                  <input 
-                    type="text" 
-                    placeholder={t('typeMessage')} 
-                    className="flex-1 bg-transparent border-none outline-none text-[var(--text-color)] text-[14px] py-2 placeholder:text-[var(--text-color)] placeholder:opacity-20"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && setMessage('')}
-                  />
-
-                  <button 
-                    className="text-[#00BFA5] hover:text-[#00BFA5]/80 transition-all"
-                    onClick={() => setMessage('')}
-                  >
-                    <Send size={22} className="rotate-[15deg]" />
-                  </button>
+                <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-xl flex items-center gap-3 px-4 py-2">
+                  <input type="text" placeholder={t('typeMessage')} className="flex-1 bg-transparent border-none outline-none text-white text-[14px] py-2" value={message} onChange={e => setMessage(e.target.value)} />
+                  <button className="text-[#3B82F6] lg:text-[#158B86]"><Send size={22} /></button>
                 </div>
               </div>
-
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-              <img src={isDark ? logoWhite : logom} alt="Neptune" className="h-16 object-contain" />
+            <div className="flex-1 flex flex-col items-center justify-center h-full p-12">
+              <img src={isDark ? logoWhite : logom} alt="Neptune" className="h-16 opacity-60 object-contain mb-6" />
+              
+              <button 
+                onClick={() => setIsStartChatOpen(true)}
+                className="xl:hidden flex items-center gap-3 bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] hover:opacity-90 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20"
+              >
+                <MessageSquare size={20} />
+                {t('startChat')}
+              </button>
             </div>
-
           )}
         </div>
       </div>

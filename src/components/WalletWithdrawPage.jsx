@@ -5,6 +5,7 @@ import WalletWithdrawTable from './WalletWithdrawTable';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
 import { endpoints } from '../api/endpoints';
 import DashboardHeader from './DashboardHeader';
+import MobileWalletWithdraw from './MobileWalletWithdraw';
 
 // Reuse images or use relevant ones if available
 import bep20Img from '../assets/BEP_20.jpg';
@@ -139,7 +140,25 @@ const WalletWithdrawPage = ({ onNavigate }) => {
 
 
   return (
-    <div className="flex flex-col w-full animate-fade-in pb-20">
+    <div className="flex flex-col w-full animate-fade-in">
+
+      {/* ════════ MOBILE VIEW (hidden on lg+) ════════ */}
+      <div className="block lg:hidden">
+        <MobileWalletWithdraw
+          onNavigate={onNavigate}
+          WITHDRAWAL_METHODS={WITHDRAWAL_METHODS}
+          summaryData={summaryData}
+          currentItems={currentItems}
+          filterStatus={filterStatus}
+          setFilterStatus={setFilterStatus}
+          sortConfig={sortConfig}
+          onSort={handleSort}
+        />
+      </div>
+
+      {/* ════════ DESKTOP VIEW (hidden on mobile) ════════ */}
+      <div className="hidden lg:block">
+
       <DashboardHeader 
         title={t('withdraw')}
         breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
@@ -533,8 +552,9 @@ const WalletWithdrawPage = ({ onNavigate }) => {
 
         </div>
       </div>
-    </div>
-  );
+    </div> {/* end desktop wrapper */}
+  </div>
+);
 };
 
 export default WalletWithdrawPage;

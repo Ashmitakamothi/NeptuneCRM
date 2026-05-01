@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import MyTransactionsTable from './MyTransactionsTable';
 import DashboardHeader from './DashboardHeader';
+import MobileMyTransactions from './MobileMyTransactions';
 
 const { RangePicker } = DatePicker;
 
@@ -58,7 +59,23 @@ const MyTransactionsPage = ({ onNavigate, initialFilter = 'All', onFilterChange 
 
 
   return (
-    <div className="flex flex-col w-full h-full animate-fade-in pb-20">
+    <div className="flex flex-col w-full h-full animate-fade-in">
+
+      {/* ════════ MOBILE VIEW (hidden on lg+) ════════ */}
+      <div className="block lg:hidden px-4">
+        <MobileMyTransactions
+          onNavigate={onNavigate}
+          operationFilter={operationFilter}
+          handleFilterChange={handleFilterChange}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          onExport={() => setExportTrigger(prev => prev + 1)}
+        />
+      </div>
+
+      {/* ════════ DESKTOP VIEW (hidden on mobile) ════════ */}
+      <div className="hidden lg:block pb-20">
+
       <DashboardHeader 
         title={t('transactions')}
         breadcrumbs={[{ title: t('breadcrumb'), active: true }]}
@@ -169,6 +186,7 @@ const MyTransactionsPage = ({ onNavigate, initialFilter = 'All', onFilterChange 
         dateRange={dateRange}
         exportTrigger={exportTrigger}
       />
+      </div> {/* end desktop wrapper */}
     </div>
   );
 };

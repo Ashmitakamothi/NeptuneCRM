@@ -33,10 +33,13 @@ const TRANSLATIONS = {
   }
 };
 
-const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRange = null }) => {
+const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRange = null, isMobile = false }) => {
   const { language } = useLanguage();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
+  const themeColor = isMobile ? '#3B82F6' : '#158B86';
+  const themeColorSub = isMobile ? '#3B82F6' : '#00BFA5';
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isRowsDropdownOpen, setIsRowsDropdownOpen] = useState(false);
@@ -48,23 +51,6 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
   }, [statusFilter, searchQuery, dateRange, sortConfig]);
 
   // Mock data matching the screenshot
-  /*
-  const mockData = [
-    { id: 1, from: 'Wallet', to: '555006', amount: 10, requestDate: '16-04-2026 05:11 PM', actionDate: '--', status: 'Approved' },
-    { id: 2, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 06:30 PM', actionDate: '08-04-2026 06:31 PM', status: 'Approved' },
-    { id: 3, from: 'Wallet', to: '555006', amount: 50, requestDate: '08-04-2026 06:29 PM', actionDate: '08-04-2026 06:30 PM', status: 'Approved' },
-    { id: 4, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 06:23 PM', actionDate: '08-04-2026 06:29 PM', status: 'Approved' },
-    { id: 5, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 06:05 PM', actionDate: '08-04-2026 06:22 PM', status: 'Approved' },
-    { id: 6, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 06:01 PM', actionDate: '08-04-2026 06:04 PM', status: 'Approved' },
-    { id: 7, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 05:54 PM', actionDate: '08-04-2026 06:01 PM', status: 'Approved' },
-    { id: 8, from: 'Wallet', to: '555006', amount: 10, requestDate: '08-04-2026 05:52 PM', actionDate: '08-04-2026 05:54 PM', status: 'Approved' },
-    { id: 9, from: 'Wallet', to: '555006', amount: 100, requestDate: '08-04-2026 05:47 PM', actionDate: '08-04-2026 05:51 PM', status: 'Approved' },
-    { id: 10, from: 'Wallet', to: '555115', amount: 500, requestDate: '17-03-2026 05:21 PM', actionDate: '--', status: 'Approved' },
-    { id: 11, from: 'Wallet', to: '555006', amount: 20, requestDate: '16-03-2026 01:10 PM', actionDate: '--', status: 'Pending' },
-    { id: 12, from: 'Wallet', to: '555166', amount: 35, requestDate: '15-03-2026 04:05 PM', actionDate: '15-03-2026 04:10 PM', status: 'Rejected' },
-    { id: 13, from: 'Wallet', to: '555006', amount: 15, requestDate: '10-03-2026 02:00 PM', actionDate: '--', status: 'Pending' }
-  ];
-  */
   const mockData = [];
 
   const filteredData = mockData.filter(item => {
@@ -153,9 +139,10 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
           onClick={() => setCurrentPage(i)}
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
             currentPage === i 
-              ? 'bg-[#158B86] text-white' 
+              ? 'text-white' 
               : 'text-[var(--text-color)] hover:bg-white/5'
           }`}
+          style={currentPage === i ? { background: themeColor } : {}}
         >
           {i}
         </button>
@@ -168,10 +155,10 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
     const isActive = sortConfig.key === key;
     return (
       <div className="flex flex-col ml-2 gap-[1px]">
-        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig.direction === 'asc' ? 'opacity-100 fill-[#158B86]' : 'opacity-40 fill-white'}`}>
+        <svg width="10" height="10" viewBox="0 0 24 24" className="transition-opacity" style={{ opacity: isActive && sortConfig.direction === 'asc' ? 1 : 0.4, fill: isActive && sortConfig.direction === 'asc' ? themeColor : 'white' }}>
           <polygon points="12,6 4,16 20,16" />
         </svg>
-        <svg width="10" height="10" viewBox="0 0 24 24" className={`transition-opacity ${isActive && sortConfig.direction === 'desc' ? 'opacity-100 fill-[#158B86]' : 'opacity-40 fill-white'}`}>
+        <svg width="10" height="10" viewBox="0 0 24 24" className="transition-opacity" style={{ opacity: isActive && sortConfig.direction === 'desc' ? 1 : 0.4, fill: isActive && sortConfig.direction === 'desc' ? themeColor : 'white' }}>
           <polygon points="12,18 4,8 20,8" />
         </svg>
       </div>
@@ -183,9 +170,13 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
     return "Click to sort ascending";
   };
 
+  const renderStatus = (status) => {
+    return <span className="text-[var(--text-color)] opacity-80">{language === 'HI' ? t(status.toLowerCase()) : status}</span>;
+  };
+
   return (
-    <div className="rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
-      <div className="flex-1 overflow-x-auto min-h-0">
+    <div className={`rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent ${isMobile ? 'mobile-table-styled' : ''}`}>
+      <div className="flex-1 overflow-x-auto min-h-0 custom-scrollbar">
         <table className="w-full whitespace-nowrap">
           <thead>
             <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
@@ -193,7 +184,6 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
               <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('to')}</th>
               <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('amount')}</th>
               <th className="p-0 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)] cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleSort('requestDate')}>
-
                 <Tooltip title={getSortTooltip('requestDate')} placement="top" color="#404040" overlayInnerStyle={{ borderRadius: '6px', padding: '4px 12px', fontSize: '13px' }} mouseEnterDelay={0.3}>
                   <div className="flex items-center justify-between w-full h-full py-3 px-2 md:px-4">
                     <span>{t('requestDate')}</span>
@@ -211,7 +201,6 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
               </th>
               <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
               <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
-
             </tr>
           </thead>
           <tbody>
@@ -234,11 +223,10 @@ const InternalTransferTable = ({ statusFilter = 'All', searchQuery = '', dateRan
                     {row.actionDate}
                   </td>
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px]">
-                    <span className="text-[var(--text-color)] opacity-80">{language === 'HI' ? t(row.status.toLowerCase()) : row.status}</span>
+                    {renderStatus(row.status)}
                   </td>
-
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[#158B86]">
-                    <svg width="22" height="22" viewBox="0 0 24 25" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-[#00BFA5] hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium" style={{ color: themeColor }}>
+                    <svg width="22" height="22" viewBox="0 0 24 25" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg" style={{ color: themeColorSub }}>
                       <path d="M2 12.5s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                       <circle cx="12" cy="12.5" r="3" />
                     </svg>

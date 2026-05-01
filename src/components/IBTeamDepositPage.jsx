@@ -146,6 +146,8 @@ const IBTeamDepositPage = ({ onNavigate }) => {
         onNavigate={onNavigate}
         activeTab="IB Dashboard"
         extra={extraHeader}
+        showMobileBack={true}
+        mobileBackTo="IB_Dashboard"
       />
 
       {/* Filters Section */}

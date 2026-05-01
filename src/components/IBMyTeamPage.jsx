@@ -145,73 +145,157 @@ const IBMyTeamPage = ({ onNavigate }) => {
 
   return (
     <div className="animate-fade-in space-y-4 pb-10">
-      <DashboardHeader 
-        title={t.myTraderTeam}
-        breadcrumbs={[{ title: t.myTraderTeam, active: true }]}
-        onNavigate={onNavigate}
-        activeTab="IB Dashboard"
-        extra={extraHeader}
-      />
+      {/* ── Mobile View (lg:hidden) ── */}
+      <div className="lg:hidden h-[calc(100vh-160px)] min-h-fit p-4 pb-[100px] bg-[var(--theme-bg)] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 bg-[var(--bg-color)] sticky top-0 z-[100]">
+          <button onClick={() => onNavigate('IB_Dashboard')} className="p-1 -ml-1 transition-colors">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <h1 className="text-[20px] font-bold text-[#3B82F6]">{t.myTraderTeam}</h1>
+        </div>
 
-      {/* Tabs & Filters Section */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-2">
-        <Segmented
-          options={[t.myTeam, t.allTeam]}
-          value={teamFilter === 'My Team' ? t.myTeam : t.allTeam}
-          onChange={handleFilterChange}
-          className="ib-segmented"
-        />
+        <div className="space-y-5">
+          {/* Tabs & Filters Section */}
+          <div className="flex flex-col gap-4">
+            <div className="w-full">
+              <Segmented
+                options={[t.myTeam, t.allTeam]}
+                value={teamFilter === 'My Team' ? t.myTeam : t.allTeam}
+                onChange={handleFilterChange}
+                className="ib-segmented w-full"
+                block
+              />
+            </div>
 
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <Input 
-            placeholder={t.search} 
-            prefix={<Search size={16} className="text-white/30" />}
-            className="ib-input w-full md:w-[220px]"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <Button 
-            type="primary"
-            icon={<Download size={16} />}
-            disabled={dataSource.length === 0 || isLoading}
-            className={`!bg-[#158B86] border-none flex items-center gap-2 h-[38px] px-6 rounded-lg font-semibold shadow-lg shadow-[#158b86]/20 !text-white transition-all ${dataSource.length === 0 || isLoading ? 'opacity-60 cursor-not-allowed' : 'hover:!bg-[#12726e]'}`}
-          >
-            {t.export}
-          </Button>
+            <div className="flex items-center gap-3 w-full">
+              <Input 
+                placeholder={t.search} 
+                prefix={<Search size={16} className="text-white/30" />}
+                className="ib-input flex-1 h-11"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <button 
+                type="button"
+                disabled={dataSource.length === 0 || isLoading}
+                className={`h-11 px-4 bg-[#2b7fff] text-white border-none rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 transition-all ${dataSource.length === 0 || isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#1a66ff]'}`}
+              >
+                <Download size={18} />
+                {t.export}
+              </button>
+            </div>
+          </div>
+
+          {/* Table Container */}
+          <div className="mt-6 border border-white/5 rounded-xl overflow-hidden bg-[var(--theme-bg)] shadow-xl">
+            {isLoading ? (
+              <div className="p-10 text-center"><SkeletonTable /></div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table 
+                  columns={columns}
+                  dataSource={dataSource}
+                  pagination={false}
+                  className="ib-table"
+                  scroll={{ x: 1300 }}
+                  locale={{
+                    emptyText: (
+                      <div className="flex flex-col items-center justify-center py-20 text-white/30 italic font-medium">
+                        <div className="mb-4 opacity-20">
+                          <svg width="64" height="41" viewBox="0 0 64 41" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="translate(0 1)" fill="none" fillRule="evenodd">
+                              <ellipse fill="#272727" cx="32" cy="33" rx="32" ry="7"></ellipse>
+                              <g fillRule="nonzero" stroke="#3e3e3e">
+                                <path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"></path>
+                                <path d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z" fill="#1d1d1d"></path>
+                              </g>
+                            </g>
+                          </svg>
+                        </div>
+                        {t.noRecord}
+                      </div>
+                    )
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Main Content Card */}
-      <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-0 overflow-hidden shadow-sm min-h-[400px]">
-        {isLoading ? (
-          <SkeletonTable />
-        ) : (
-          <div className="overflow-x-auto w-full">
-          <Table 
-            columns={columns}
-            dataSource={dataSource}
-            pagination={{
-              pageSize: 10,
-              className: "ib-pagination px-6 py-4",
-            }}
-            className="ib-table"
-            scroll={{ x: 1300 }}
-            locale={{
-              emptyText: (
-                <div className="flex flex-col items-center justify-center py-12 text-[#8e9d9b]">
-                  <div className="bg-white/5 p-4 rounded-full mb-4">
-                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="opacity-40">
-                       <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
-                       <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
-                     </svg>
-                  </div>
-                  <span className="text-[14px] font-medium">{t.noRecord}</span>
-                </div>
-              )
-            }}
+      {/* ── Desktop View (lg:block hidden on mobile) ── */}
+      <div className="hidden lg:block">
+        <DashboardHeader 
+          title={t.myTraderTeam}
+          breadcrumbs={[{ title: t.myTraderTeam, active: true }]}
+          onNavigate={onNavigate}
+          activeTab="IB Dashboard"
+          extra={extraHeader}
+          showMobileBack={true}
+          mobileBackTo="IB_Dashboard"
+        />
+
+        {/* Tabs & Filters Section */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-2">
+          <Segmented
+            options={[t.myTeam, t.allTeam]}
+            value={teamFilter === 'My Team' ? t.myTeam : t.allTeam}
+            onChange={handleFilterChange}
+            className="ib-segmented"
           />
+
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <Input 
+              placeholder={t.search} 
+              prefix={<Search size={16} className="text-white/30" />}
+              className="ib-input w-full md:w-[220px]"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button 
+              type="button"
+              disabled={dataSource.length === 0 || isLoading}
+              className={`h-[38px] px-6 bg-[#158B86] hover:bg-[#117672] text-white border-none rounded-lg font-semibold flex items-center gap-2 shadow-lg shadow-teal-900/20 transition-all ${dataSource.length === 0 || isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            >
+              <Download size={16} />
+              {t.export}
+            </button>
           </div>
-        )}
+        </div>
+
+        {/* Main Content Card */}
+        <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-0 overflow-hidden shadow-sm min-h-[400px]">
+          {isLoading ? (
+            <SkeletonTable />
+          ) : (
+            <div className="overflow-x-auto w-full">
+            <Table 
+              columns={columns}
+              dataSource={dataSource}
+              pagination={{
+                pageSize: 10,
+                className: "ib-pagination px-6 py-4",
+              }}
+              className="ib-table"
+              scroll={{ x: 1300 }}
+              locale={{
+                emptyText: (
+                  <div className="flex flex-col items-center justify-center py-12 text-[#8e9d9b]">
+                    <div className="bg-white/5 p-4 rounded-full mb-4">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="opacity-40">
+                        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
+                        <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                      </svg>
+                    </div>
+                    <span className="text-[14px] font-medium">{t.noRecord}</span>
+                  </div>
+                )
+              }}
+            />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

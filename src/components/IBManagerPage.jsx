@@ -153,16 +153,19 @@ const IBManagerPage = ({ onNavigate }) => {
         onNavigate={onNavigate}
         activeTab="IB Dashboard"
         extra={extraHeader}
+        showMobileBack={true}
+        mobileBackTo="IB_Dashboard"
       />
 
       {/* Tabs & Filters Section - Matching provided HTML structure */}
       <div className="flex items-center justify-between flex-wrap gap-5">
         <div className="w-full md:w-auto">
           <Segmented
+            block
             options={[t.approved, t.pending, t.declined]}
             value={statusFilter === 'Approved' ? t.approved : statusFilter === 'Pending' ? t.pending : t.declined}
             onChange={handleStatusChange}
-            className="ib-segmented"
+            className="ib-segmented w-full"
           />
         </div>
 
@@ -176,14 +179,14 @@ const IBManagerPage = ({ onNavigate }) => {
           />
           <div>
             <div className="w-full md:w-auto">
-              <Button 
-                type="primary"
-                icon={<Download size={16} />}
+              <button 
+                type="button"
                 disabled={dataSource.length === 0 || isLoading}
-                className={`!bg-[#158B86] border-none flex items-center gap-2 h-[38px] px-6 rounded-lg font-semibold shadow-lg shadow-[#158b86]/20 !text-white transition-all ${dataSource.length === 0 || isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:!bg-[#12726e]'}`}
+                className={`h-[38px] px-6 bg-[#158B86] hover:bg-[#117672] text-white border-none rounded-lg font-semibold flex items-center gap-2 shadow-lg shadow-teal-900/20 transition-all ${dataSource.length === 0 || isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
+                <Download size={16} />
                 {t.export}
-              </Button>
+              </button>
             </div>
           </div>
         </div>

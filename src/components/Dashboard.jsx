@@ -42,11 +42,13 @@ const Dashboard = ({ onNavigate }) => {
 
   return (
     <div className="space-y-6 md:space-y-8 animate-fade-in">
-      <DashboardHeader 
-        title="Dashboard" 
-        breadcrumbs={[{ title: 'Dashboard', active: true }]} 
-        onNavigate={onNavigate} 
-      />
+      <div className="hidden lg:block">
+        <DashboardHeader 
+          title="Dashboard" 
+          breadcrumbs={[{ title: 'Dashboard', active: true }]} 
+          onNavigate={onNavigate} 
+        />
+      </div>
       {/* Top Section: Hello and Balance */}
       <SummaryCards onNavigate={onNavigate} data={slices.summary} />
 

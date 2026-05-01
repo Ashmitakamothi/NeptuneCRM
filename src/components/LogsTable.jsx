@@ -93,10 +93,10 @@ const LogsTable = () => {
         <button 
           key={i}
           onClick={() => setCurrentPage(i)}
-          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
+          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
-              ? 'bg-[#158B86] text-white' 
-              : 'text-[var(--text-color)] hover:bg-white/5'
+              ? 'bg-[#3B82F6] text-white shadow-lg shadow-blue-500/20' 
+              : 'text-white/40 hover:text-white hover:bg-white/5'
           }`}
         >
           {i}
@@ -111,9 +111,9 @@ const LogsTable = () => {
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] w-3/4">{t('message')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)] w-1/4">{t('updateDate')}</th>
+            <tr className="bg-[#1a1a1e] border-b border-white/5">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider min-w-[200px]">{t('message')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5 min-w-[150px]">{t('updateDate')}</th>
             </tr>
           </thead>
 
@@ -122,16 +122,15 @@ const LogsTable = () => {
               <tr><td colSpan="2" className="py-20 text-center text-[#8e9d9b]">Loading logs...</td></tr>
             ) : paginatedData.length > 0 ? (
               paginatedData.map((row, idx) => (
-                <tr key={row.id || idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--sub-bg)] transition-colors">
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                <tr key={row.id || idx} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
+                  <td className="py-4 px-4 text-[14px] font-medium text-white/90 whitespace-normal">
                     {row.message || row.Message || '-'}
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[var(--text-color)]">
+                  <td className="py-4 px-4 text-[14px] font-medium text-white/60">
                     {formatDate(row.updateDate || row.UpdateDate || row.createdDate || row.date || row.dateTime)}
                   </td>
                 </tr>
               ))
-
             ) : (
               <tr>
                 <td colSpan="2" className="py-[60px] text-center">

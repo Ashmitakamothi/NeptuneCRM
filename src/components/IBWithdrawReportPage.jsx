@@ -131,6 +131,8 @@ const IBWithdrawReportPage = ({ onNavigate }) => {
         onNavigate={onNavigate}
         activeTab="IB Dashboard"
         extra={extraHeader}
+        showMobileBack={true}
+        mobileBackTo="IB_Dashboard"
       />
 
       {/* Tabs & Filters Section */}

@@ -106,8 +106,16 @@ const DownloadPage = ({ onNavigate }) => {
 
   return (
     <div className="flex flex-col w-full animate-fade-in pb-12">
-      {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
+      {/* ── Mobile Back Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Settings')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">{t('title')}</h1>
+      </div>
+
+      {/* ── Top Header (Desktop only) ─────────────────────────────────── */}
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6 shrink-0">
         <div className="flex items-center gap-3">
           <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('title')}</h1>
           <div className="flex items-center gap-1.5">
@@ -121,18 +129,11 @@ const DownloadPage = ({ onNavigate }) => {
             <button onClick={() => setDashboardType('User')} className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'User' ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('userDashboard')}</button>
             <button onClick={() => setDashboardType('IB')}   className={`px-4 py-1.5 rounded-full text-[13px] transition-colors ${dashboardType === 'IB'   ? 'bg-[#158B86] text-white font-semibold' : 'text-[#8e9d9b] hover:text-[var(--text-color)]'}`}>{t('ibDashboard')}</button>
           </div>
-          {/* 
-          <button className="text-[#8e9d9b] hover:text-white transition-colors"><Moon size={20} strokeWidth={2} /></button>
-          <div className="flex items-center gap-1.5 bg-[#122D32] px-3 py-1.5 rounded-full h-[38px] text-[#8e9d9b] text-[13px] cursor-pointer hover:text-white transition-all">
-            <Globe size={16} /> <span>US</span>
-          </div>
-          */}
         </div>
-
       </div>
 
-      {/* ── Breadcrumb ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
+      {/* ── Breadcrumb (Desktop only) ─────────────────────────────────── */}
+      <div className="hidden lg:flex items-center gap-2 text-[15px] mb-7 font-medium shrink-0">
         <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
         <span className="text-[var(--text-color)]">Download Terminal</span>
@@ -140,62 +141,59 @@ const DownloadPage = ({ onNavigate }) => {
 
       {/* ── Hero Banner ────────────────────────────────────────── */}
       <div 
-        className="relative w-full h-[100px] rounded-[10px] overflow-hidden mb-4 flex flex-col items-center justify-center text-center px-4"
+        className="relative w-full h-[150px] lg:h-[180px] rounded-[12px] overflow-hidden mb-8 flex flex-col items-center justify-center text-center px-6 shadow-2xl"
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(6, 18, 15, 0.4), rgba(6, 18, 15, 0.8)), url(${downloadBg})`,
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9)), url(${downloadBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
-        <h2 className="text-[20px] font-black text-white mb-0.5 tracking-wide">{t('heroTitle')}</h2>
-        <p className="text-white/60 text-[12px] max-w-2xl">{t('heroSubtitle')}</p>
+        <p className="text-white text-[16px] lg:text-[20px] font-bold leading-tight max-w-sm mb-0">
+          Download the MT5 trading App on App Store and Google Play Store
+        </p>
       </div>
 
       {/* ── Download Section ───────────────────────────────────── */}
       <div className="max-w-4xl mx-auto w-full px-2">
-        <h3 className="text-[#158B86] text-[20px] font-bold mb-3 tracking-wider">Download</h3>
+        <h3 className="text-[#3B82F6] lg:text-[#158B86] text-[28px] lg:text-[24px] font-bold mb-6 tracking-tight text-center lg:text-left">{t('downloadSection')}</h3>
 
-        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[8px] p-4 backdrop-blur-md">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="bg-white p-0.5 rounded-[2px]">
-              <img src={mt5Logo} alt="MT5" className="w-5 h-5 object-contain" />
+        <div className="bg-[#1a1a1e] lg:bg-[var(--card-bg)] border border-white/5 lg:border-[var(--border-color)] rounded-[16px] p-8 shadow-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-white p-1 rounded-[4px]">
+              <img src={mt5Logo} alt="MT5" className="w-6 h-6 object-contain" />
             </div>
-            <h4 className="text-[#158B86] text-[16px] font-black tracking-tight uppercase">{t('mt5Title')}</h4>
+            <h4 className="text-white lg:text-[var(--text-color)] text-[18px] lg:text-[20px] font-black tracking-tight uppercase">{t('mt5Title')}</h4>
           </div>
-          <p className="text-[#158B86]/70 text-[11px] mb-6">{t('mt5Subtitle')}</p>
+          <p className="text-[#3B82F6] lg:text-[var(--text-color)] text-[13px] lg:text-[14px] mb-10 font-medium leading-relaxed max-w-xs">{t('mt5Subtitle')}</p>
 
-
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-y-10 gap-x-4">
             {downloadOptions.map((option) => (
               <a 
                 key={option.id} 
                 href={option.url} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-1.5 group cursor-pointer"
+                className="flex flex-col items-center gap-3 group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#158B86]/10 border border-[var(--border-color)] flex items-center justify-center text-[#158B86] group-hover:bg-[#158B86]/20 group-hover:border-[#158B86]/30 transition-all duration-300">
-                  {option.icon}
+                <div className="w-14 h-14 rounded-full bg-[#000000] lg:bg-[var(--sub-bg)] border border-white/5 lg:border-[var(--border-color)] flex items-center justify-center text-[#3B82F6] lg:text-[#158B86] group-hover:border-[#3B82F6]/50 lg:group-hover:border-[#158B86]/50 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] lg:group-hover:shadow-[0_0_20px_rgba(21,139,134,0.2)] transition-all duration-300">
+                  <div className="scale-125">{option.icon}</div>
                 </div>
-                <span className="text-[#158B86] text-[11px] font-medium group-hover:text-[var(--text-color)] transition-colors">{option.name}</span>
+                <span className="text-[#3B82F6] lg:text-[var(--text-color)] text-[12px] font-bold group-hover:text-white lg:group-hover:text-[#158B86] transition-colors text-center">{option.name}</span>
               </a>
             ))}
           </div>
-
         </div>
 
         {/* ── Risk Statement ────────────────────────────────────── */}
-        <div className="mt-6 space-y-1.5">
-          <h5 className="text-[var(--text-color)] text-[12px] font-black tracking-wider uppercase">{t('riskTitle')}</h5>
-          <div className="space-y-1">
-            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic">{t('riskText')}</p>
-            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic text-justify">{t('riskText2')}</p>
-            <p className="text-[var(--text-color)] opacity-80 text-[10px] leading-tight italic">{t('riskText3')}</p>
+        <div className="mt-12 space-y-3 opacity-60">
+          <h5 className="text-[var(--text-color)] text-[13px] font-black tracking-widest uppercase">{t('riskTitle')}</h5>
+          <div className="space-y-2">
+            <p className="text-[var(--text-color)] text-[11px] leading-relaxed italic">{t('riskText')}</p>
+            <p className="text-[var(--text-color)] text-[11px] leading-relaxed italic text-justify">{t('riskText2')}</p>
+            <p className="text-[var(--text-color)] text-[11px] leading-relaxed italic">{t('riskText3')}</p>
           </div>
         </div>
       </div>
-
-
     </div>
   );
 };

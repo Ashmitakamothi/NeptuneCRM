@@ -5,6 +5,7 @@ import WalletDepositTable from './WalletDepositTable';
 import { useRealtimeJson } from '../hooks/useRealtimeJson';
 import { endpoints } from '../api/endpoints';
 import DashboardHeader from './DashboardHeader';
+import MobileWalletDeposit from './MobileWalletDeposit';
 
 import bep20Img from '../assets/BEP_20.jpg';
 import trc20Img from '../assets/TRC20.png';
@@ -158,7 +159,24 @@ const WalletDepositPage = ({ onNavigate }) => {
   };
 
   return (
-    <div className="flex flex-col w-full animate-fade-in pb-20">
+    <div className="flex flex-col w-full animate-fade-in">
+
+      {/* ════════ MOBILE VIEW (hidden on lg+) ════════ */}
+      <div className="block lg:hidden">
+        <MobileWalletDeposit
+          onNavigate={onNavigate}
+          PAYMENT_METHODS={PAYMENT_METHODS}
+          summaryData={summaryData}
+          currentItems={currentItems}
+          filterStatus={filterStatus}
+          setFilterStatus={setFilterStatus}
+          sortConfig={sortConfig}
+          onSort={handleSort}
+        />
+      </div>
+
+      {/* ════════ DESKTOP VIEW (hidden on mobile) ════════ */}
+      <div className="hidden lg:block">
 
       <DashboardHeader 
         title={t('deposit')}
@@ -776,6 +794,9 @@ const WalletDepositPage = ({ onNavigate }) => {
           ))}
         </div>
       </div>
+
+      </div>
+
     </div>
   );
 };

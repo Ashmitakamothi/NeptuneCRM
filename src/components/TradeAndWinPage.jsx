@@ -28,8 +28,16 @@ const TradeAndWinPage = ({ onNavigate }) => {
 
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
-      {/* ── Top Header ─────────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
+      {/* ── Mobile Back Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Dashboard')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">{t('tradeWin')}</h1>
+      </div>
+
+      {/* ── Top Header (Desktop only) ── */}
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
           <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('tradeWin')}</h1>
           <div className="flex items-center gap-1.5">
@@ -53,8 +61,8 @@ const TradeAndWinPage = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* ── Breadcrumb ─────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium">
+      {/* ── Breadcrumb (Desktop only) ── */}
+      <div className="hidden lg:flex items-center gap-2 text-[15px] mb-7 font-medium">
         <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80 transition-colors" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
         <span className="text-[var(--text-color)]">{t('tradeWin')}</span>

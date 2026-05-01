@@ -36,11 +36,14 @@ const TRANSLATIONS = {
   }
 };
 
-const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, exportTrigger = 0 }) => {
+const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, exportTrigger = 0, isMobile = false }) => {
   const { language } = useLanguage();
   const { token, userId } = useAuth();
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
   
+  const themeColor = isMobile ? '#3B82F6' : '#158B86';
+  const themeColorSub = isMobile ? '#3B82F6' : '#00BFA5';
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isRowsDropdownOpen, setIsRowsDropdownOpen] = useState(false);
@@ -156,10 +159,10 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
         <button 
           key={i}
           onClick={() => setCurrentPage(i)}
-          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-medium text-[13px] transition-colors ${
+          className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
-              ? 'bg-[#158B86] text-white' 
-              : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)]'
+              ? 'bg-[#3B82F6] text-white shadow-lg shadow-blue-500/20' 
+              : 'text-white/40 hover:text-white hover:bg-white/5'
           }`}
         >
           {i}
@@ -183,19 +186,19 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
   };
 
   return (
-    <div className="rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
-      <div className="flex-1 overflow-x-auto min-h-0">
+    <div className={`rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent ${isMobile ? 'mobile-table-styled' : ''}`}>
+      <div className="flex-1 overflow-x-auto min-h-0 custom-scrollbar">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)]">{t('operation')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentFrom')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('paymentTo')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('amount')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('transactionDate')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
-              <th className="py-3 px-2 md:px-4 text-left text-[13px] md:text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('remark')}</th>
+            <tr className="bg-[#1a1a1e] border-b border-white/5">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider">{t('operation')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentFrom')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentTo')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('amount')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('transactionDate')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('status')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('remark')}</th>
             </tr>
           </thead>
 
@@ -228,10 +231,10 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
                       {language === 'HI' ? t((row.status || 'PENDING').toLowerCase()) : (row.status || 'PENDING')}
                     </span>
                   </td>
-                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium text-[#158B86]">
+                  <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium" style={{ color: themeColor }}>
                     <div className="flex items-center gap-2">
                        <span className="text-[12px] opacity-60 truncate max-w-[100px]">{row.remarks || row.remark || '-'}</span>
-                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer text-[#00BFA5] hover:text-white transition-colors shrink-0">
+                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer hover:text-white transition-colors shrink-0" style={{ color: themeColorSub }}>
                         <path d="M4 14c4.5-6.5 11.5-6.5 16 0" />
                         <circle cx="12" cy="12" r="3" />
                       </svg>
@@ -273,9 +276,10 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
                   key={num}
                   className={`w-full px-3 py-2 text-left text-[13px] transition-colors ${
                     itemsPerPage === num 
-                      ? 'bg-[#158B86] text-white' 
+                      ? 'text-white' 
                       : 'text-[var(--text-color)] hover:bg-[var(--sub-bg)] opacity-80 hover:opacity-100'
                   }`}
+                  style={itemsPerPage === num ? { background: themeColor } : {}}
                   onClick={() => {
                     setItemsPerPage(num);
                     setCurrentPage(1);

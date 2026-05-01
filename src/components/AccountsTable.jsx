@@ -103,7 +103,7 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
   const t = (key) => TRANSLATIONS[language]?.[key] || key;
 
   return (
-    <div className="rounded-[16px] border border-[var(--border-color)] overflow-hidden flex flex-col h-full min-h-[325px] bg-transparent">
+    <div className="rounded-[16px] border border-[var(--border-color)] overflow-x-auto flex flex-col h-full min-h-[325px] bg-transparent">
       {!hideHeader && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-5 pt-4 pb-4">
           <h2 className="text-[16px] font-extrabold text-[var(--text-color)]">{t('accounts')}</h2>
@@ -129,18 +129,18 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
       <div className="flex-1 overflow-x-auto min-h-0 custom-scrollbar">
         <table className="w-full whitespace-nowrap min-w-[800px]">
           <thead>
-            <tr className="bg-[var(--card-bg)] border-b border-[var(--border-color)]">
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)]">{t('login')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('platform')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('acType')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('balance')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('leverage')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
-              <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('createdAt')}</th>
+            <tr className="bg-[#1a1a1e] border-b border-white/5">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider">{t('login')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('platform')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('acType')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('balance')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('leverage')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('createdAt')}</th>
               {!isDashboard && (
                 <>
-                  <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
-                  <th className="py-3 px-1 md:px-2 text-left text-[12px] md:text-[13px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('actions')}</th>
+                  <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('status')}</th>
+                  <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('actions')}</th>
                 </>
               )}
             </tr>
@@ -250,14 +250,17 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
               ))
             ) : (
               <tr>
-                <td colSpan={isDashboard ? 7 : 9} className="py-[60px] text-center">
-                   <div className="flex flex-col items-center justify-center text-[var(--text-color)] opacity-60">
-
-                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mb-3 opacity-60">
-                       <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline>
-                       <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
-                     </svg>
-                     <span className="text-[14px] font-medium">{t('noRecord')}</span>
+                <td colSpan={isDashboard ? 7 : 9} className="py-20 px-4 text-center">
+                   <div className="flex flex-col items-center justify-center p-8 bg-[#1a1a1e] border border-white/5 rounded-2xl w-full">
+                     <div className="w-20 h-20 mb-6 flex items-center justify-center bg-blue-500/10 rounded-full">
+                       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                         <line x1="3" y1="9" x2="21" y2="9" />
+                         <line x1="9" y1="21" x2="9" y2="9" />
+                       </svg>
+                     </div>
+                     <h2 className="text-[18px] font-bold text-white mb-2">No Accounts Found</h2>
+                     <p className="text-white/40 text-[14px]">There are no accounts to display</p>
                    </div>
                 </td>
               </tr>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Home, ChevronRight, Play, X, Eye, ChevronLeft, ChevronRight as ChevronRightIcon, LifeBuoy, Send } from 'lucide-react';
+import { Home, ChevronRight, Play, X, Eye, ChevronLeft, ChevronRight as ChevronRightIcon, LifeBuoy, Send, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -49,9 +49,12 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
   const [isAnimating, setIsAnimating] = useState(false);
   const [form, setForm] = useState({ title: '', description: '', queryType: '', priority: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [queryTypes, setqueryTypes] = useState([]);
+  const [queryTypes, setQueryTypes] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const t = (k) => TRANSLATIONS[language]?.[k] || k;
+
+  const modalInputCls = 'w-full bg-[#000000] border border-white/5 rounded-[8px] px-4 py-3 text-white text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-white/20';
+  const modalSelectCls = modalInputCls + ' appearance-none cursor-pointer';
 
   const headers = {
     'Content-Type': 'application/json',
@@ -63,7 +66,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
     if (!isOpen) { setTimeout(() => setIsAnimating(false), 300); return; }
     setIsAnimating(true);
     setForm({ title: '', description: '', queryType: '', priority: '' });
-    // fetch dropdowns
+    
     Promise.all([
       fetch(`${BASE}/DropDown/Ticket-Query?QueryType=user`, { headers }).then(r => r.ok ? r.json() : null),
       fetch(`${BASE}/DropDown/Priority`, { headers }).then(r => r.ok ? r.json() : null),
@@ -80,8 +83,8 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
       const payload = {
         title: form.title,
         description: form.description,
-        ticketQueryId: form.queryType, // The GUID string
-        priorityId: Number(form.priority) // The numeric priority ID
+        ticketQueryId: form.queryType,
+        priorityId: Number(form.priority)
       };
       const res = await fetch(`${BASE}/TicketMaster/Generate-Ticket`, {
         method: 'POST',
@@ -96,67 +99,70 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
   if (!isOpen && !isAnimating) return null;
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-start justify-center p-4 pt-[10vh] transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative bg-[var(--card-bg)] border border-[var(--border-color)] w-full max-w-[500px] rounded-[12px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : '-translate-y-10 scale-95 opacity-0'}`}>
+    <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className={`relative bg-[#1a1a1e] border border-white/5 w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-color)]">
-          <h2 className="text-[17px] font-bold text-[var(--text-color)]">{t('createTicket')}</h2>
-          <button onClick={onClose} className="text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors"><X size={20} /></button>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
+          <h2 className="text-[20px] font-bold text-[#3B82F6]">{t('createTicket')}</h2>
+          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors"><X size={24} /></button>
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5 space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-[var(--text-color)] opacity-80">{t('title')}</label>
+        <div className="px-6 py-6 space-y-6">
+          <div className="space-y-2">
+            <label className="text-[14px] font-bold text-white">{t('title')}</label>
             <input type="text" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              placeholder={t('title')} className={inputCls} />
+              placeholder={t('title')} className={modalInputCls} />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-[var(--text-color)] opacity-80">{t('description')}</label>
+          <div className="space-y-2">
+            <label className="text-[14px] font-bold text-white">{t('description')}</label>
             <textarea rows={4} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder={t('description')} className={inputCls + ' resize-none'} />
+              placeholder={t('description')} className={modalInputCls + ' resize-none'} />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-[var(--text-color)] opacity-80">{t('queryType')}</label>
-            <select value={form.queryType} onChange={e => setForm(f => ({ ...f, queryType: e.target.value }))} className={selectCls}>
-              <option value="">{t('selectQuery')}</option>
-              {queryTypes.length > 0
-                ? queryTypes.map((q, i) => <option key={i} value={q.id ?? q.queryId ?? q.value}>{q.queryName ?? q.name ?? q.label}</option>)
-                : [
-                    {id: '695fe51a-73f6-11ee-b962-0242ac120002', name: 'Withdrawal'},
-                    {id: '695fe628-73f6-11ee-b962-0242ac120002', name: 'Deposit'},
-                    {id: '695fe74a-73f6-11ee-b962-0242ac120002', name: 'Account'},
-                    {id: '695fe9ca-73f6-11ee-b962-0242ac120002', name: 'Trading'},
-                    {id: '695feaec-73f6-11ee-b962-0242ac120002', name: 'Other'}
-                  ].map(q => <option key={q.id} value={q.id}>{q.name}</option>)
-              }
-            </select>
+          <div className="space-y-2">
+            <label className="text-[14px] font-bold text-white">{t('queryType')}</label>
+            <div className="relative">
+              <select value={form.queryType} onChange={e => setForm(f => ({ ...f, queryType: e.target.value }))} className={modalSelectCls}>
+                <option value="">{t('selectQuery')}</option>
+                {(queryTypes.length > 0 ? queryTypes : [
+                  {id: 'record_transaction', name: 'Record Transaction'},
+                  {id: 'withdrawal', name: 'Withdrawal'},
+                  {id: 'deposit', name: 'Deposit'},
+                  {id: 'account', name: 'Account'},
+                  {id: 'other', name: 'Other'},
+                  {id: 'trading', name: 'Trading'},
+                  {id: 'ib_commission_role_back', name: 'IB Commission Role Back'},
+                  {id: 'calculate_ib_commission', name: 'Calculate IB Commission'}
+                ]).map(q => <option key={q.id ?? q.value} value={q.id ?? q.value}>{q.queryName ?? q.name ?? q.label}</option>)}
+              </select>
+              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+            </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-[var(--text-color)] opacity-80">{t('priorityType')}</label>
-            <select value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value }))} className={selectCls}>
-              <option value="">{t('selectPriority')}</option>
-              {priorities.length > 0
-                ? priorities.map((p, i) => <option key={i} value={p.priorityId ?? p.id ?? p.value}>{p.priorityName ?? p.name ?? p.label}</option>)
-                : [
-                    {id: 1, name: 'LOW'},
-                    {id: 2, name: 'MEDIUM'},
-                    {id: 3, name: 'HIGH'}
-                  ].map(p => <option key={p.id} value={p.id}>{p.name}</option>)
-              }
-            </select>
+          <div className="space-y-2">
+            <label className="text-[14px] font-bold text-white">{t('priorityType')}</label>
+            <div className="relative">
+              <select value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value }))} className={modalSelectCls}>
+                <option value="">{t('selectPriority')}</option>
+                {(priorities.length > 0 ? priorities : [
+                  {id: 1, name: 'LOW'},
+                  {id: 2, name: 'MEDIUM'},
+                  {id: 3, name: 'HIGH'}
+                ]).map(p => <option key={p.id ?? p.value} value={p.id ?? p.value}>{p.priorityName ?? p.name ?? p.label}</option>)}
+              </select>
+              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-6 pb-6 flex justify-center">
+        <div className="px-6 pb-8 flex justify-end">
           <button onClick={handleSubmit} disabled={submitting || !form.title || !form.queryType || !form.priority}
-            className="px-12 py-2.5 bg-[#158B86] hover:bg-[#117672] disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold rounded-[8px] text-[13px] uppercase tracking-wider transition-all flex items-center gap-2">
+            className="px-10 py-2.5 bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] hover:from-[#2563EB] hover:to-[#1E40AF] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-[8px] text-[14px] shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] transition-all flex items-center gap-2">
             {submitting && (
               <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -434,8 +440,16 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
 
   return (
     <div className="flex flex-col w-full animate-fade-in pb-20">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
+      {/* ── Mobile Back Header (lg:hidden) ── */}
+      <div className="flex lg:hidden items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 -mx-4 px-4 bg-[var(--bg-color)] sticky top-0 z-[100]">
+        <button onClick={() => onNavigate('Settings')} className="p-1 -ml-1 transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h1 className="text-[20px] font-bold text-[#3B82F6]">Ticket List</h1>
+      </div>
+
+      {/* Top Header (Desktop only) */}
+      <div className="hidden lg:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[var(--border-color)] mb-6">
         <div className="flex items-center gap-3">
           <h1 className="text-[22px] font-extrabold text-[var(--text-color)] tracking-tight">{t('support')}</h1>
           <div className="flex items-center gap-1.5">
@@ -449,8 +463,8 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
         </div>
       </div>
 
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-[15px] mb-7 font-medium">
+      {/* Breadcrumb (Desktop only) */}
+      <div className="hidden lg:flex items-center gap-2 text-[15px] mb-7 font-medium">
         <Home size={17} className="text-[#158B86] cursor-pointer hover:opacity-80" strokeWidth={2.5} onClick={() => onNavigate('Dashboard')} />
         <ChevronRight size={15} className="text-gray-500" strokeWidth={2} />
         <span className={`${initialTicketId ? 'text-[#8e9d9b] cursor-pointer hover:text-[#158B86]' : 'text-[var(--text-color)]'}`} onClick={() => onNavigate('More_Support')}>{t('supportBread')}</span>
@@ -474,25 +488,29 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
       ) : (
         <>
           {/* Page Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-[20px] font-bold text-[var(--text-color)]">{t('ticketList')}</h2>
-            <div className="flex items-center gap-4">
-            <div className="flex items-center">
-              <button 
-                onClick={() => setIsVideoModalOpen(true)}
-                className="bg-[#158B86] hover:bg-[#117672] text-white pl-6 pr-10 py-2.5 rounded-full text-[14px] font-bold transition-all relative z-10 shadow-lg"
-              >
-                {t('videoTutorial')}
-              </button>
-              <div 
-                onClick={() => setIsVideoModalOpen(true)}
-                className="w-[42px] h-[42px] rounded-full bg-[#AF6C56] flex items-center justify-center -ml-8 relative z-20 shadow-xl cursor-pointer hover:bg-[#965a48] transition-all"
-              >
-                <Play size={16} fill="white" className="text-white ml-0.5" />
+          <div className="flex items-center justify-between mb-8 pt-4">
+            <h2 className="text-[24px] lg:text-[20px] font-bold text-white lg:text-[var(--text-color)]">{t('ticketList')}</h2>
+            
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Video Tutorial Button Group */}
+              <div className="flex items-center">
+                <button 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="bg-[#3B82F6] lg:bg-[#158B86] hover:bg-[#2563EB] lg:hover:bg-[#117672] text-white pl-6 pr-10 py-2.5 rounded-full text-[14px] font-bold transition-all relative z-10 shadow-lg"
+                >
+                  {t('videoTutorial')}
+                </button>
+                <div 
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="w-[42px] h-[42px] rounded-full bg-[#D17551] flex items-center justify-center -ml-8 relative z-20 shadow-xl cursor-pointer hover:opacity-90 transition-all border-2 border-[#101013] lg:border-[var(--bg-color)]"
+                >
+                  <Play size={16} fill="white" className="text-white ml-0.5" />
+                </div>
               </div>
-            </div>
+
+              {/* Create Ticket Button */}
               <button onClick={() => setIsModalOpen(true)}
-                className="bg-[#158B86] hover:bg-[#117672] text-white px-5 py-2.5 rounded-[8px] text-[14px] font-bold transition-all shadow-lg">
+                className="bg-[#3B82F6] lg:bg-[#158B86] hover:bg-[#2563EB] lg:hover:bg-[#117672] text-white px-8 py-2.5 rounded-full text-[14px] font-bold transition-all shadow-lg">
                 {t('createTicket')}
               </button>
             </div>
@@ -501,13 +519,13 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
           <div className="w-full h-px bg-[var(--border-color)] mb-8" />
 
           {/* Ticket Table */}
-          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] overflow-hidden">
+          <div className="bg-[#1a1a1e] lg:bg-[var(--card-bg)] border border-white/5 lg:border-[var(--border-color)] rounded-[12px] overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
+                <thead className="bg-[#252529] lg:bg-[var(--sub-bg)] border-b border-white/5 lg:border-[var(--border-color)]">
                   <tr>
                     {[t('ticketNo'), t('queryType'), t('title'), t('name'), t('createdAt'), t('priority'), t('status'), t('action')].map((h, idx, arr) => (
-                      <th key={h} className={`px-6 py-4 text-[13px] font-bold text-[var(--text-color)] tracking-wider whitespace-nowrap ${idx < arr.length - 1 ? 'border-r border-[var(--border-color)]' : ''}`}>{h}</th>
+                      <th key={h} className={`px-6 py-4 text-[13px] font-bold text-[#8e9d9b] lg:text-white tracking-wider whitespace-nowrap ${idx < arr.length - 1 ? 'border-r border-white/5 lg:border-[var(--border-color)]' : ''}`}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -533,16 +551,16 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
                     const status    = (tk.status     ?? tk.Status    ?? '-').toString().toUpperCase();
                     return (
                       <tr key={i} className="hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-5 text-[14px] font-medium text-[var(--text-color)]">{ticketNo}</td>
-                        <td className="px-6 py-5 text-[14px] text-[#158B86] font-medium">{queryType}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)]">{title}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)]">{name}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] whitespace-nowrap">{formatDate(createdAt)}</td>
+                        <td className="px-6 py-5 text-[14px] font-medium text-[var(--text-color)] lg:text-white">{ticketNo}</td>
+                        <td className="px-6 py-5 text-[14px] text-[#158B86] font-medium lg:text-[#158B86]">{queryType}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white">{title}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white">{name}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white whitespace-nowrap">{formatDate(createdAt)}</td>
                         <td className="px-6 py-5">
-                          <span className={`text-[12px] font-bold ${priority === 'HIGH' ? 'text-[#AF6C56]' : priority === 'MEDIUM' ? 'text-yellow-400' : 'text-green-500'}`}>{priority}</span>
+                          <span className={`text-[12px] font-bold ${priority === 'HIGH' ? 'text-[#AF6C56]' : priority === 'MEDIUM' ? 'text-yellow-400' : 'text-[#158B86]'}`}>{priority}</span>
                         </td>
                         <td className="px-6 py-5">
-                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${status === 'OPEN' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-400'}`}>{status}</span>
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${status === 'OPEN' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/10 text-red-500/80 border border-red-500/20'}`}>{status}</span>
                         </td>
                         <td className="px-6 py-5">
                           <button onClick={() => onNavigate('View_Ticket', { ticketId: tk.id ?? tk.ticketId })}
