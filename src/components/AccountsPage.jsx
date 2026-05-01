@@ -8,7 +8,7 @@ import DashboardHeader from './DashboardHeader';
 
 const TRANSLATIONS = {
   EN: {
-    accounts: "ACCOUNTS",
+    accounts: "Accounts",
     news: "News",
     userDashboard: "User Dashboard",
     ibDashboard: "IB Dashboard",

@@ -112,8 +112,8 @@ const LogsTable = () => {
         <table className="w-full whitespace-nowrap">
           <thead>
             <tr className="bg-[var(--segmented-bg)] border-b border-[var(--border-color)]">
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider min-w-[200px]">{t('message')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)] min-w-[150px]">{t('updateDate')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] min-w-[200px]">{t('message')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)] min-w-[150px]">{t('updateDate')}</th>
             </tr>
           </thead>
 

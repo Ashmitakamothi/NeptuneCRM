@@ -130,17 +130,17 @@ const AccountsTable = ({ data: dataProp, hideHeader = false, externalAccountType
         <table className="w-full whitespace-nowrap min-w-[800px]">
           <thead>
             <tr className="bg-[var(--segmented-bg)] border-b border-[var(--border-color)]">
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider">{t('login')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('platform')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('acType')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('balance')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('leverage')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('currency')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('createdAt')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)]">{t('login')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('platform')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('acType')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('balance')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('leverage')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('createdAt')}</th>
               {!isDashboard && (
                 <>
-                  <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('status')}</th>
-                  <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('actions')}</th>
+                  <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('status')}</th>
+                  <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] border-l border-[var(--border-color)]">{t('actions')}</th>
                 </>
               )}
             </tr>

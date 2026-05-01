@@ -343,7 +343,6 @@ body {
   font-size: 14px;
   font-weight: 700 !important;
   text-transform: none;
-  @apply lg:uppercase lg:tracking-wider;
   white-space: nowrap;
   border-bottom: 1px solid var(--border-color) !important;
   transition: all 0.2s ease !important;
