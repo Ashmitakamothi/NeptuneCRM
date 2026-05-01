@@ -3,6 +3,7 @@ import { Home, ChevronRight, CheckCircle, Loader2, AlertCircle } from 'lucide-re
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { endpoints } from '../api/endpoints';
+import Loader from './Loader';
 
 const TRANSLATIONS = {
   EN: {
@@ -416,13 +417,8 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
 
       {/* Content */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-40 gap-4">
-          <div className="relative w-10 h-10 animate-spin" style={{ animationDuration: '1s' }}>
-            <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-[#158B86] opacity-100" />
-            <span className="absolute top-1/2 right-0 -translate-y-1/2 w-2 h-2 rounded-full bg-[#158B86] opacity-70" />
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#158B86] opacity-40" />
-          </div>
-          <span className="text-[#158B86] text-[15px] font-medium tracking-wide">Loading...</span>
+        <div className="flex items-center justify-center py-40">
+          <Loader />
         </div>
       ) : error ? (
         <div className="flex flex-col items-center justify-center py-32 gap-4">

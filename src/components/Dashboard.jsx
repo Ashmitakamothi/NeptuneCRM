@@ -9,6 +9,7 @@ import { useDashboardSocket } from '../hooks/useDashboardSocket';
 import { endpoints } from '../api/endpoints';
 import DashboardHeader from './DashboardHeader';
 
+import Loader from './Loader';
 import NoAccountsState from './NoAccountsState';
 
 const Dashboard = ({ onNavigate }) => {
@@ -61,7 +62,7 @@ const Dashboard = ({ onNavigate }) => {
 
       {isLoading ? (
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="w-12 h-12 border-4 border-[var(--primary-color)] border-t-transparent rounded-full animate-spin"></div>
+          <Loader />
         </div>
       ) : !hasAccounts ? (
         <NoAccountsState onNavigate={onNavigate} />
