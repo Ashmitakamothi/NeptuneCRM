@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Bell } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import NotificationSidebar from './NotificationSidebar';
 import logo from '../assets/logo.png.png';
+import logom from '../assets/logom.png';
 
 const MobileHeader = ({ onNavigate, activePage }) => {
   const { user } = useAuth();
+  const { isDark } = useTheme();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   const isIBPage = [
@@ -34,9 +37,9 @@ const MobileHeader = ({ onNavigate, activePage }) => {
         {/* Logo */}
         <div className="shrink-0 flex items-center">
           <img
-            src={logo}
+            src={isDark ? logo : logom}
             alt="Neptune"
-            className="h-8 max-h-10 w-auto object-contain cursor-pointer"
+            className={`${isDark ? 'h-7' : 'h-8'} w-auto object-contain cursor-pointer`}
             onClick={() => onNavigate(isIBPage ? 'IB_Dashboard' : 'Dashboard')}
           />
         </div>

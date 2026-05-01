@@ -10,6 +10,7 @@ import myTransactionIcon from '../assets/my-transaction.png.png';
 import reportsIcon from '../assets/reports.png.png';
 import leaderboardIcon from '../assets/leaderboard.png.png';
 import logo from '../assets/logo.png.png';
+import logom from '../assets/logom.png';
 import NotificationSidebar from './NotificationSidebar';
 import * as IBIcons from './IBIcons';
 
@@ -195,9 +196,14 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
       <div className="max-w-[1860px] mx-auto h-full flex items-center justify-between px-4 md:px-6">
 
         {/* Left Section: Logo & Nav Links grouped together */}
-        <div className="flex items-center gap-4 flex-1 min-w-0">
+        <div className="flex items-center gap-6 flex-1 min-w-0">
           {/* Logo Pill */}
-          <img src={logo} alt="Neptune Logo" className="h-[40px] w-auto cursor-pointer object-contain shrink-0" onClick={() => handleNavClick('Dashboard')} />
+          <img 
+            src={isDark ? logo : logom} 
+            alt="Neptune Logo" 
+            className={`${!isDark ? 'h-[38px]' : 'h-[34px]'} w-auto cursor-pointer object-contain shrink-0`} 
+            onClick={() => handleNavClick('Dashboard')} 
+          />
 
           {/* Navigation Links */}
           <div className="hidden xl:flex items-center gap-0.5 min-w-0">
