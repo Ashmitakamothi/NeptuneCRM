@@ -105,7 +105,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--border-color)]">
-          <h2 className="text-[20px] font-bold text-[#3B82F6]">{t('createTicket')}</h2>
+          <h2 className="text-[20px] font-bold text-[#158B86]">{t('createTicket')}</h2>
           <button onClick={onClose} className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity"><X size={24} /></button>
         </div>
 
@@ -162,7 +162,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
         {/* Footer */}
         <div className="px-6 pb-8 flex justify-end">
           <button onClick={handleSubmit} disabled={submitting || !form.title || !form.queryType || !form.priority}
-            className="px-10 py-2.5 bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8] hover:from-[#2563EB] hover:to-[#1E40AF] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-[8px] text-[14px] shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] transition-all flex items-center gap-2">
+            className="px-10 py-2.5 bg-gradient-to-r from-[#158B86] to-[#0D6B66] hover:from-[#117672] hover:to-[#0A5652] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-[8px] text-[14px] shadow-[0_4px_14px_0_rgba(21,139,134,0.39)] transition-all flex items-center gap-2">
             {submitting && (
               <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M21 12a9 9 0 1 1-6.219-8.56" />

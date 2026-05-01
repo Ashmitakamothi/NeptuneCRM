@@ -147,7 +147,7 @@ const ReportsPage = ({ type, onNavigate }) => {
           <div className="relative w-full sm:w-auto">
             <button 
               onClick={() => setIsExportOpen(!isExportOpen)}
-              className="flex items-center justify-center gap-2 lg:bg-[#158B86] lg:hover:bg-[#117672] bg-[#3B82F6] hover:bg-[#2563EB] text-white px-5 py-2.5 rounded-[6px] font-bold text-sm transition-colors w-full lg:shadow-md shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.23)]"
+              className="flex items-center justify-center gap-2 lg:bg-[#158B86] lg:hover:bg-[#117672] bg-[#3B82F6] hover:bg-[#2563EB] text-white px-5 py-2.5 rounded-[6px] font-bold text-sm transition-colors w-full lg:shadow-md shadow-[0_4px_14px_0_rgba(59,130,246,0.39)] lg:shadow-[0_4px_14px_0_rgba(21,139,134,0.39)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.23)] lg:hover:shadow-[0_6px_20px_rgba(21,139,134,0.23)]"
             >
               <Download size={18} />
               {t('export')}

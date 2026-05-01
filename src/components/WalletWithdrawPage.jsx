@@ -419,12 +419,12 @@ const WalletWithdrawPage = ({ onNavigate }) => {
 
                     {/* Important Information */}
                     <div className="pt-6 border-t border-[var(--border-color)] mt-auto">
-                       <div className="flex items-start gap-2 text-[#3B82F6] mb-4">
+                       <div className="flex items-start gap-2 text-[#158B86] mb-4">
                           <Info size={16} className="shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-bold text-[#3B82F6]">Important Information</span>
+                          <span className="text-[13px] font-bold text-[#158B86]">Important Information</span>
                        </div>
                        <ul className="flex flex-col gap-1.5">
-                          <li className="text-[12px] text-[#3B82F6] leading-relaxed">
+                          <li className="text-[12px] text-[#158B86] leading-relaxed">
                              - Processing time: {selectedMethod.processing}
                           </li>
                           <li className="text-[12px] text-[#3B82F6] leading-relaxed">

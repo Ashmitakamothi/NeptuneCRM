@@ -95,7 +95,7 @@ const LogsTable = () => {
           onClick={() => setCurrentPage(i)}
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
-              ? 'bg-[#3B82F6] text-white shadow-lg shadow-blue-500/20' 
+              ? 'bg-[#3B82F6] lg:bg-[#158B86] text-white shadow-lg lg:shadow-teal-500/20 shadow-blue-500/20' 
               : 'text-[var(--text-color)] opacity-40 hover:opacity-100 hover:bg-[var(--hover-bg)]'
           }`}
         >

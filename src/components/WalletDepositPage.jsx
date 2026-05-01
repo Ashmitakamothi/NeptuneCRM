@@ -672,21 +672,21 @@ const WalletDepositPage = ({ onNavigate }) => {
 
                  {/* Important Information */}
                  <div className="pt-6 border-t border-[var(--border-color)]">
-                    <div className="flex items-start gap-2 text-[#3B82F6] mb-4">
-                       <Info size={16} className="shrink-0 mt-0.5" />
-                       <span className="text-[14px] font-bold text-[#3B82F6]">Important Information</span>
-                    </div>
+                       <div className="flex items-start gap-2 text-[#158B86] mb-4">
+                          <Info size={16} className="shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-bold text-[#158B86]">Important Information</span>
+                       </div>
                     <ul className="flex flex-col gap-3">
-                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
-                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#158B86] leading-relaxed">
+                          <span className="text-[#158B86] font-bold text-[14px] mt-2 leading-none">•</span>
                           Funds will be available instantly after successful payment
                        </li>
-                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
-                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#158B86] leading-relaxed">
+                          <span className="text-[#158B86] font-bold text-[14px] mt-2 leading-none">•</span>
                           All transactions are encrypted with SSL technology
                        </li>
-                       <li className="flex items-start gap-2 text-[12.5px] text-[#3B82F6] leading-relaxed">
-                          <span className="text-[#3B82F6] font-bold text-[14px] mt-2 leading-none">•</span>
+                       <li className="flex items-start gap-2 text-[12.5px] text-[#158B86] leading-relaxed">
+                          <span className="text-[#158B86] font-bold text-[14px] mt-2 leading-none">•</span>
                           Transaction fees may apply based on payment method
                        </li>
                     </ul>
@@ -788,7 +788,7 @@ const WalletDepositPage = ({ onNavigate }) => {
               <div className={`w-14 h-14 rounded-full border flex items-center justify-center ${item.bg} ${item.color}`}>{item.icon}</div>
               <div>
                 <h3 className="text-[14px] font-bold text-[var(--text-color)] mb-1">{t(item.tKey)}</h3>
-                <p className="text-[11px] text-[#8e9d9b] leading-relaxed">{t(item.dKey)}</p>
+                <p className="text-[12px] text-[#158B86] leading-relaxed">{t(item.dKey)}</p>
               </div>
             </div>
           ))}
