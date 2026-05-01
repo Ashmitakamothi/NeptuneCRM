@@ -126,7 +126,7 @@ const TutorialsPage = ({ onNavigate }) => {
 
                   <div className="flex flex-col">
                     <span className="text-[12px] font-bold text-white leading-none shadow-sm">{language === 'EN' ? video.titleEN : video.titleHI}</span>
-                    <span className="text-[10px] text-white/70 font-medium">Neptunefxcrm</span>
+                    <span className="text-[10px] text-[var(--text-color)] opacity-70 font-medium">Neptunefxcrm</span>
                   </div>
                 </div>
 

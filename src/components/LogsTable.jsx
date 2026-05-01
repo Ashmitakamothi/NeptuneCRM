@@ -96,7 +96,7 @@ const LogsTable = () => {
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
               ? 'bg-[#3B82F6] text-white shadow-lg shadow-blue-500/20' 
-              : 'text-white/40 hover:text-white hover:bg-white/5'
+              : 'text-[var(--text-color)] opacity-40 hover:opacity-100 hover:bg-[var(--hover-bg)]'
           }`}
         >
           {i}
@@ -111,9 +111,9 @@ const LogsTable = () => {
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[#1a1a1e] border-b border-white/5">
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider min-w-[200px]">{t('message')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5 min-w-[150px]">{t('updateDate')}</th>
+            <tr className="bg-[var(--segmented-bg)] border-b border-[var(--border-color)]">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider min-w-[200px]">{t('message')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)] min-w-[150px]">{t('updateDate')}</th>
             </tr>
           </thead>
 
@@ -122,11 +122,11 @@ const LogsTable = () => {
               <tr><td colSpan="2" className="py-20 text-center text-[#8e9d9b]">Loading logs...</td></tr>
             ) : paginatedData.length > 0 ? (
               paginatedData.map((row, idx) => (
-                <tr key={row.id || idx} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-[14px] font-medium text-white/90 whitespace-normal">
+                <tr key={row.id || idx} className="border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--hover-bg)] transition-colors">
+                  <td className="py-4 px-4 text-[14px] font-medium text-[var(--text-color)] opacity-90 whitespace-normal">
                     {row.message || row.Message || '-'}
                   </td>
-                  <td className="py-4 px-4 text-[14px] font-medium text-white/60">
+                  <td className="py-4 px-4 text-[14px] font-medium text-[var(--text-color)] opacity-60">
                     {formatDate(row.updateDate || row.UpdateDate || row.createdDate || row.date || row.dateTime)}
                   </td>
                 </tr>
@@ -166,7 +166,7 @@ const LogsTable = () => {
                   className={`w-full px-3 py-2 text-left text-[13px] transition-colors ${
                     itemsPerPage === num 
                       ? 'bg-[#158B86] text-white' 
-                      : 'text-[var(--text-color)] hover:bg-white/5'
+                      : 'text-[var(--text-color)] hover:bg-[var(--hover-bg)]'
                   }`}
 
                   onClick={() => {
@@ -187,7 +187,7 @@ const LogsTable = () => {
             className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${
               currentPage === 1 
                 ? 'text-gray-500 cursor-not-allowed' 
-                : 'text-[var(--text-color)] hover:bg-white/5 cursor-pointer'
+                : 'text-[var(--text-color)] hover:bg-[var(--hover-bg)] cursor-pointer'
             }`}
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}
@@ -201,7 +201,7 @@ const LogsTable = () => {
             className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-colors ${
               currentPage === totalPages || totalPages === 0
                 ? 'text-gray-500 cursor-not-allowed' 
-                : 'text-[var(--text-color)] hover:bg-white/5 cursor-pointer'
+                : 'text-[var(--text-color)] hover:bg-[var(--hover-bg)] cursor-pointer'
             }`}
 
             onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}

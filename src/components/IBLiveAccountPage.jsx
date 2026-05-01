@@ -93,7 +93,7 @@ const IBLiveAccountPage = ({ onNavigate }) => {
       dataIndex: 'name',
       key: 'name',
       // sorter: (a, b) => (a.name || '').localeCompare(b.name || ''),
-      render: (text) => <span className="text-white/90 font-medium">{text}</span>
+      render: (text) => <span className="text-[var(--text-color)] opacity-90 font-medium">{text}</span>
     },
     { 
       title: t.columns.accountNumber, 
@@ -143,9 +143,9 @@ const IBLiveAccountPage = ({ onNavigate }) => {
   const dataSource = [];
 
   const extraHeader = (
-    <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
-       <p className="text-[14px] font-medium text-white">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
-       <button className="text-white hover:opacity-80 transition-all">
+    <div className="hidden md:flex items-center gap-3 bg-[var(--segmented-bg)] border border-[var(--border-color)] px-5 py-2 rounded-xl">
+       <p className="text-[14px] font-medium text-[var(--text-color)]">{t.referralLink}: <span className="text-[var(--text-color)]">IFAHGGAP</span></p>
+       <button className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity">
          <Copy size={16} />
        </button>
     </div>
@@ -180,7 +180,7 @@ const IBLiveAccountPage = ({ onNavigate }) => {
         <div className="flex items-center gap-3 w-full md:w-auto">
           <Input 
             placeholder={t.search} 
-            prefix={<Search size={16} className="text-white/30" />}
+            prefix={<Search size={16} className="text-[var(--text-color)] opacity-30" />}
             className="ib-input w-full md:w-[220px]"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -191,7 +191,7 @@ const IBLiveAccountPage = ({ onNavigate }) => {
       {/* Main Content Card */}
       <div className="border-[2px] border-[var(--theme-light)] bg-[var(--bg-color)] rounded-xl pt-3 lg:pt-4 w-full mt-3 shadow-sm min-h-[400px] overflow-hidden flex flex-col">
         <div className="px-4 lg:px-6">
-          <p className="text-xl font-semibold text-white">{tableTitle}</p>
+          <p className="text-xl font-semibold text-[var(--text-color)]">{tableTitle}</p>
         </div>
         
         <div className="my-4 flex-1">

@@ -57,7 +57,7 @@ const ChangePasswordPage = ({ onNavigate }) => {
 
       <div className="px-4 py-6 space-y-8">
         {/* Description */}
-        <p className="text-[15px] text-white/70 leading-relaxed max-w-[90%]">
+        <p className="text-[15px] text-[var(--text-color)] opacity-70 leading-relaxed max-w-[90%]">
           {t('description')}
         </p>
 
@@ -120,10 +120,10 @@ const ChangePasswordPage = ({ onNavigate }) => {
 
         {/* Requirements */}
         <div className="space-y-4 pt-2">
-          <h3 className="text-[17px] font-bold text-white">{t('passwordRequirements')}</h3>
+          <h3 className="text-[17px] font-bold text-[var(--text-color)]">{t('passwordRequirements')}</h3>
           <ul className="space-y-3">
             {[t('req1'), t('req2'), t('req3')].map((req, idx) => (
-              <li key={idx} className="flex items-start gap-3 text-[14px] text-white/40">
+              <li key={idx} className="flex items-start gap-3 text-[14px] text-[var(--text-color)] opacity-40">
                 <div className="w-1.5 h-1.5 rounded-full bg-white/20 mt-2 shrink-0" />
                 <span className="leading-tight">{req}</span>
               </li>

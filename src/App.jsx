@@ -368,7 +368,10 @@ const AppContent = () => {
           colorTextHeading: '#ffffff',
         } : {
           colorPrimary: '#158B86',
+          colorBgElevated: '#ffffff',
           colorBgSpotlight: '#1d1d1d',
+          colorTextLightSolid: '#ffffff',
+          colorText: '#1a1a1a',
         }
       }}
     >

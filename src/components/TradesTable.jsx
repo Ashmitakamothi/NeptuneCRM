@@ -93,7 +93,7 @@ const TradesTable = ({ data: dataProp }) => {
                 {rows.length === 0 ? (
                   <tr>
                     <td colSpan={headers.length} className="h-[320px] text-center align-middle">
-                      <p className="text-gray-300 text-[13px] font-medium">{t('noTrades')}</p>
+                      <p className="text-[var(--text-color)] opacity-30 text-[13px] font-medium">{t('noTrades')}</p>
                     </td>
                   </tr>
                 ) : (

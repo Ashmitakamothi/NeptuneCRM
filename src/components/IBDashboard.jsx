@@ -87,7 +87,7 @@ const MetricCard = ({ title, leftLabel, rightLabel, leftVal, rightVal, color, ac
            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${color}15` }}>
               <IBIcons.MetricIcon color={color} />
            </div>
-           <p className="text-2xl font-bold text-white">{leftVal}</p>
+           <p className="text-2xl font-bold text-[var(--text-color)]">{leftVal}</p>
            <p className="text-sm text-[#8e9d9b]">{leftLabel}</p>
         </div>
 
@@ -95,7 +95,7 @@ const MetricCard = ({ title, leftLabel, rightLabel, leftVal, rightVal, color, ac
            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent}15` }}>
               <IBIcons.MetricIcon color={accent} />
            </div>
-           <p className="text-2xl font-bold text-white">{rightVal}</p>
+           <p className="text-2xl font-bold text-[var(--text-color)]">{rightVal}</p>
            <p className="text-sm text-[#8e9d9b]">{rightLabel}</p>
         </div>
      </div>
@@ -105,15 +105,15 @@ const MetricCard = ({ title, leftLabel, rightLabel, leftVal, rightVal, color, ac
 const CustomTooltip = ({ active, payload, label, t }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 flex flex-col gap-2 shadow-2xl">
-        <span className="text-[10px] text-white/40 font-bold uppercase">{label}</span>
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl p-3 flex flex-col gap-2 shadow-2xl">
+        <span className="text-[10px] text-[var(--text-color)] opacity-40 font-bold uppercase">{label}</span>
         <div className="flex items-center gap-2">
            <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56]"></div>
-           <span className="text-sm font-medium text-white/80">{t.lot}: <span className="text-white">{payload[0].value}</span></span>
+           <span className="text-sm font-medium text-[var(--text-color)] opacity-80">{t.lot}: <span className="text-[var(--text-color)] font-bold">{payload[0].value}</span></span>
         </div>
         <div className="flex items-center gap-2">
            <div className="w-2.5 h-2.5 rounded-full bg-[#12716E]"></div>
-           <span className="text-sm font-medium text-white/80">{t.commission}: <span className="text-white">{payload[1].value}</span></span>
+           <span className="text-sm font-medium text-[var(--text-color)] opacity-80">{t.commission}: <span className="text-[var(--text-color)] font-bold">{payload[1].value}</span></span>
         </div>
       </div>
     );
@@ -137,9 +137,9 @@ const IBDashboard = ({ onNavigate }) => {
   ];
 
   const extraHeader = (
-    <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
-       <p className="text-[14px] font-medium text-white">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
-       <button className="text-white hover:opacity-80 transition-all">
+    <div className="hidden md:flex items-center gap-3 bg-[var(--sub-bg)] border border-[var(--border-color)] px-5 py-2 rounded-xl">
+       <p className="text-[14px] font-medium text-[var(--text-color)]">{t.referralLink}: <span className="text-[var(--text-color)] opacity-80">IFAHGGAP</span></p>
+       <button className="text-[var(--text-color)] opacity-60 hover:opacity-100 transition-all">
          <Copy size={16} />
        </button>
     </div>
@@ -161,41 +161,41 @@ const IBDashboard = ({ onNavigate }) => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-4">
           {/* Welcome Card */}
           <div className="xl:col-span-2 bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-6 relative overflow-hidden shadow-sm">
-             <div className="flex flex-col gap-1 text-white">
-                <h2 className="text-2xl font-semibold flex items-end gap-2">
-                   {t.welcomeBack}, <span className="opacity-80">Ashmita Jethava</span>
+             <div className="flex flex-col gap-1">
+                <h2 className="text-2xl font-semibold flex items-end gap-2 text-[var(--text-color)]">
+                   {t.welcomeBack}, <span className="opacity-60">Ashmita Jethava</span>
                 </h2>
-                <p className="text-[#8e9d9b] mt-1">{t.progressMessage}</p>
+                <p className="text-[#8e9d9b] mt-1 font-medium">{t.progressMessage}</p>
              </div>
              
              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
                 <div className="flex items-center gap-4 p-4 rounded-xl hover:bg-[var(--hover-bg)] transition-colors cursor-pointer group">
-                   <div className="flex items-center justify-center w-12 h-12 bg-[#7367f038] rounded-lg">
+                   <div className="flex items-center justify-center w-12 h-12 bg-[#7367f015] rounded-lg">
                       <IBIcons.EarningIcon color="#7367F0" />
                    </div>
                    <div>
-                      <h4 className="text-xl font-bold text-white">$ 0</h4>
-                      <p className="text-xs text-[#8e9d9b]">{t.todayEarning}</p>
+                      <h4 className="text-xl font-bold text-[var(--text-color)]">$ 0</h4>
+                      <p className="text-xs text-[#8e9d9b] font-medium">{t.todayEarning}</p>
                    </div>
                 </div>
                 
                 <div className="flex items-center gap-4 p-4 rounded-xl hover:bg-[var(--hover-bg)] transition-colors cursor-pointer group">
-                   <div className="flex items-center justify-center w-12 h-12 bg-[#00bad130] rounded-lg">
+                   <div className="flex items-center justify-center w-12 h-12 bg-[#00bad115] rounded-lg">
                       <IBIcons.LotsIcon color="#00BAD1" />
                    </div>
                    <div>
-                      <h4 className="text-xl font-bold text-white">0</h4>
-                      <p className="text-xs text-[#8e9d9b]">{t.todayLots}</p>
+                      <h4 className="text-xl font-bold text-[var(--text-color)]">0</h4>
+                      <p className="text-xs text-[#8e9d9b] font-medium">{t.todayLots}</p>
                    </div>
                 </div>
 
                 <div className="flex items-center gap-4 p-4 rounded-xl hover:bg-[var(--hover-bg)] transition-colors cursor-pointer group">
-                   <div className="flex items-center justify-center w-12 h-12 bg-[#ff9f432b] rounded-lg">
+                   <div className="flex items-center justify-center w-12 h-12 bg-[#ff9f4315] rounded-lg">
                       <IBIcons.MyTeamIcon color="#FF9F43" />
                    </div>
                    <div>
-                      <h4 className="text-xl font-bold text-white">0</h4>
-                      <p className="text-xs text-[#8e9d9b]">{t.myTeam}</p>
+                      <h4 className="text-xl font-bold text-[var(--text-color)]">0</h4>
+                      <p className="text-xs text-[#8e9d9b] font-medium">{t.myTeam}</p>
                    </div>
                 </div>
              </div>
@@ -205,8 +205,8 @@ const IBDashboard = ({ onNavigate }) => {
           <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-2xl p-6 flex justify-between relative overflow-hidden shadow-sm">
              <div className="z-10 flex flex-col justify-between h-full">
                 <div>
-                  <h3 className="text-xl font-semibold text-white">{t.ibWallet}</h3>
-                  <p className="text-[#8e9d9b] text-sm mt-1">{t.availableCommission}</p>
+                  <h3 className="text-xl font-semibold text-[var(--text-color)]">{t.ibWallet}</h3>
+                  <p className="text-[#8e9d9b] text-sm mt-1 font-medium">{t.availableCommission}</p>
                 </div>
                 <div className="mt-4">
                   <p className="text-3xl font-bold text-[#158B86]">$ 00</p>
@@ -240,11 +240,11 @@ const IBDashboard = ({ onNavigate }) => {
               <div className="flex gap-6">
                  <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#AF6C56]"></div>
-                    <span className="text-sm font-medium text-white/70">{t.lot}</span>
+                    <span className="text-sm font-medium text-[var(--text-color)]/70">{t.lot}</span>
                  </div>
                  <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-[#12716E]"></div>
-                    <span className="text-sm font-medium text-white/70">{t.commission}</span>
+                    <span className="text-sm font-medium text-[var(--text-color)]/70">{t.commission}</span>
                  </div>
               </div>
               <RangePicker 
@@ -262,7 +262,7 @@ const IBDashboard = ({ onNavigate }) => {
                         dataKey="name" 
                         axisLine={false} 
                         tickLine={false} 
-                        tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 12 }}
+                        tick={{ fill: 'rgba(128,128,128,0.5)', fontSize: 12 }}
                         dy={15}
                      />
                      <YAxis 
@@ -270,9 +270,9 @@ const IBDashboard = ({ onNavigate }) => {
                         ticks={[0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2]}
                         axisLine={false} 
                         tickLine={false}
-                        tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 12 }}
+                        tick={{ fill: 'rgba(128,128,128,0.5)', fontSize: 12 }}
                      />
-                     <Tooltip content={<CustomTooltip t={t} />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }} />
+                     <Tooltip content={<CustomTooltip t={t} />} cursor={{ stroke: 'rgba(128,128,128,0.1)', strokeWidth: 1 }} />
                      <Line 
                         type="monotone" 
                         dataKey="lot" 
@@ -297,14 +297,14 @@ const IBDashboard = ({ onNavigate }) => {
           {/* Top Scorer Table */}
           <div className="bg-[var(--bg-color)] border border-[var(--border-color)] rounded-[20px] p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-bold text-white">{t.topScorer}</h2>
-              <Button type="text" icon={<Info size={18} className="text-white/30" />} />
+              <h2 className="text-lg font-bold text-[var(--text-color)]">{t.topScorer}</h2>
+              <Button type="text" icon={<Info size={18} className="text-[var(--text-color)]/30" />} />
             </div>
             
             <Table 
               columns={[
-                { title: t.user, dataIndex: 'user', key: 'user', render: (text) => <span className="font-semibold text-white/90">{text}</span> },
-                { title: t.userType, dataIndex: 'type', key: 'type', render: (type) => <span className="opacity-60 text-white/70">{type}</span> },
+                { title: t.user, dataIndex: 'user', key: 'user', render: (text) => <span className="font-semibold text-[var(--text-color)]">{text}</span> },
+                { title: t.userType, dataIndex: 'type', key: 'type', render: (type) => <span className="opacity-60 text-[var(--text-color)]">{type}</span> },
                 { title: t.commissionHeader, dataIndex: 'commission', key: 'commission', render: (val) => <span className="text-[#12716E] font-bold">${val}</span> },
               ]}
               dataSource={[
@@ -323,7 +323,7 @@ const IBDashboard = ({ onNavigate }) => {
       <div className="lg:hidden h-[calc(100vh-160px)] min-h-fit p-0 pb-[100px] bg-[var(--theme-bg)]">
         <div className="mt-3 px-4">
           <div className="space-y-4">
-            {/* Referral Link Card - Dark themed */}
+            {/* Referral Link Card */}
             <div className="bg-[var(--mobile-card-bg)] border border-[var(--mobile-card-border)] px-4 py-3 rounded-xl flex items-center justify-between gap-2 shadow-lg">
               <div className="min-w-0 flex-1">
                 <p className="text-[14px] text-[var(--mobile-text)] font-medium truncate">{t.referralLink}: <span className="opacity-80">IFAHGGAP</span></p>
@@ -331,8 +331,8 @@ const IBDashboard = ({ onNavigate }) => {
               <div className="shrink-0">
                 <button className="p-1 hover:bg-[var(--mobileThemeHover)] rounded-md transition-colors">
                   <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11 4.00012V4.00012C11 3.06824 11 2.6023 10.8478 2.23476C10.6448 1.7447 10.2554 1.35535 9.76537 1.15236C9.39782 1.00012 8.93188 1.00012 8 1.00012H5C3.11438 1.00012 2.17157 1.00012 1.58579 1.58591C1 2.17169 1 3.1145 1 5.00012V8.00012C1 8.93201 1 9.39795 1.15224 9.76549C1.35523 10.2555 1.74458 10.6449 2.23463 10.8479C2.60218 11.0001 3.06812 11.0001 4 11.0001V11.0001" stroke="#ffffff" strokeOpacity="0.78" strokeWidth="1.5"></path>
-                    <rect x="4" y="4.00012" width="10" height="10" rx="2" stroke="#ffffff" strokeOpacity="0.78" strokeWidth="1.5"></rect>
+                    <path d="M11 4.00012V4.00012C11 3.06824 11 2.6023 10.8478 2.23476C10.6448 1.7447 10.2554 1.35535 9.76537 1.15236C9.39782 1.00012 8.93188 1.00012 8 1.00012H5C3.11438 1.00012 2.17157 1.00012 1.58579 1.58591C1 2.17169 1 3.1145 1 5.00012V8.00012C1 8.93201 1 9.39795 1.15224 9.76549C1.35523 10.2555 1.74458 10.6449 2.23463 10.8479C2.60218 11.0001 3.06812 11.0001 4 11.0001V11.0001" stroke="currentColor" strokeOpacity="0.78" strokeWidth="1.5"></path>
+                    <rect x="4" y="4.00012" width="10" height="10" rx="2" stroke="currentColor" strokeOpacity="0.78" strokeWidth="1.5"></rect>
                   </svg>
                 </button>
               </div>
@@ -340,7 +340,6 @@ const IBDashboard = ({ onNavigate }) => {
             
             {/* Top Cards Grid */}
             <div className="grid grid-cols-2 gap-4 cursor-pointer">
-              {/* Today Earning */}
               <div onClick={() => onNavigate('IB_Commission')} className="rounded-2xl p-4 shadow-xl border border-[var(--mobile-card-border)] bg-[var(--mobile-card-bg)] transition-all hover:bg-[var(--mobileThemeHover)] cursor-pointer active:scale-95">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 bg-[#7367f015] rounded-xl flex items-center justify-center">
@@ -353,7 +352,6 @@ const IBDashboard = ({ onNavigate }) => {
                 </div>
               </div>
 
-              {/* Today Lots */}
               <div onClick={() => onNavigate('IB_Commission')} className="rounded-2xl p-4 shadow-xl border border-[var(--mobile-card-border)] bg-[var(--mobile-card-bg)] transition-all hover:bg-[var(--mobileThemeHover)] cursor-pointer active:scale-95">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 bg-[#00bad115] rounded-xl flex items-center justify-center">
@@ -366,7 +364,6 @@ const IBDashboard = ({ onNavigate }) => {
                 </div>
               </div>
 
-              {/* My Team - Now half width as per screenshot */}
               <div onClick={() => onNavigate('IB_MyTeam')} className="rounded-2xl p-4 shadow-xl border border-[var(--mobile-card-border)] bg-[var(--mobile-card-bg)] transition-all hover:bg-[var(--mobileThemeHover)] cursor-pointer active:scale-95">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 bg-[#ff9f4315] rounded-xl flex items-center justify-center">
@@ -382,11 +379,9 @@ const IBDashboard = ({ onNavigate }) => {
           </div>
 
           <div className="space-y-4 mt-6">
-            {/* Deposit/Withdraw Card with prominent vertical separator */}
             <div className="bg-[var(--mobile-card-bg)] border border-[var(--mobile-card-border)] rounded-2xl p-5 shadow-xl relative">
               <p className="text-lg font-bold text-[var(--mobile-text)] mb-6 uppercase tracking-tight">{t.depositWithdraw}</p>
               <div className="grid grid-cols-2 relative">
-                {/* Vertical Separator Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border-color)] -translate-x-1/2"></div>
                 
                 <div className="flex flex-col items-center justify-center gap-3">
@@ -411,11 +406,9 @@ const IBDashboard = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* KYC Details Card */}
             <div className="bg-[var(--mobile-card-bg)] border border-[var(--mobile-card-border)] rounded-2xl p-5 shadow-xl relative">
               <p className="text-lg font-bold text-[var(--mobile-text)] mb-6 uppercase tracking-tight">{t.kycDetails}</p>
               <div className="grid grid-cols-2 relative">
-                {/* Vertical Separator Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border-color)] -translate-x-1/2"></div>
                 
                 <div className="flex flex-col items-center justify-center gap-3">
@@ -440,11 +433,9 @@ const IBDashboard = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Live Account Card */}
             <div className="bg-[var(--mobile-card-bg)] border border-[var(--mobile-card-border)] rounded-2xl p-5 shadow-xl relative">
               <p className="text-lg font-bold text-[var(--mobile-text)] mb-6 uppercase tracking-tight">{t.liveAccount}</p>
               <div className="grid grid-cols-2 relative">
-                {/* Vertical Separator Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border-color)] -translate-x-1/2"></div>
                 
                 <div className="flex flex-col items-center justify-center gap-3">
@@ -469,11 +460,9 @@ const IBDashboard = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* IB Requests Card */}
             <div className="bg-[var(--mobile-card-bg)] border border-[var(--mobile-card-border)] rounded-2xl p-5 shadow-xl relative">
               <p className="text-lg font-bold text-[var(--mobile-text)] mb-6 uppercase tracking-tight">{t.ibRequests}</p>
               <div className="grid grid-cols-2 relative">
-                {/* Vertical Separator Line */}
                 <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[var(--border-color)] -translate-x-1/2"></div>
                 
                 <div className="flex flex-col items-center justify-center gap-3">
@@ -500,16 +489,16 @@ const IBDashboard = ({ onNavigate }) => {
           </div>
 
           <div className="space-y-4 mt-6">
-            <div className="border border-white/5 rounded-2xl bg-[#1a1a1a] shadow-xl overflow-hidden">
+            <div className="border border-[var(--border-color)] rounded-2xl bg-[var(--bg-color)] shadow-xl overflow-hidden">
               <div className="p-5 flex justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center">
                     <div className="h-[10px] w-[10px] bg-[#AF6C56] rounded-full"></div>
-                    <p className="ml-2 text-sm dark:text-white text-gray-800">{t.lot}</p>
+                    <p className="ml-2 text-sm text-[var(--text-color)]">{t.lot}</p>
                   </div>
                   <div className="flex items-center">
                     <div className="h-[10px] w-[10px] bg-[#12716E] rounded-full"></div>
-                    <p className="ml-2 text-sm dark:text-white text-gray-800">{t.commission}</p>
+                    <p className="ml-2 text-sm text-[var(--text-color)]">{t.commission}</p>
                   </div>
                 </div>
                 <RangePicker 
@@ -521,21 +510,21 @@ const IBDashboard = ({ onNavigate }) => {
               <div className="h-[300px] w-full p-4">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 5, right: 20, left: -20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="0" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                    <CartesianGrid strokeDasharray="0" vertical={false} stroke="rgba(128,128,128,0.1)" />
                     <XAxis 
                       dataKey="name" 
                       axisLine={false} 
                       tickLine={false} 
-                      tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
+                      tick={{ fill: 'rgba(128,128,128,0.5)', fontSize: 10 }}
                     />
                     <YAxis 
                       domain={[0, 2]} 
                       ticks={[0, 0.4, 0.8, 1.2, 1.6, 2]}
                       axisLine={false} 
                       tickLine={false}
-                      tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }}
+                      tick={{ fill: 'rgba(128,128,128,0.5)', fontSize: 10 }}
                     />
-                    <Tooltip content={<CustomTooltip t={t} />} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }} />
+                    <Tooltip content={<CustomTooltip t={t} />} cursor={{ stroke: 'rgba(128,128,128,0.1)', strokeWidth: 1 }} />
                     <Line type="monotone" dataKey="lot" stroke="#AF6C56" strokeWidth={2} dot={{ r: 0 }} />
                     <Line type="monotone" dataKey="commission" stroke="#12716E" strokeWidth={2} dot={{ r: 0 }} />
                   </LineChart>
@@ -543,13 +532,13 @@ const IBDashboard = ({ onNavigate }) => {
               </div>
             </div>
 
-            <div className="border-2 border-[var(--border-color)] rounded-xl p-5 bg-[var(--bg-color)] overflow-hidden">
-              <p className="text-xl font-medium dark:text-white text-gray-800">{t.topScorer}</p>
+            <div className="border border-[var(--border-color)] rounded-xl p-5 bg-[var(--bg-color)] overflow-hidden">
+              <p className="text-xl font-medium text-[var(--text-color)]">{t.topScorer}</p>
               <div className="h-[400px] overflow-y-auto mt-5">
                 <Table 
                   columns={[
-                    { title: t.user, dataIndex: 'user', key: 'user', render: (text) => <span className="font-semibold dark:text-white text-gray-800">{text}</span> },
-                    { title: t.userType, dataIndex: 'type', key: 'type', render: (type) => <span className="opacity-60 dark:text-white/70 text-gray-600">{type}</span> },
+                    { title: t.user, dataIndex: 'user', key: 'user', render: (text) => <span className="font-semibold text-[var(--text-color)]">{text}</span> },
+                    { title: t.userType, dataIndex: 'type', key: 'type', render: (type) => <span className="opacity-60 text-[var(--text-color)]">{type}</span> },
                     { title: t.commissionHeader, dataIndex: 'commission', key: 'commission', render: (val) => <span className="text-[#12716E] font-bold">${val}</span> },
                   ]}
                   dataSource={[

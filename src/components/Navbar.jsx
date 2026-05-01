@@ -87,6 +87,8 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
     return TRANSLATIONS[language]?.[key] || key;
   };
 
+  const { isDark, toggleTheme } = useTheme();
+
   const userMenuItems = [
     { name: 'Dashboard', icon: <img src={homeSmileIcon} alt="Dashboard" className="w-[18px] h-[18px] object-contain" /> },
     { name: 'Accounts', icon: <img src={accountsIcon} alt="Accounts" className="w-[18px] h-[18px] object-contain" /> },
@@ -186,7 +188,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const { isDark, toggleTheme } = useTheme();
+
 
   return (
     <nav className="bg-[var(--nav-bg)] border-b border-[var(--border-color)] h-[53px] sticky top-0 z-50 transition-colors">
@@ -306,7 +308,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
             className="p-1.5 text-[#8e9d9b] hover:text-[var(--text-color)] transition-colors"
             title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDark ? <Moon size={20} strokeWidth={2} /> : <Sun size={20} strokeWidth={2} />}
+            {isDark ? <Sun size={20} strokeWidth={2} /> : <Moon size={20} strokeWidth={2} />}
           </button>
 
           {/* Language Selector */}

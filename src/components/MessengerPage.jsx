@@ -32,12 +32,12 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
   return (
     <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative bg-[#1a1a1e] border border-white/5 w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
+      <div className={`relative bg-[var(--card-bg)] border border-[var(--border-color)] w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--border-color)]">
           <h2 className="text-[20px] font-bold text-[#3B82F6]">{t('startNewChat')}</h2>
-          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity">
             <X size={24} />
           </button>
         </div>
@@ -45,11 +45,11 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
         {/* Body */}
         <div className="px-6 py-6">
           <div className="relative mb-6">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-40" />
             <input 
               type="text" 
               placeholder={t('search')} 
-              className="w-full bg-[#000000] border border-white/5 rounded-[8px] pl-11 pr-4 py-3 text-white text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-white/20"
+              className="w-full bg-[var(--bg-color)] border border-[var(--border-color)] rounded-[8px] pl-11 pr-4 py-3 text-[var(--text-color)] text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-[var(--text-color)] placeholder:opacity-20"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -71,7 +71,7 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
               .map((user) => (
                 <div 
                   key={user.id} 
-                  className="flex items-center gap-4 p-3 rounded-[12px] hover:bg-white/5 cursor-pointer transition-all border border-transparent"
+                  className="flex items-center gap-4 p-3 rounded-[12px] hover:bg-[var(--hover-bg)] cursor-pointer transition-all border border-transparent"
                   onClick={() => onSelectUser(user)}
                 >
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-[16px] text-white shrink-0 ${user.color}`}>
@@ -79,10 +79,10 @@ const StartChatModal = ({ isOpen, onClose, onSelectUser, language }) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-white font-bold text-[15px]">{user.name}</span>
+                      <span className="text-[var(--text-color)] font-bold text-[15px]">{user.name}</span>
                       <span className="bg-[#3B82F6]/20 text-[#3B82F6] text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider border border-[#3B82F6]/30">{user.role}</span>
                     </div>
-                    <div className="text-white/40 text-[13px] truncate">{user.email}</div>
+                    <div className="text-[var(--text-color)] opacity-40 text-[13px] truncate">{user.email}</div>
                   </div>
                 </div>
               ))}
@@ -143,8 +143,8 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
 
       <div className="border-2 border-[var(--border-color)] rounded-xl flex overflow-hidden h-full">
         {/* Sidebar (Desktop only) */}
-        <div className={`hidden xl:flex w-1/4 border-r-2 border-[var(--border-color)] flex-col bg-[#1a1a1a]`}>
-          <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between sticky top-0 z-10 shadow-sm bg-[#1a1a1a]">
+        <div className={`hidden xl:flex w-1/4 border-r-2 border-[var(--border-color)] flex-col bg-[var(--bg-color)]`}>
+          <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between sticky top-0 z-10 shadow-sm bg-[var(--bg-color)]">
             <span className="text-[var(--text-color)] font-semibold text-lg">{t('users')}</span>
             <div className="flex bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] p-1 scale-90">
               <button onClick={() => setActiveTab('Active')} className={`px-3 py-1 rounded-[6px] text-[12px] font-bold transition-all ${activeTab === 'Active' ? 'bg-[#158B86] text-white' : 'text-[#8e9d9b]'}`}>{t('active')}</button>
@@ -185,7 +185,7 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 flex flex-col relative overflow-hidden bg-[#1a1a1a]">
+        <div className="flex-1 flex flex-col relative overflow-hidden bg-[var(--bg-color)]">
           {selectedChat ? (
             <>
               {/* Chat Header */}
@@ -201,7 +201,7 @@ const MessengerPage = ({ onNavigate, isIBMode = false }) => {
               <div className="flex-1 overflow-y-auto p-6" />
               <div className="p-6 border-t border-[var(--border-color)]">
                 <div className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-xl flex items-center gap-3 px-4 py-2">
-                  <input type="text" placeholder={t('typeMessage')} className="flex-1 bg-transparent border-none outline-none text-white text-[14px] py-2" value={message} onChange={e => setMessage(e.target.value)} />
+                  <input type="text" placeholder={t('typeMessage')} className="flex-1 bg-transparent border-none outline-none text-[var(--text-color)] text-[14px] py-2" value={message} onChange={e => setMessage(e.target.value)} />
                   <button className="text-[#3B82F6] lg:text-[#158B86]"><Send size={22} /></button>
                 </div>
               </div>

@@ -79,7 +79,7 @@ const IBCommissionPage = ({ onNavigate }) => {
       title: t.columns.user,
       dataIndex: 'user',
       key: 'user',
-      render: (text) => <span className="text-white/90 font-medium">{text}</span>
+      render: (text) => <span className="text-[var(--text-color)] opacity-90 font-medium">{text}</span>
     },
     { title: t.columns.loginId, dataIndex: 'loginId', key: 'loginId' },
     { title: t.columns.level, dataIndex: 'level', key: 'level' },
@@ -106,9 +106,9 @@ const IBCommissionPage = ({ onNavigate }) => {
   const dataSource = [];
 
   const extraHeader = (
-    <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
-       <p className="text-[14px] font-medium text-white">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
-       <button className="text-white hover:opacity-80 transition-all">
+    <div className="hidden md:flex items-center gap-3 bg-[var(--segmented-bg)] border border-[var(--border-color)] px-5 py-2 rounded-xl">
+       <p className="text-[14px] font-medium text-[var(--text-color)]">{t.referralLink}: <span className="text-[var(--text-color)]">IFAHGGAP</span></p>
+       <button className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity">
          <Copy size={16} />
        </button>
     </div>
@@ -119,7 +119,7 @@ const IBCommissionPage = ({ onNavigate }) => {
       {/* ── Mobile View (lg:hidden) ── */}
       <div className="lg:hidden h-[calc(100vh-160px)] min-h-fit p-4 pb-[100px] bg-[var(--theme-bg)] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 py-4 border-b border-white/5 mb-6 bg-[var(--theme-bg)] sticky top-0 z-[100]">
+        <div className="flex items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 bg-[var(--bg-color)] sticky top-0 z-[100]">
           <button onClick={() => onNavigate('IB_Dashboard')} className="p-1 -ml-1 transition-colors">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
@@ -142,7 +142,7 @@ const IBCommissionPage = ({ onNavigate }) => {
             <div className="flex items-center gap-3 w-full">
               <Input 
                 placeholder={t.search} 
-                prefix={<Search size={16} className="text-white/30" />}
+                prefix={<Search size={16} className="text-[var(--text-color)] opacity-30" />}
                 className="ib-input flex-1 h-11"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
@@ -159,15 +159,15 @@ const IBCommissionPage = ({ onNavigate }) => {
           </div>
 
           {/* Summary Section */}
-          <div className="flex flex-wrap items-center gap-1 text-white">
+          <div className="flex flex-wrap items-center gap-1 text-[var(--text-color)]">
             <p className="text-[18px] font-bold">{t.summaryPrefix}</p>
-            <span className="text-white/70 text-sm">
-              ({t.lot}:<span className="text-white font-bold ml-1">0</span> {t.commission}:<span className="text-white font-bold ml-1">$ 0</span>)
+            <span className="opacity-70 text-sm">
+              ({t.lot}:<span className="font-bold ml-1">0</span> {t.commission}:<span className="font-bold ml-1">$ 0</span>)
             </span>
           </div>
 
           {/* Table Container */}
-          <div className="mt-6 border border-white/5 rounded-xl overflow-hidden bg-[var(--theme-bg)] shadow-xl">
+          <div className="mt-6 border border-[var(--border-color)] rounded-xl overflow-hidden bg-[var(--bg-color)] shadow-xl">
             <div className="overflow-x-auto">
               <Table 
                 columns={columns}
@@ -224,7 +224,7 @@ const IBCommissionPage = ({ onNavigate }) => {
           <div className="flex items-center gap-3 w-full md:w-auto">
             <Input 
               placeholder={t.search} 
-              prefix={<Search size={16} className="text-white/30" />}
+              prefix={<Search size={16} className="text-[var(--text-color)] opacity-30" />}
               className="ib-input w-full md:w-[220px]"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -242,8 +242,8 @@ const IBCommissionPage = ({ onNavigate }) => {
 
         {/* Summary Section */}
         <div className="px-1">
-          <h3 className="text-[18px] font-semibold text-white">
-            {t.summaryPrefix} <span className="text-white/60 text-[14px] font-normal">({t.lot}:<span className="text-white font-bold mx-1">0</span> {t.commission}:<span className="text-white font-bold mx-1">-$ 0</span>)</span>
+          <h3 className="text-[18px] font-semibold text-[var(--text-color)]">
+            {t.summaryPrefix} <span className="opacity-60 text-[14px] font-normal">({t.lot}:<span className="font-bold mx-1">0</span> {t.commission}:<span className="font-bold mx-1">-$ 0</span>)</span>
           </h3>
         </div>
 

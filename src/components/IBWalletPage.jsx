@@ -60,8 +60,8 @@ const MetricCard = ({ icon, val, label, color, bg }) => (
        {icon}
     </div>
     <div>
-       <p className="text-xl font-bold text-white">{val}</p>
-       <p className="text-xs text-[#8e9d9b] font-medium tracking-wider mt-0.5">{label}</p>
+       <p className="text-xl font-bold text-[var(--text-color)]">{val}</p>
+       <p className="text-xs text-[var(--text-color)] opacity-60 font-medium tracking-wider mt-0.5">{label}</p>
     </div>
   </div>
 );
@@ -75,7 +75,7 @@ const IBWalletPage = ({ onNavigate }) => {
       {/* ── Mobile View (lg:hidden) ── */}
       <div className="lg:hidden h-[calc(100vh-160px)] min-h-fit p-4 pb-[100px] bg-[var(--theme-bg)] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 py-4 border-b border-white/5 mb-6 bg-[var(--theme-bg)] sticky top-0 z-[100]">
+        <div className="flex items-center gap-3 py-4 border-b border-[var(--border-color)] mb-6 bg-[var(--bg-color)] sticky top-0 z-[100]">
           <button onClick={() => onNavigate('IB_Dashboard')} className="p-1 -ml-1 transition-colors">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
@@ -86,20 +86,20 @@ const IBWalletPage = ({ onNavigate }) => {
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 gap-4">
             {/* Generate Commission */}
-            <div className="rounded-2xl p-3 shadow-md border border-white/10 bg-gradient-to-tl from-gray-700 to-black cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="rounded-2xl p-3 shadow-md border border-[var(--border-color)] bg-[var(--card-bg)] cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-center">
                 <div className="p-2 bg-[#7367F010] rounded-[10px] flex flex-col items-center justify-center shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" className="size-6" viewBox="0 0 24 24" fill="none" stroke="#7367F0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m15 9-6 6"></path><path d="M9 9h.01"></path><path d="M15 15h.01"></path></svg>
                 </div>
                 <div className="ml-2 min-w-0">
-                  <h3 className="text-xs font-bold leading-tight text-white">Generate Commission</h3>
-                  <p className="text-sm font-bold text-white">$ 0</p>
+                  <h3 className="text-xs font-bold leading-tight text-[var(--text-color)] opacity-60">Generate Commission</h3>
+                  <p className="text-sm font-bold text-[var(--text-color)]">$ 0</p>
                 </div>
               </div>
             </div>
 
             {/* Available Commission */}
-            <div className="rounded-2xl p-3 shadow-md border border-white/10 bg-gradient-to-tl from-gray-700 to-black cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="rounded-2xl p-3 shadow-md border border-[var(--border-color)] bg-[var(--card-bg)] cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-center">
                 <div className="p-2 bg-[#00727D10] rounded-[10px] flex flex-col items-center justify-center shrink-0">
                   <svg width="64px" height="64px" viewBox="-0.5 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-6">
@@ -107,14 +107,14 @@ const IBWalletPage = ({ onNavigate }) => {
                   </svg>
                 </div>
                 <div className="ml-2 min-w-0">
-                  <h3 className="text-xs font-bold leading-tight text-white">Available Commission</h3>
-                  <p className="text-sm font-bold text-white">$ 0</p>
+                  <h3 className="text-xs font-bold leading-tight text-[var(--text-color)] opacity-60">Available Commission</h3>
+                  <p className="text-sm font-bold text-[var(--text-color)]">$ 0</p>
                 </div>
               </div>
             </div>
 
             {/* Withdraw Commission */}
-            <div className="rounded-2xl p-3 shadow-md border border-white/10 bg-gradient-to-tl from-gray-700 to-black cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="rounded-2xl p-3 shadow-md border border-[var(--border-color)] bg-[var(--card-bg)] cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-center">
                 <div className="p-2 bg-[#00BAD110] rounded-[10px] flex flex-col items-center justify-center shrink-0">
                   <svg width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-6">
@@ -123,48 +123,48 @@ const IBWalletPage = ({ onNavigate }) => {
                   </svg>
                 </div>
                 <div className="ml-2 min-w-0">
-                  <h3 className="text-xs font-bold leading-tight text-white">Withdraw Commission</h3>
-                  <p className="text-sm font-bold text-white">$ 0</p>
+                  <h3 className="text-xs font-bold leading-tight text-[var(--text-color)] opacity-60">Withdraw Commission</h3>
+                  <p className="text-sm font-bold text-[var(--text-color)]">$ 0</p>
                 </div>
               </div>
             </div>
 
             {/* Minimum Transfer */}
-            <div className="rounded-2xl p-3 shadow-md border border-white/10 bg-gradient-to-tl from-gray-700 to-black cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="rounded-2xl p-3 shadow-md border border-[var(--border-color)] bg-[var(--card-bg)] cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-center">
                 <div className="p-2 bg-[#28C76F10] rounded-[10px] flex flex-col items-center justify-center shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" className="size-6" viewBox="0 0 24 24" fill="none" stroke="#28C76F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                 </div>
                 <div className="ml-2 min-w-0">
-                  <h3 className="text-xs font-bold leading-tight text-white">Minimum Transfer</h3>
-                  <p className="text-sm font-bold text-white">$ 1</p>
+                  <h3 className="text-xs font-bold leading-tight text-[var(--text-color)] opacity-60">Minimum Transfer</h3>
+                  <p className="text-sm font-bold text-[var(--text-color)]">$ 1</p>
                 </div>
               </div>
             </div>
 
             {/* Maximum Transfer */}
-            <div className="rounded-2xl p-3 shadow-md border border-white/10 bg-gradient-to-tl from-gray-700 to-black cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="rounded-2xl p-3 shadow-md border border-[var(--border-color)] bg-[var(--card-bg)] cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-center">
                 <div className="p-2 bg-[#FF9F4310] rounded-[10px] flex flex-col items-center justify-center shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" className="size-6" viewBox="0 0 24 24" fill="none" stroke="#FF9F43" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                 </div>
                 <div className="ml-2 min-w-0">
-                  <h3 className="text-xs font-bold leading-tight text-white">Maximum Transfer</h3>
-                  <p className="text-sm font-bold text-white">$ 100</p>
+                  <h3 className="text-xs font-bold leading-tight text-[var(--text-color)] opacity-60">Maximum Transfer</h3>
+                  <p className="text-sm font-bold text-[var(--text-color)]">$ 100</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Withdraw Form */}
-          <div className="border-[2px] border-white/5 rounded-xl bg-[var(--theme-bg)] pt-4 w-full mt-5">
-            <p className="text-xl font-semibold px-4 pb-4 border-b border-white/5 text-white">Withdraw</p>
+          <div className="border-[2px] border-[var(--border-color)] rounded-xl bg-[var(--card-bg)] pt-4 w-full mt-5">
+            <p className="text-xl font-semibold px-4 pb-4 border-b border-[var(--border-color)] text-[var(--text-color)]">Withdraw</p>
             <form autoComplete="off" className="w-full">
               <div className="p-4">
                 <div className="md:w-1/3">
-                  <label className="text-lg font-medium text-white block mb-2">Amount In USD</label>
+                  <label className="text-lg font-medium text-[var(--text-color)] block mb-2">Amount In USD</label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30">$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-30">$</span>
                     <input 
                       type="number" 
                       placeholder="0" 
@@ -176,7 +176,7 @@ const IBWalletPage = ({ onNavigate }) => {
                 <div className="flex flex-wrap justify-between items-center mt-6">
                   <div className="flex items-center gap-2">
                     <input type="checkbox" className="w-4 h-4 rounded border-[var(--border-color)] bg-[var(--bg-color)] text-[#3B82F6]" />
-                    <span className="text-[14px] text-white/60">
+                    <span className="text-[14px] text-[var(--text-color)] opacity-60">
                       Yes, I agree to the <a href="https://mt5.neptunefxcrm.com/TermsPdf/CommissionWithdraw.pdf" target="_blank" rel="noopener noreferrer" className="text-[#3B82F6] underline hover:text-[#2563EB] duration-300">Terms & Conditions</a>
                     </span>
                   </div>
@@ -193,19 +193,19 @@ const IBWalletPage = ({ onNavigate }) => {
 
           {/* History Table */}
           <div className="py-6">
-            <div className="border border-white/5 rounded-xl overflow-hidden shadow-xl bg-[var(--theme-bg)]">
+            <div className="border border-[var(--border-color)] rounded-xl overflow-hidden shadow-xl bg-[var(--card-bg)]">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-[var(--bg-color)] text-[var(--text-color)] text-[11px] tracking-wider">
+                  <thead className="bg-[var(--segmented-bg)] text-[var(--text-color)] text-[11px] tracking-wider uppercase">
                     <tr>
-                      <th className="px-4 py-4 font-bold border-b border-white/5">Name</th>
-                      <th className="px-4 py-4 font-bold border-b border-white/5">Type</th>
-                      <th className="px-4 py-4 font-bold border-b border-white/5">Amount</th>
-                      <th className="px-4 py-4 font-bold border-b border-white/5">Status</th>
-                      <th className="px-4 py-4 font-bold border-b border-white/5">Requested Date</th>
+                      <th className="px-4 py-4 font-bold border-b border-[var(--border-color)]">Name</th>
+                      <th className="px-4 py-4 font-bold border-b border-[var(--border-color)]">Type</th>
+                      <th className="px-4 py-4 font-bold border-b border-[var(--border-color)]">Amount</th>
+                      <th className="px-4 py-4 font-bold border-b border-[var(--border-color)]">Status</th>
+                      <th className="px-4 py-4 font-bold border-b border-[var(--border-color)]">Requested Date</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-[var(--border-color)]">
                     <tr>
                       <td colSpan="5" className="px-4 py-20 text-center">
                         <div className="flex flex-col items-center justify-center opacity-20">
@@ -218,7 +218,7 @@ const IBWalletPage = ({ onNavigate }) => {
                               </g>
                             </g>
                           </svg>
-                          <span className="text-sm font-medium">No Record Found</span>
+                          <span className="text-sm font-medium text-[var(--text-color)] opacity-40">No Record Found</span>
                         </div>
                       </td>
                     </tr>
@@ -235,7 +235,7 @@ const IBWalletPage = ({ onNavigate }) => {
         {/* Header Section */}
         <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-b border-[var(--border-color)]">
           <div className="flex items-center gap-3">
-            <h1 className="text-[22px] font-bold uppercase tracking-tight text-white">{t.ibWithdraw}</h1>
+            <h1 className="text-[22px] font-bold uppercase tracking-tight text-[var(--text-color)]">{t.ibWithdraw}</h1>
             <div className="flex items-center gap-2">
                <div className="w-2.5 h-2.5 bg-[#AF6C56] rounded-full dotanim"></div>
                <div className="bg-[#12716E] text-white text-[13px] font-medium px-3 py-1 rounded-[4px] cursor-pointer">
@@ -246,9 +246,9 @@ const IBWalletPage = ({ onNavigate }) => {
 
           <div className="flex flex-wrap items-center gap-4">
             {/* Referral Link */}
-            <div className="hidden md:flex items-center gap-3 bg-[#111818] border border-white/5 px-5 py-2 rounded-xl">
-               <p className="text-[14px] font-medium text-white/70">{t.referralLink}: <span className="text-white">IFAHGGAP</span></p>
-               <button className="text-white/50 hover:text-white transition-colors">
+            <div className="hidden md:flex items-center gap-3 bg-[var(--segmented-bg)] border border-[var(--border-color)] px-5 py-2 rounded-xl">
+               <p className="text-[14px] font-medium text-[var(--text-color)] opacity-70">{t.referralLink}: <span className="text-[var(--text-color)]">IFAHGGAP</span></p>
+               <button className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity">
                  <Copy size={14} />
                </button>
             </div>
@@ -322,7 +322,7 @@ const IBWalletPage = ({ onNavigate }) => {
                  <Input 
                     type="number" 
                     placeholder="0" 
-                    prefix={<span className="text-white/40 mr-1">$</span>}
+                    prefix={<span className="text-[var(--text-color)] opacity-40 mr-1">$</span>}
                     className="ib-input h-12 text-[16px] font-medium"
                  />
               </div>

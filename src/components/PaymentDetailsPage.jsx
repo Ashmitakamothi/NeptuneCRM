@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ArrowLeft, X, CreditCard, Plus } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
 
 const PaymentDetailsPage = ({ onNavigate }) => {
+  const { isDark } = useTheme();
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     bankName: '',
@@ -48,16 +50,16 @@ const PaymentDetailsPage = ({ onNavigate }) => {
             </div>
             
             <div className="mt-10">
-              <p className="text-white/30 text-[15px]">No bank added yet.</p>
+              <p className="text-[var(--text-color)] opacity-30 text-[15px]">No bank added yet.</p>
             </div>
           </div>
         ) : (
           /* ── Add Bank Form View ── */
-          <div className="bg-[#1a1a1a] rounded-2xl border border-white/5 overflow-hidden animate-fade-in">
+          <div className="bg-[var(--card-bg)] rounded-2xl border border-[var(--border-color)] overflow-hidden animate-fade-in shadow-xl">
             <div className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[17px] font-bold text-[#3B82F6]">Add Bank</h2>
-                <button onClick={() => setIsAdding(false)} className="text-white/40 hover:text-white transition-colors">
+                <button onClick={() => setIsAdding(false)} className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-colors">
                   <X size={22} />
                 </button>
               </div>
@@ -65,7 +67,7 @@ const PaymentDetailsPage = ({ onNavigate }) => {
               <div className="space-y-3">
                 {/* Bank Name */}
                 <div className="space-y-1">
-                  <label className="text-[12px] font-medium text-white flex items-center gap-1">
+                  <label className="text-[12px] font-medium text-[var(--text-color)] flex items-center gap-1">
                     <span className="text-red-500">*</span> Bank Name
                   </label>
                   <input 
@@ -74,13 +76,13 @@ const PaymentDetailsPage = ({ onNavigate }) => {
                     value={formData.bankName}
                     onChange={handleInputChange}
                     placeholder="Enter bank name"
-                    className="w-full bg-[#252525] border border-white/10 rounded-lg px-4 py-2 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-[#3B82F6]/50 transition-all"
+                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-20 outline-none focus:border-[#3B82F6]/50 transition-all"
                   />
                 </div>
 
                 {/* Account Number */}
                 <div className="space-y-1">
-                  <label className="text-[12px] font-medium text-white flex items-center gap-1">
+                  <label className="text-[12px] font-medium text-[var(--text-color)] flex items-center gap-1">
                     <span className="text-red-500">*</span> Account Number
                   </label>
                   <input 
@@ -89,13 +91,13 @@ const PaymentDetailsPage = ({ onNavigate }) => {
                     value={formData.accountNumber}
                     onChange={handleInputChange}
                     placeholder="Enter account number"
-                    className="w-full bg-[#252525] border border-white/10 rounded-lg px-4 py-2 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-[#3B82F6]/50 transition-all"
+                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-20 outline-none focus:border-[#3B82F6]/50 transition-all"
                   />
                 </div>
 
                 {/* Branch Address */}
                 <div className="space-y-1">
-                  <label className="text-[12px] font-medium text-white flex items-center gap-1">
+                  <label className="text-[12px] font-medium text-[var(--text-color)] flex items-center gap-1">
                     <span className="text-red-500">*</span> Branch Address
                   </label>
                   <input 
@@ -104,13 +106,13 @@ const PaymentDetailsPage = ({ onNavigate }) => {
                     value={formData.branchAddress}
                     onChange={handleInputChange}
                     placeholder="Enter branch address"
-                    className="w-full bg-[#252525] border border-white/10 rounded-lg px-4 py-2 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-[#3B82F6]/50 transition-all"
+                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-20 outline-none focus:border-[#3B82F6]/50 transition-all"
                   />
                 </div>
 
                 {/* IFSC Code */}
                 <div className="space-y-1">
-                  <label className="text-[12px] font-medium text-white flex items-center gap-1">
+                  <label className="text-[12px] font-medium text-[var(--text-color)] flex items-center gap-1">
                     <span className="text-red-500">*</span> IFSC Code
                   </label>
                   <input 
@@ -119,13 +121,13 @@ const PaymentDetailsPage = ({ onNavigate }) => {
                     value={formData.ifscCode}
                     onChange={handleInputChange}
                     placeholder="IFSC code"
-                    className="w-full bg-[#252525] border border-white/10 rounded-lg px-4 py-2 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-[#3B82F6]/50 transition-all"
+                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-20 outline-none focus:border-[#3B82F6]/50 transition-all"
                   />
                 </div>
 
                 {/* Account Holder Name */}
                 <div className="space-y-1">
-                  <label className="text-[12px] font-medium text-white flex items-center gap-1">
+                  <label className="text-[12px] font-medium text-[var(--text-color)] flex items-center gap-1">
                     <span className="text-red-500">*</span> Account Holder Name
                   </label>
                   <input 
@@ -134,7 +136,7 @@ const PaymentDetailsPage = ({ onNavigate }) => {
                     value={formData.accountHolderName}
                     onChange={handleInputChange}
                     placeholder="Enter account holder name"
-                    className="w-full bg-[#252525] border border-white/10 rounded-lg px-4 py-2 text-[13px] text-white placeholder:text-white/20 outline-none focus:border-[#3B82F6]/50 transition-all"
+                    className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-lg px-4 py-2 text-[13px] text-[var(--text-color)] placeholder:text-[var(--text-color)] placeholder:opacity-20 outline-none focus:border-[#3B82F6]/50 transition-all"
                   />
                 </div>
 

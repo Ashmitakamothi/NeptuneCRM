@@ -162,7 +162,7 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
           className={`w-8 h-8 flex items-center justify-center rounded-[6px] font-bold text-[13px] transition-all ${
             currentPage === i 
               ? 'bg-[#3B82F6] text-white shadow-lg shadow-blue-500/20' 
-              : 'text-white/40 hover:text-white hover:bg-white/5'
+              : 'text-[var(--text-color)] opacity-40 hover:opacity-100 hover:bg-[var(--hover-bg)]'
           }`}
         >
           {i}
@@ -181,7 +181,7 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
       case 'REJECTED':
         return 'text-[#EF4444] bg-[#3a1010] px-3 py-1 rounded-full';
       default:
-        return 'text-white bg-white/10 px-3 py-1 rounded-full';
+        return 'text-[var(--text-color)] bg-[var(--hover-bg)] px-3 py-1 rounded-full';
     }
   };
 
@@ -190,15 +190,15 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
       <div className="flex-1 overflow-x-auto min-h-0 custom-scrollbar">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[#1a1a1e] border-b border-white/5">
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider">{t('operation')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentFrom')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentTo')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('amount')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('currency')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('transactionDate')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('status')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('remark')}</th>
+            <tr className="bg-[var(--segmented-bg)] border-b border-[var(--border-color)]">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider">{t('operation')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('paymentFrom')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('paymentTo')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('amount')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('transactionDate')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('status')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('remark')}</th>
             </tr>
           </thead>
 
@@ -234,7 +234,7 @@ const MyTransactionsTable = ({ operationFilter = 'All', dateRange = null, export
                   <td className="py-3.5 px-2 md:px-4 text-[13px] md:text-[14px] font-medium" style={{ color: themeColor }}>
                     <div className="flex items-center gap-2">
                        <span className="text-[12px] opacity-60 truncate max-w-[100px]">{row.remarks || row.remark || '-'}</span>
-                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer hover:text-white transition-colors shrink-0" style={{ color: themeColorSub }}>
+                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="cursor-pointer hover:opacity-100 transition-opacity shrink-0" style={{ color: themeColorSub }}>
                         <path d="M4 14c4.5-6.5 11.5-6.5 16 0" />
                         <circle cx="12" cy="12" r="3" />
                       </svg>

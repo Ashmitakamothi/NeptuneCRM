@@ -17,7 +17,7 @@ const DashboardHeader = ({ title, breadcrumbs, activeTab = 'User Dashboard', onN
       {/* Main Header Row */}
       <div className={`${showMobileBack ? 'hidden lg:flex' : 'flex'} flex-wrap items-center justify-between gap-4 py-4 border-b border-[var(--border-color)] mb-4`}>
         <div className="flex items-center gap-4">
-          <h1 className="text-[20px] font-bold uppercase tracking-tight">{title}</h1>
+          <h1 className="text-[20px] font-bold uppercase tracking-tight text-[var(--text-color)]">{title}</h1>
           <div className="flex items-center gap-2 px-3 py-1 bg-[#158B86] text-white rounded-md text-sm font-medium">
              <div className="w-2 h-2 bg-[#FF9F43] rounded-full dotanim"></div>
              News

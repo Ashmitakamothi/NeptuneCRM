@@ -97,7 +97,7 @@ const TransactionsList = ({ data: dataProp }) => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="py-8 text-center text-[#B2BEBB] text-[12px]">{t('noRecords')}</td>
+                  <td colSpan="3" className="py-8 text-center text-[var(--text-color)] opacity-40 text-[12px]">{t('noRecords')}</td>
                 </tr>
               )}
             </tbody>

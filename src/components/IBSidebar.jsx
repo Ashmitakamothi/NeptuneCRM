@@ -86,7 +86,7 @@ const IBSidebar = ({ activeItem, onNavigate }) => {
          <div className="px-4 py-2 border-t border-white/5 flex items-center gap-3 opacity-40 hover:opacity-100 transition-opacity cursor-pointer">
             <div className="w-8 h-8 rounded-full bg-[#158B86]" />
             <div className="flex flex-col">
-               <span className="text-[12px] font-bold text-white">IB Account</span>
+               <span className="text-[12px] font-bold text-[var(--text-color)]">IB Account</span>
                <span className="text-[10px] text-[#158B86]">Verified Partner</span>
             </div>
          </div>

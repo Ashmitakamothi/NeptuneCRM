@@ -5,6 +5,7 @@ import {
   MessageCircle, PlayCircle, Download, Headphones, 
   HelpCircle, LogOut, Trophy, LayoutDashboard, Network, BadgePercent, X
 } from 'lucide-react';
+import { Sun } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -24,7 +25,7 @@ const MobileSettings = ({ onNavigate, isIB }) => {
 
   // Settings items based on mode
   const settingsItems = isIB ? [
-    { label: 'Dark Mode', icon: <Moon size={20} />, type: 'toggle', value: isDark, onToggle: toggleTheme },
+    { label: 'Dark Mode', icon: isDark ? <Sun size={20} /> : <Moon size={20} />, type: 'toggle', value: isDark, onToggle: toggleTheme },
     { label: 'KYC Manager', icon: <UserCheck size={20} />, page: 'KYC' },
     { label: 'IB Manager', icon: <Users size={20} />, page: 'IB Manager' },
     { label: 'Live Account', icon: <LayoutDashboard size={20} />, page: 'Live Account' },
@@ -40,7 +41,7 @@ const MobileSettings = ({ onNavigate, isIB }) => {
     },
   ] : [
     { label: 'IB Request', icon: <UserCheck size={20} />, page: 'More_IBRequest' },
-    { label: 'Dark Mode', icon: <Moon size={20} />, type: 'toggle', value: isDark, onToggle: toggleTheme },
+    { label: 'Dark Mode', icon: isDark ? <Sun size={20} /> : <Moon size={20} />, type: 'toggle', value: isDark, onToggle: toggleTheme },
     { label: 'Two Factor Authentication', icon: <ShieldCheck size={20} />, type: 'toggle', value: false },
     { label: 'Change Password', icon: <Lock size={20} />, page: 'Change_Password' },
     { label: 'Payment Details', icon: <CreditCard size={20} />, page: 'Payment_Details' },

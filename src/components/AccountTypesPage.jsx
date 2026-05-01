@@ -411,7 +411,7 @@ const AccountTypesPage = ({ onNavigate, pageData }) => {
           {t('breadcrumbAccounts')}
         </span>
         <ChevronRight size={16} className="text-gray-500" strokeWidth={2} />
-        <span className="text-white">{t('breadcrumbTypes')}</span>
+        <span className="text-[var(--text-color)]">{t('breadcrumbTypes')}</span>
       </div>
 
       {/* Content */}

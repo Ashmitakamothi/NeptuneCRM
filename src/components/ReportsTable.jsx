@@ -186,15 +186,15 @@ const ReportsTable = ({ type, dateRange = null, exportTrigger = 0 }) => {
       <div className="flex-1 overflow-x-auto min-h-0">
         <table className="w-full whitespace-nowrap">
           <thead>
-            <tr className="bg-[#1a1a1e] border-b border-white/5">
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider">{t('operation')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentFrom')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('paymentTo')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('amount')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('currency')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('transactionDate')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('status')}</th>
-              <th className="py-4 px-4 text-left text-[14px] font-bold text-white uppercase tracking-wider border-l border-white/5">{t('remark')}</th>
+            <tr className="bg-[var(--segmented-bg)] border-b border-[var(--border-color)]">
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider">{t('operation')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('paymentFrom')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('paymentTo')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('amount')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('currency')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('transactionDate')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('status')}</th>
+              <th className="py-4 px-4 text-left text-[14px] font-bold text-[var(--text-color)] lg:uppercase lg:tracking-wider border-l border-[var(--border-color)]">{t('remark')}</th>
             </tr>
           </thead>
           <tbody>

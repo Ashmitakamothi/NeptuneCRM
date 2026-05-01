@@ -3,6 +3,7 @@ import { ChevronDown, Download, Calendar } from 'lucide-react';
 import { DatePicker, ConfigProvider, theme as antdTheme } from 'antd';
 import dayjs from 'dayjs';
 import MyTransactionsTable from './MyTransactionsTable';
+import { useTheme } from '../contexts/ThemeContext';
 
 const MobileMyTransactions = ({ 
   onNavigate, 
@@ -12,6 +13,7 @@ const MobileMyTransactions = ({
   setDateRange,
   onExport 
 }) => {
+  const { isDark } = useTheme();
   const [isOpOpen, setIsOpOpen] = useState(false);
   const operations = ['All', 'Deposit', 'Withdrawal', 'Wallet To Account', 'Account To Wallet', 'IB Wallet To Wallet'];
 
@@ -29,7 +31,7 @@ const MobileMyTransactions = ({
       <div className="relative mb-4">
         <div 
           onClick={() => setIsOpOpen(!isOpOpen)}
-          className="flex items-center justify-between py-3.5 px-4 bg-[#1a1a1a] border border-[var(--border-color)] rounded-xl cursor-pointer"
+          className="flex items-center justify-between py-3.5 px-4 bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-xl cursor-pointer"
         >
           <span className="text-base font-medium text-[var(--text-color)]">{operationFilter}</span>
           <ChevronDown size={18} className="text-[#8e9d9b]" />
@@ -47,12 +49,12 @@ const MobileMyTransactions = ({
       </div>
 
       {/* ── Date Filters ── */}
-      <ConfigProvider theme={{ algorithm: antdTheme.darkAlgorithm }}>
+      <ConfigProvider theme={{ algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm }}>
         <div className="flex gap-3 mb-4">
           <div className="flex-1 relative">
             <DatePicker 
               placeholder="From Date" 
-              className="w-full bg-[#1a1a1a] border border-[var(--border-color)] rounded-xl py-3.5 pl-4 pr-4 text-[var(--text-color)] outline-none text-sm font-medium hover:border-[#3B82F6] focus:border-[#3B82F6]"
+              className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-xl py-3.5 pl-4 pr-4 text-[var(--text-color)] outline-none text-sm font-medium hover:border-[#3B82F6] focus:border-[#3B82F6]"
               suffixIcon={<Calendar size={16} className="text-[#8e9d9b]" />}
               value={dateRange ? dateRange[0] : null}
               onChange={(date) => setDateRange([date, dateRange ? dateRange[1] : null])}
@@ -61,7 +63,7 @@ const MobileMyTransactions = ({
           <div className="flex-1 relative">
             <DatePicker 
               placeholder="To Date" 
-              className="w-full bg-[#1a1a1a] border border-[var(--border-color)] rounded-xl py-3.5 pl-4 pr-4 text-[var(--text-color)] outline-none text-sm font-medium hover:border-[#3B82F6] focus:border-[#3B82F6]"
+              className="w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-xl py-3.5 pl-4 pr-4 text-[var(--text-color)] outline-none text-sm font-medium hover:border-[#3B82F6] focus:border-[#3B82F6]"
               suffixIcon={<Calendar size={16} className="text-[#8e9d9b]" />}
               value={dateRange ? dateRange[1] : null}
               onChange={(date) => setDateRange([dateRange ? dateRange[0] : null, date])}

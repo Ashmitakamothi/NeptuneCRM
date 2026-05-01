@@ -53,7 +53,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
   const [priorities, setPriorities] = useState([]);
   const t = (k) => TRANSLATIONS[language]?.[k] || k;
 
-  const modalInputCls = 'w-full bg-[#000000] border border-white/5 rounded-[8px] px-4 py-3 text-white text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-white/20';
+  const modalInputCls = 'w-full bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-[8px] px-4 py-3 text-[var(--text-color)] text-[14px] outline-none focus:border-[#3B82F6] transition-all placeholder:text-[var(--text-color)] placeholder:opacity-20';
   const modalSelectCls = modalInputCls + ' appearance-none cursor-pointer';
 
   const headers = {
@@ -101,30 +101,30 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
   return (
     <div className={`fixed inset-0 z-[200] flex items-center justify-center p-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative bg-[#1a1a1e] border border-white/5 w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
+      <div className={`relative bg-[var(--card-bg)] border border-[var(--border-color)] w-full max-w-[450px] rounded-[16px] shadow-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-10 scale-95 opacity-0'}`}>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--border-color)]">
           <h2 className="text-[20px] font-bold text-[#3B82F6]">{t('createTicket')}</h2>
-          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors"><X size={24} /></button>
+          <button onClick={onClose} className="text-[var(--text-color)] opacity-40 hover:opacity-100 transition-opacity"><X size={24} /></button>
         </div>
 
         {/* Body */}
         <div className="px-6 py-6 space-y-6">
           <div className="space-y-2">
-            <label className="text-[14px] font-bold text-white">{t('title')}</label>
+            <label className="text-[14px] font-bold text-[var(--text-color)]">{t('title')}</label>
             <input type="text" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               placeholder={t('title')} className={modalInputCls} />
           </div>
 
           <div className="space-y-2">
-            <label className="text-[14px] font-bold text-white">{t('description')}</label>
+            <label className="text-[14px] font-bold text-[var(--text-color)]">{t('description')}</label>
             <textarea rows={4} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder={t('description')} className={modalInputCls + ' resize-none'} />
           </div>
 
           <div className="space-y-2">
-            <label className="text-[14px] font-bold text-white">{t('queryType')}</label>
+            <label className="text-[14px] font-bold text-[var(--text-color)]">{t('queryType')}</label>
             <div className="relative">
               <select value={form.queryType} onChange={e => setForm(f => ({ ...f, queryType: e.target.value }))} className={modalSelectCls}>
                 <option value="">{t('selectQuery')}</option>
@@ -139,12 +139,12 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
                   {id: 'calculate_ib_commission', name: 'Calculate IB Commission'}
                 ]).map(q => <option key={q.id ?? q.value} value={q.id ?? q.value}>{q.queryName ?? q.name ?? q.label}</option>)}
               </select>
-              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60 pointer-events-none" />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[14px] font-bold text-white">{t('priorityType')}</label>
+            <label className="text-[14px] font-bold text-[var(--text-color)]">{t('priorityType')}</label>
             <div className="relative">
               <select value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value }))} className={modalSelectCls}>
                 <option value="">{t('selectPriority')}</option>
@@ -154,7 +154,7 @@ const CreateTicketModal = ({ isOpen, onClose, onSubmitted, language, token, user
                   {id: 3, name: 'HIGH'}
                 ]).map(p => <option key={p.id ?? p.value} value={p.id ?? p.value}>{p.priorityName ?? p.name ?? p.label}</option>)}
               </select>
-              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
+              <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-color)] opacity-60 pointer-events-none" />
             </div>
           </div>
         </div>
@@ -201,8 +201,8 @@ const VideoTutorialModal = ({ isOpen, onClose, language }) => {
         </div>
 
         <div className="p-8 text-center sm:text-left">
-          <h3 className="text-[22px] font-extrabold text-white mb-4">{title}</h3>
-          <p className="text-[14px] text-white/60 leading-relaxed font-medium">
+          <h3 className="text-[22px] font-extrabold text-[var(--text-color)] mb-4">{title}</h3>
+          <p className="text-[14px] text-[var(--text-color)] opacity-60 leading-relaxed font-medium">
             {desc}
           </p>
         </div>
@@ -222,7 +222,7 @@ const CloseTicketModal = ({ isOpen, onClose, onConfirm }) => {
             <img src={RedCrossIcon} alt="Alert" className="w-full h-full object-contain" />
           </div>
         </div>
-        <h3 className="text-[20px] font-bold text-white mb-10 leading-tight px-6">Are you sure you want to close this ticket?</h3>
+        <h3 className="text-[20px] font-bold text-[var(--text-color)] mb-10 leading-tight px-6">Are you sure you want to close this ticket?</h3>
         <div className="flex items-center justify-center gap-4">
           <button onClick={onClose}
             className="w-32 py-3 bg-[#D32F2F] hover:bg-[#B71C1C] text-white font-black rounded-[8px] text-[15px] transition-all shadow-lg uppercase tracking-wider">
@@ -355,7 +355,7 @@ const TicketDetailView = ({ ticketId, onClose, onRefresh, language, token, userI
                   <span className="text-[12px] font-bold text-[var(--text-color)]">{senderName}</span>
                   <span className="text-[11px] text-[#8e9d9b]">{new Date(m.createdDate ?? m.date).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
-                <div className={`w-full max-w-[85%] p-4 rounded-[8px] text-[14px] leading-relaxed shadow-md ${isMe ? 'bg-[#0E1B1E] border border-[#158B86]/20 text-[var(--text-color)]' : 'bg-[var(--sub-bg)] text-[var(--text-color)]'}`}>
+                <div className={`w-full max-w-[85%] p-4 rounded-[8px] text-[14px] leading-relaxed shadow-md ${isMe ? 'bg-[#0E1B1E] border border-[#158B86]/20 text-white' : 'bg-[var(--sub-bg)] text-[var(--text-color)]'}`}>
                   {m.userComments ?? m.message}
                 </div>
               </div>
@@ -489,7 +489,7 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
         <>
           {/* Page Header */}
           <div className="flex items-center justify-between mb-8 pt-4">
-            <h2 className="text-[24px] lg:text-[20px] font-bold text-white lg:text-[var(--text-color)]">{t('ticketList')}</h2>
+            <h2 className="text-[24px] lg:text-[20px] font-bold text-[var(--text-color)]">{t('ticketList')}</h2>
             
             <div className="flex flex-wrap items-center gap-4">
               {/* Video Tutorial Button Group */}
@@ -519,13 +519,13 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
           <div className="w-full h-px bg-[var(--border-color)] mb-8" />
 
           {/* Ticket Table */}
-          <div className="bg-[#1a1a1e] lg:bg-[var(--card-bg)] border border-white/5 lg:border-[var(--border-color)] rounded-[12px] overflow-hidden shadow-2xl">
+          <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[12px] overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left">
-                <thead className="bg-[#252529] lg:bg-[var(--sub-bg)] border-b border-white/5 lg:border-[var(--border-color)]">
+                <thead className="bg-[var(--sub-bg)] border-b border-[var(--border-color)]">
                   <tr>
                     {[t('ticketNo'), t('queryType'), t('title'), t('name'), t('createdAt'), t('priority'), t('status'), t('action')].map((h, idx, arr) => (
-                      <th key={h} className={`px-6 py-4 text-[13px] font-bold text-[#8e9d9b] lg:text-white tracking-wider whitespace-nowrap ${idx < arr.length - 1 ? 'border-r border-white/5 lg:border-[var(--border-color)]' : ''}`}>{h}</th>
+                      <th key={h} className={`px-6 py-4 text-[13px] font-bold text-[#8e9d9b] lg:text-[var(--text-color)] opacity-60 tracking-wider whitespace-nowrap ${idx < arr.length - 1 ? 'border-r border-[var(--border-color)]' : ''}`}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -550,12 +550,12 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
                     const priority  = (tk.priority   ?? tk.Priority  ?? '-').toString().toUpperCase();
                     const status    = (tk.status     ?? tk.Status    ?? '-').toString().toUpperCase();
                     return (
-                      <tr key={i} className="hover:bg-white/5 transition-colors">
-                        <td className="px-6 py-5 text-[14px] font-medium text-[var(--text-color)] lg:text-white">{ticketNo}</td>
-                        <td className="px-6 py-5 text-[14px] text-[#158B86] font-medium lg:text-[#158B86]">{queryType}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white">{title}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white">{name}</td>
-                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] lg:text-white whitespace-nowrap">{formatDate(createdAt)}</td>
+                      <tr key={i} className="hover:bg-[var(--hover-bg)] transition-colors">
+                        <td className="px-6 py-5 text-[14px] font-medium text-[var(--text-color)]">{ticketNo}</td>
+                        <td className="px-6 py-5 text-[14px] text-[#158B86] font-medium">{queryType}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)]">{title}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)]">{name}</td>
+                        <td className="px-6 py-5 text-[14px] text-[var(--text-color)] whitespace-nowrap">{formatDate(createdAt)}</td>
                         <td className="px-6 py-5">
                           <span className={`text-[12px] font-bold ${priority === 'HIGH' ? 'text-[#AF6C56]' : priority === 'MEDIUM' ? 'text-yellow-400' : 'text-[#158B86]'}`}>{priority}</span>
                         </td>
@@ -594,7 +594,7 @@ const SupportPage = ({ onNavigate, initialTicketId }) => {
                   <select className="bg-[var(--sub-bg)] border border-[var(--border-color)] rounded-md px-3 py-1.5 text-[13px] text-[var(--text-color)] outline-none cursor-pointer appearance-none pr-8">
                     <option>10 / Page</option><option>20 / Page</option><option>50 / Page</option>
                   </select>
-                  <ChevronRight size={14} className="rotate-90 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-white/40" />
+                  <ChevronRight size={14} className="rotate-90 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-color)] opacity-40" />
                 </div>
                 <div className="flex items-center gap-1">
                   <button onClick={() => goPage(Math.max(1, page - 1))} disabled={page === 1} className="p-2 text-[var(--text-color)] opacity-40 hover:opacity-100 disabled:opacity-20 transition-colors"><ChevronLeft size={18} /></button>
