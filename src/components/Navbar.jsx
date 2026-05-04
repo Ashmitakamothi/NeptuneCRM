@@ -14,11 +14,15 @@ import logom from '../assets/logom.png';
 import NotificationSidebar from './NotificationSidebar';
 import * as IBIcons from './IBIcons';
 
+import redCrossIcon from '../assets/red-cross-icon.svg';
+
 const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
   const { user, logout } = useAuth();
   const { language, setLanguage } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState(null);
   
   // Notification Data
@@ -64,8 +68,18 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
   const notificationCount = notifications.length;
 
   const handleLogout = () => {
-    logout();
-    onNavigate('Login');
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
+    setIsLoggingOut(true);
+    // Simulate a brief delay for the loader
+    setTimeout(() => {
+      logout();
+      onNavigate('Login');
+      setIsLogoutModalOpen(false);
+      setIsLoggingOut(false);
+    }, 1500);
   };
 
   const t = (key) => {
@@ -371,7 +385,7 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
             className="w-9 h-9 rounded-full bg-[#D1F7E9] cursor-pointer border border-[var(--border-color)] ml-1 flex items-center justify-center overflow-hidden"
           >
             <img 
-              src={user?.profileImage || "https://api.dicebear.com/7.x/avataaars/svg?seed=Daniel"} 
+              src={user?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.firstName || 'User'}`} 
               alt="Profile" 
               className="w-full h-full object-cover" 
             />
@@ -466,6 +480,57 @@ const Navbar = ({ onNavigate, activeMenu, isIB = false }) => {
         onClose={() => setIsNotificationOpen(false)}
         notifications={notifications}
       />
+
+      {/* Logout Confirmation Modal */}
+      {isLogoutModalOpen && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in px-4">
+          <div 
+            className="bg-white rounded-[20px] w-full max-w-[500px] overflow-hidden shadow-2xl animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center px-10 py-12 text-center">
+              {/* Icon */}
+              <div className="w-[120px] h-[120px] mb-8">
+                <img src={redCrossIcon} alt="Logout" className="w-full h-full object-contain" />
+              </div>
+
+              {/* Text */}
+              <h3 className="text-[24px] font-bold text-[#1a1a1a] mb-10">
+                Are you sure you want to logout?
+              </h3>
+
+              {/* Buttons */}
+              <div className="flex items-center gap-4 w-full">
+                <button 
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="flex-1 bg-[#D91B11] hover:bg-[#b9170e] text-white py-3.5 rounded-[12px] text-[16px] font-extrabold transition-all shadow-lg shadow-red-900/20 uppercase"
+                >
+                  NO
+                </button>
+                <button 
+                  onClick={confirmLogout}
+                  disabled={isLoggingOut}
+                  className="flex-1 bg-[#28A745] hover:bg-[#218838] text-white py-3.5 rounded-[12px] text-[16px] font-extrabold transition-all shadow-lg shadow-green-900/20 uppercase flex items-center justify-center gap-2 disabled:opacity-80 disabled:cursor-not-allowed"
+                >
+                  {isLoggingOut ? (
+                    <div className="flex items-center gap-2">
+                      <div className="relative w-5 h-5 mr-1">
+                        <div className="absolute top-0 left-0 w-2 h-2 bg-white rounded-full animate-ping"></div>
+                        <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full animate-ping [animation-delay:0.2s]"></div>
+                        <div className="absolute bottom-0 left-0 w-2 h-2 bg-white rounded-full animate-ping [animation-delay:0.4s]"></div>
+                        <div className="absolute bottom-0 right-0 w-2 h-2 bg-white rounded-full animate-ping [animation-delay:0.6s]"></div>
+                      </div>
+                      <span className="tracking-widest">LOGGING OUT...</span>
+                    </div>
+                  ) : (
+                    "YES"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </nav>
   );

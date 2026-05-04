@@ -124,10 +124,17 @@ const ProfilePage = ({ onNavigate }) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         // API may return the object directly or wrapped in data/result
-        const data = json?.data ?? json?.result ?? json;
+        let data = json?.data ?? json?.result ?? json;
+        if (Array.isArray(data)) data = data[0];
+        
+        // Merge with local user data if server data is missing the image
+        if (data && !data.profileImage && user?.profileImage) {
+          data.profileImage = user.profileImage;
+        }
+        
         setProfileData(data);
         
-        // Sync global user state if it's missing image
+        // Sync global user state if it's missing image but server has it
         if (data?.profileImage && !user?.profileImage) {
            updateUser({ profileImage: data.profileImage });
         }
@@ -164,16 +171,40 @@ const ProfilePage = ({ onNavigate }) => {
     setUploading(true);
     
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const imageData = reader.result;
+      
+      // Update UI immediately for best UX
       setProfileData(prev => ({
         ...prev,
         profileImage: imageData
       }));
-      // Update global context so navbar reflects changes
       updateUser({ profileImage: imageData });
-      alert("Photo uploaded successfully!");
-      setUploading(false);
+
+      try {
+        const res = await fetch(`/mt5-api/api/UserMaster/Update-User`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            userId: userId,
+            profileImage: imageData
+          })
+        });
+
+        if (res.ok) {
+          console.log('Profile image saved to server successfully');
+        } else {
+          console.warn('Profile image failed to save to server, using local cache instead');
+        }
+      } catch (err) {
+        console.error('Server sync error:', err);
+      } finally {
+        setUploading(false);
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -217,7 +248,7 @@ const ProfilePage = ({ onNavigate }) => {
             <div className="flex items-center gap-6">
               <div className="w-[100px] h-[100px] rounded-[12px] bg-[#1A1A1A] overflow-hidden border border-[var(--border-color)]">
                 <img
-                  src={pv('profileImage') || `https://api.dicebear.com/7.x/avataaars/svg?seed=${pv('firstName', 'User')}`}
+                  src={pv('profileImage') || user?.profileImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${pv('firstName', 'User')}`}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
